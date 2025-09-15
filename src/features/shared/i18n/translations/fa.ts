@@ -1,0 +1,156 @@
+import { Translations } from '../types'
+
+const fa: Translations = {
+  common: {
+    submit: 'ارسال',
+    cancel: 'انصراف',
+    continue: 'ادامه',
+    back: 'بازگشت',
+    error: 'خطا',
+    success: 'موفق',
+    loading: 'در حال بارگذاری...',
+    category: 'دسته‌بندی',
+    categories: 'دسته‌بندی‌ها',
+    subcategory: 'زیردسته',
+    subcategories: 'زیردسته‌ها',
+    viewAll: 'مشاهده همه',
+    noResults: 'نتیجه‌ای یافت نشد',
+  },
+  auth: {
+    phoneNumber: 'شماره موبایل',
+    phoneNumberPlaceholder: '۰۹۱۲۳۴۵۶۷۸۹',
+    sendCode: 'ارسال کد',
+    verifyCode: 'تایید کد',
+    otpCode: 'کد تایید',
+    otpCodePlaceholder: '۱۲۳۴۵',
+    resendCode: 'ارسال مجدد کد',
+    resendIn: 'ارسال مجدد در',
+    firstName: 'نام',
+    firstNamePlaceholder: 'علی',
+    lastName: 'نام خانوادگی',
+    lastNamePlaceholder: 'احمدی',
+    completeProfile: 'تکمیل پروفایل',
+    profileTitle: 'تکمیل پروفایل',
+    profileSubtitle: 'لطفا نام خود را وارد کنید',
+    welcomeBack: 'خوش آمدید',
+    signInTitle: 'ورود / ثبت نام',
+    signInSubtitle: 'شماره موبایل خود را وارد کنید',
+    verifyTitle: 'تایید شماره',
+    verifySubtitle: 'کد ارسال شده به این شماره را وارد کنید',
+    invalidPhoneNumber: 'فرمت شماره موبایل نادرست است',
+    invalidCode: 'کد نامعتبر یا منقضی شده',
+    codeSent: 'کد با موفقیت ارسال شد',
+    logout: 'خروج',
+  },
+  dashboard: {
+    profileInfo: 'اطلاعات پروفایل',
+    name: 'نام',
+    phoneNumber: 'شماره موبایل',
+    memberSince: 'عضو از تاریخ',
+  },
+  categories: {
+    title: 'مرور دسته‌بندی‌ها',
+    subtitle: 'محصولات را بر اساس دسته‌بندی پیدا کنید',
+    allCategories: 'همه دسته‌بندی‌ها',
+    popularCategories: 'دسته‌بندی‌های محبوب',
+    browseBy: 'مرور بر اساس دسته‌بندی',
+    itemsInCategory: 'آیتم در این دسته‌بندی',
+    noItemsFound: 'هیچ آیتمی در این دسته‌بندی یافت نشد',
+    backToCategories: 'بازگشت به دسته‌بندی‌ها',
+    subcategoriesOf: 'زیردسته‌های',
+  },
+  shops: {
+    // Shop creation
+    startYourBusiness: 'کسب و کار خود را شروع کنید',
+    createShopToday: 'امروز فروشگاه خود را ایجاد کنید و شروع به فروش کنید',
+    createShop: 'ایجاد فروشگاه',
+    createShopDescription: 'اطلاعات زیر را برای ایجاد فروشگاه تکمیل کنید',
+    creatingShop: 'در حال ایجاد فروشگاه...',
+    shopCreatedSuccessfully: 'فروشگاه با موفقیت ایجاد شد!',
+
+    // Form fields
+    basicInformation: 'اطلاعات پایه',
+    contactInformation: 'اطلاعات تماس',
+    nameEn: 'نام فروشگاه (انگلیسی)',
+    nameEnPlaceholder: 'نام فروشگاه را به انگلیسی وارد کنید',
+    nameFa: 'نام فروشگاه (فارسی)',
+    nameFaPlaceholder: 'نام فروشگاه را به فارسی وارد کنید',
+    descriptionEn: 'توضیحات (انگلیسی)',
+    descriptionEnPlaceholder: 'فروشگاه خود را به انگلیسی توضیح دهید',
+    descriptionFa: 'توضیحات (فارسی)',
+    descriptionFaPlaceholder: 'فروشگاه خود را به فارسی توضیح دهید',
+    email: 'ایمیل',
+    emailPlaceholder: 'shop@example.com',
+    phone: 'تلفن',
+    phonePlaceholder: '09123456789',
+    city: 'شهر',
+    cityPlaceholder: 'شهر خود را وارد کنید',
+    address: 'آدرس',
+    addressPlaceholder: 'آدرس خود را وارد کنید',
+
+    // Shop status
+    active: 'فعال',
+    inactive: 'غیرفعال',
+    verified: 'تأیید شده',
+
+    // Shop listing
+    allShops: 'همه فروشگاه‌ها',
+    discoverGreatShops: 'فروشگاه‌ها و محصولات عالی را کشف کنید',
+    searchShops: 'جستجو در فروشگاه‌ها...',
+    filterByCity: 'فیلتر بر اساس شهر...',
+    noShopsFound: 'فروشگاهی یافت نشد',
+    noShopsYet: 'هنوز فروشگاهی وجود ندارد',
+    tryDifferentSearch: 'عبارات جستجوی خود را تغییر دهید',
+    noShopsFoundDescription:
+      'اولین نفری باشید که فروشگاه در پلتفرم ما ایجاد می‌کند',
+    createFirstShop: 'ایجاد اولین فروشگاه',
+    showingResults: 'نمایش {count} از {total} فروشگاه',
+
+    // Shop details
+    products: 'محصولات',
+    rating: 'امتیاز',
+    totalSales: 'کل فروش',
+    totalProducts: 'کل محصولات',
+    memberSince: 'عضو از',
+    contactSeller: 'تماس با فروشنده',
+    followShop: 'دنبال کردن فروشگاه',
+    viewShop: 'مشاهده فروشگاه',
+    manage: 'مدیریت',
+
+    // Shop policies
+    policies: 'قوانین فروشگاه',
+    shipping: 'ارسال',
+    returns: 'بازگشت کالا',
+    businessHours: 'ساعات کاری',
+    shopStats: 'آمار فروشگاه',
+
+    // Product related
+    noProducts: 'هنوز محصولی وجود ندارد',
+    noProductsDescription: 'این فروشگاه هنوز محصولی اضافه نکرده است',
+
+    // Dashboard
+    myShops: 'فروشگاه‌های من',
+    manageYourShops: 'فروشگاه‌های خود را مدیریت و نظارت کنید',
+    createAnotherShop: 'ایجاد فروشگاه دیگر',
+    expandYourBusiness: 'کسب و کار خود را با چندین فروشگاه گسترش دهید',
+    startYourBusinessToday: 'امروز سفر کسب و کار خود را شروع کنید',
+    totalShops: 'کل فروشگاه‌ها',
+    acrossAllShops: 'در همه فروشگاه‌ها',
+    allTimeTotal: 'کل تمام دوران',
+    avgRating: 'میانگین امتیاز',
+    outOfFive: 'از 5',
+    daysActive: 'روزهای فعال',
+
+    // Warnings
+    shopInactiveWarning: 'فروشگاه در حال حاضر غیرفعال است',
+    shopNotVerifiedWarning: 'فروشگاه هنوز تأیید نشده است',
+  },
+  upload: {
+    dragOrClick: 'فایل‌ها را اینجا بکشید یا کلیک کنید',
+    fileTooLarge: 'حجم فایل زیاد است',
+    uploadFailed: 'آپلود ناموفق بود',
+    deleteFailed: 'حذف ناموفق بود',
+  },
+}
+
+export default fa
