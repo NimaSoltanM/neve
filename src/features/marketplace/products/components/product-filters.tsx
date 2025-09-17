@@ -78,23 +78,29 @@ export function ProductFilters(props: ProductFiltersProps) {
     <div className="space-y-6">
       {/* Product Type */}
       <div className="space-y-3">
-        <Label>{t('marketplace.productType')}</Label>
-        <RadioGroup value={productType} onValueChange={setProductType}>
-          <div className="flex items-center space-x-2 rtl:space-x-reverse">
+        <Label className="text-sm font-medium">
+          {t('marketplace.productType')}
+        </Label>
+        <RadioGroup
+          value={productType}
+          onValueChange={setProductType}
+          className="space-y-2"
+        >
+          <div className="flex items-center gap-2">
             <RadioGroupItem value="all" id="all" />
-            <Label htmlFor="all" className="font-normal cursor-pointer">
+            <Label htmlFor="all" className="cursor-pointer">
               {t('marketplace.allProducts')}
             </Label>
           </div>
-          <div className="flex items-center space-x-2 rtl:space-x-reverse">
+          <div className="flex items-center gap-2">
             <RadioGroupItem value="regular" id="regular" />
-            <Label htmlFor="regular" className="font-normal cursor-pointer">
+            <Label htmlFor="regular" className="cursor-pointer">
               {t('marketplace.buyNow')}
             </Label>
           </div>
-          <div className="flex items-center space-x-2 rtl:space-x-reverse">
+          <div className="flex items-center gap-2">
             <RadioGroupItem value="auction" id="auction" />
-            <Label htmlFor="auction" className="font-normal cursor-pointer">
+            <Label htmlFor="auction" className="cursor-pointer">
               {t('marketplace.auctions')}
             </Label>
           </div>
@@ -102,18 +108,18 @@ export function ProductFilters(props: ProductFiltersProps) {
       </div>
 
       {/* Price Range */}
-      <div className="space-y-3">
-        <Label>{t('marketplace.priceRange')}</Label>
-        <div className="px-1">
-          <Slider
-            value={priceRange}
-            onValueChange={setPriceRange as any}
-            min={0}
-            max={5000}
-            step={50}
-            className="w-full"
-          />
-        </div>
+      <div className="space-y-3 border-t pt-4">
+        <Label className="text-sm font-medium">
+          {t('marketplace.priceRange')}
+        </Label>
+        <Slider
+          value={priceRange}
+          onValueChange={setPriceRange as any}
+          min={0}
+          max={5000}
+          step={50}
+          className="w-full"
+        />
         <div className="flex items-center gap-2">
           <Input
             type="number"
@@ -121,7 +127,7 @@ export function ProductFilters(props: ProductFiltersProps) {
             onChange={(e) =>
               setPriceRange([parseInt(e.target.value) || 0, priceRange[1]])
             }
-            className="h-8"
+            className="h-8 w-full"
             placeholder={t('marketplace.min')}
           />
           <span className="text-muted-foreground">-</span>
@@ -131,41 +137,42 @@ export function ProductFilters(props: ProductFiltersProps) {
             onChange={(e) =>
               setPriceRange([priceRange[0], parseInt(e.target.value) || 5000])
             }
-            className="h-8"
+            className="h-8 w-full"
             placeholder={t('marketplace.max')}
           />
         </div>
       </div>
 
       {/* Sort By */}
-      <div className="space-y-3">
-        <Label>{t('marketplace.sortBy')}</Label>
-        <RadioGroup value={sortBy} onValueChange={setSortBy}>
-          <div className="flex items-center space-x-2 rtl:space-x-reverse">
+      <div className="space-y-3 border-t pt-4">
+        <Label className="text-sm font-medium">{t('marketplace.sortBy')}</Label>
+        <RadioGroup
+          value={sortBy}
+          onValueChange={setSortBy}
+          className="space-y-2"
+        >
+          <div className="flex items-center gap-2">
             <RadioGroupItem value="newest" id="newest" />
-            <Label htmlFor="newest" className="font-normal cursor-pointer">
+            <Label htmlFor="newest" className="cursor-pointer">
               {t('marketplace.newest')}
             </Label>
           </div>
-          <div className="flex items-center space-x-2 rtl:space-x-reverse">
+          <div className="flex items-center gap-2">
             <RadioGroupItem value="price_asc" id="price_asc" />
-            <Label htmlFor="price_asc" className="font-normal cursor-pointer">
+            <Label htmlFor="price_asc" className="cursor-pointer">
               {t('marketplace.priceLowToHigh')}
             </Label>
           </div>
-          <div className="flex items-center space-x-2 rtl:space-x-reverse">
+          <div className="flex items-center gap-2">
             <RadioGroupItem value="price_desc" id="price_desc" />
-            <Label htmlFor="price_desc" className="font-normal cursor-pointer">
+            <Label htmlFor="price_desc" className="cursor-pointer">
               {t('marketplace.priceHighToLow')}
             </Label>
           </div>
           {productType === 'auction' && (
-            <div className="flex items-center space-x-2 rtl:space-x-reverse">
+            <div className="flex items-center gap-2">
               <RadioGroupItem value="ending_soon" id="ending_soon" />
-              <Label
-                htmlFor="ending_soon"
-                className="font-normal cursor-pointer"
-              >
+              <Label htmlFor="ending_soon" className="cursor-pointer">
                 {t('marketplace.endingSoon')}
               </Label>
             </div>
@@ -174,28 +181,30 @@ export function ProductFilters(props: ProductFiltersProps) {
       </div>
 
       {/* Additional Filters */}
-      <div className="space-y-3">
-        <Label>{t('marketplace.additionalFilters')}</Label>
+      <div className="space-y-3 border-t pt-4">
+        <Label className="text-sm font-medium">
+          {t('marketplace.additionalFilters')}
+        </Label>
         {productType !== 'auction' && (
-          <div className="flex items-center space-x-2 rtl:space-x-reverse">
+          <div className="flex items-center gap-2">
             <Checkbox
               id="inStock"
               checked={inStock}
               onCheckedChange={setInStock as any}
             />
-            <Label htmlFor="inStock" className="font-normal cursor-pointer">
+            <Label htmlFor="inStock" className="cursor-pointer">
               {t('marketplace.inStockOnly')}
             </Label>
           </div>
         )}
         {productType === 'auction' && (
-          <div className="flex items-center space-x-2 rtl:space-x-reverse">
+          <div className="flex items-center gap-2">
             <Checkbox
               id="endingSoon"
               checked={endingSoon}
               onCheckedChange={setEndingSoon as any}
             />
-            <Label htmlFor="endingSoon" className="font-normal cursor-pointer">
+            <Label htmlFor="endingSoon" className="cursor-pointer">
               {t('marketplace.endingIn24h')}
             </Label>
           </div>
@@ -204,7 +213,7 @@ export function ProductFilters(props: ProductFiltersProps) {
     </div>
   )
 
-  // Desktop view - Card
+  // Desktop view
   if (isDesktop) {
     return (
       <Card className="sticky top-4">
@@ -236,7 +245,7 @@ export function ProductFilters(props: ProductFiltersProps) {
     )
   }
 
-  // Mobile view - Drawer
+  // Mobile view
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>

@@ -8,9 +8,9 @@ import { Loader2, LogOut, User } from 'lucide-react'
 
 export const Route = createFileRoute('/dashboard/')({
   beforeLoad: async () => {
-    const { isAuthenticated, user, needsProfile } = await getCurrentUser()
+    const { isAuthenticated, needsProfile } = await getCurrentUser()
 
-    if (!isAuthenticated) {
+    if (!isAuthenticated || needsProfile) {
       throw redirect({
         to: '/auth',
         search: {
@@ -18,61 +18,13 @@ export const Route = createFileRoute('/dashboard/')({
         },
       })
     }
-
-    return { user, needsProfile }
   },
   component: DashboardComponent,
 })
 
 function DashboardComponent() {
   const { t, dir } = useI18n()
-  const { user, needsProfile, logout, isLoading } = useAuth()
-  const routeContext = Route.useRouteContext()
-
-  if (routeContext.needsProfile || needsProfile) {
-    return (
-      <div
-        className="min-h-screen flex items-center justify-center bg-background p-4"
-        dir={dir}
-      >
-        <Card className="max-w-2xl">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <User className="h-5 w-5" />
-              {t('dashboard.profileInfo')}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <p className="text-sm text-muted-foreground">
-                {t('dashboard.name')}
-              </p>
-              <p className="font-medium">
-                {user?.firstName} {user?.lastName}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">
-                {t('dashboard.phoneNumber')}
-              </p>
-              <p className="font-medium" dir="ltr">
-                {user?.phoneNumber}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">
-                {t('dashboard.memberSince')}
-              </p>
-              <p className="font-medium">
-                {user?.createdAt &&
-                  new Date(user.createdAt).toLocaleDateString()}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    )
-  }
+  const { user, logout, isLoading } = useAuth()
 
   if (isLoading) {
     return (

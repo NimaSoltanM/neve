@@ -18,7 +18,6 @@ export const Route = createFileRoute('/shops/$slug')({
   validateSearch: (search) => searchSchema.parse(search),
   loaderDeps: ({ search }) => ({ search }),
   loader: async ({ params, deps: { search } }) => {
-    // Get shop info
     const shopResult = await getShopBySlug({ data: params.slug })
 
     if (!shopResult.success || !shopResult.data) {

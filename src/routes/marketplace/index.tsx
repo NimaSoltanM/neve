@@ -7,7 +7,7 @@ import { ProductGrid } from '@/features/marketplace/products/components/product-
 import { ProductGridSkeleton } from '@/features/marketplace/products/components/product-grid-skeleton'
 import { ProductFilters } from '@/features/marketplace/products/components/product-filters'
 import { PlaceBidModal } from '@/features/marketplace/bids/components/place-bid-modal'
-import { useI18n } from '@/features/shared/i18n'
+import { LanguageSwitcher, useI18n } from '@/features/shared/i18n'
 import { Input } from '@/components/ui/input'
 import { Search } from 'lucide-react'
 import { z } from 'zod'
@@ -92,6 +92,7 @@ function MarketplacePage() {
 
   return (
     <div dir={dir} className="container mx-auto p-6">
+      <LanguageSwitcher />
       {/* Hero Section */}
       <div className="mb-8">
         <h1 className="text-4xl font-bold mb-4">{t('marketplace.title')}</h1>
