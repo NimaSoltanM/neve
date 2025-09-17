@@ -11,8 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TestUploadRouteImport } from './routes/test-upload'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MarketplaceIndexRouteImport } from './routes/marketplace/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
+import { Route as CategoriesIndexRouteImport } from './routes/categories/index'
 import { Route as AuthIndexRouteImport } from './routes/auth/index'
+import { Route as ShopsSlugRouteImport } from './routes/shops/$slug'
+import { Route as CategoriesSlugRouteImport } from './routes/categories/$slug'
 
 const TestUploadRoute = TestUploadRouteImport.update({
   id: '/test-upload',
@@ -24,9 +28,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MarketplaceIndexRoute = MarketplaceIndexRouteImport.update({
+  id: '/marketplace/',
+  path: '/marketplace/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/dashboard/',
   path: '/dashboard/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CategoriesIndexRoute = CategoriesIndexRouteImport.update({
+  id: '/categories/',
+  path: '/categories/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthIndexRoute = AuthIndexRouteImport.update({
@@ -34,39 +48,90 @@ const AuthIndexRoute = AuthIndexRouteImport.update({
   path: '/auth/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ShopsSlugRoute = ShopsSlugRouteImport.update({
+  id: '/shops/$slug',
+  path: '/shops/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CategoriesSlugRoute = CategoriesSlugRouteImport.update({
+  id: '/categories/$slug',
+  path: '/categories/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/test-upload': typeof TestUploadRoute
+  '/categories/$slug': typeof CategoriesSlugRoute
+  '/shops/$slug': typeof ShopsSlugRoute
   '/auth': typeof AuthIndexRoute
+  '/categories': typeof CategoriesIndexRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/marketplace': typeof MarketplaceIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/test-upload': typeof TestUploadRoute
+  '/categories/$slug': typeof CategoriesSlugRoute
+  '/shops/$slug': typeof ShopsSlugRoute
   '/auth': typeof AuthIndexRoute
+  '/categories': typeof CategoriesIndexRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/marketplace': typeof MarketplaceIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/test-upload': typeof TestUploadRoute
+  '/categories/$slug': typeof CategoriesSlugRoute
+  '/shops/$slug': typeof ShopsSlugRoute
   '/auth/': typeof AuthIndexRoute
+  '/categories/': typeof CategoriesIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/marketplace/': typeof MarketplaceIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/test-upload' | '/auth' | '/dashboard'
+  fullPaths:
+    | '/'
+    | '/test-upload'
+    | '/categories/$slug'
+    | '/shops/$slug'
+    | '/auth'
+    | '/categories'
+    | '/dashboard'
+    | '/marketplace'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/test-upload' | '/auth' | '/dashboard'
-  id: '__root__' | '/' | '/test-upload' | '/auth/' | '/dashboard/'
+  to:
+    | '/'
+    | '/test-upload'
+    | '/categories/$slug'
+    | '/shops/$slug'
+    | '/auth'
+    | '/categories'
+    | '/dashboard'
+    | '/marketplace'
+  id:
+    | '__root__'
+    | '/'
+    | '/test-upload'
+    | '/categories/$slug'
+    | '/shops/$slug'
+    | '/auth/'
+    | '/categories/'
+    | '/dashboard/'
+    | '/marketplace/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   TestUploadRoute: typeof TestUploadRoute
+  CategoriesSlugRoute: typeof CategoriesSlugRoute
+  ShopsSlugRoute: typeof ShopsSlugRoute
   AuthIndexRoute: typeof AuthIndexRoute
+  CategoriesIndexRoute: typeof CategoriesIndexRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
+  MarketplaceIndexRoute: typeof MarketplaceIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -85,11 +150,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/marketplace/': {
+      id: '/marketplace/'
+      path: '/marketplace'
+      fullPath: '/marketplace'
+      preLoaderRoute: typeof MarketplaceIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/': {
       id: '/dashboard/'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/categories/': {
+      id: '/categories/'
+      path: '/categories'
+      fullPath: '/categories'
+      preLoaderRoute: typeof CategoriesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/': {
@@ -99,14 +178,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/shops/$slug': {
+      id: '/shops/$slug'
+      path: '/shops/$slug'
+      fullPath: '/shops/$slug'
+      preLoaderRoute: typeof ShopsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/categories/$slug': {
+      id: '/categories/$slug'
+      path: '/categories/$slug'
+      fullPath: '/categories/$slug'
+      preLoaderRoute: typeof CategoriesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   TestUploadRoute: TestUploadRoute,
+  CategoriesSlugRoute: CategoriesSlugRoute,
+  ShopsSlugRoute: ShopsSlugRoute,
   AuthIndexRoute: AuthIndexRoute,
+  CategoriesIndexRoute: CategoriesIndexRoute,
   DashboardIndexRoute: DashboardIndexRoute,
+  MarketplaceIndexRoute: MarketplaceIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

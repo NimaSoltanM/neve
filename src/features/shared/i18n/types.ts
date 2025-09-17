@@ -7,12 +7,48 @@ export type Translations = {
     error: string
     success: string
     loading: string
+    save: string
+    delete: string
+    edit: string
+    add: string
+    search: string
+    clear: string
+    close: string
+    confirm: string
+    yes: string
+    no: string
+    all: string
+    none: string
+    select: string
+    selected: string
+    required: string
+    optional: string
     category: string
     categories: string
     subcategory: string
     subcategories: string
     viewAll: string
     noResults: string
+    name: string
+    description: string
+    price: string
+    quantity: string
+    stock: string
+    images: string
+    image: string
+    status: string
+    actions: string
+    createdAt: string
+    updatedAt: string
+  }
+  nav: {
+    home: string
+    marketplace: string
+    categories: string
+    shops: string
+    dashboard: string
+    profile: string
+    settings: string
   }
   auth: {
     phoneNumber: string
@@ -130,5 +166,154 @@ export type Translations = {
     fileTooLarge: string
     uploadFailed: string
     deleteFailed: string
+    uploadImage: string
+    uploadImages: string
+    removeImage: string
+    mainImage: string
+  }
+  marketplace: {
+    title: string
+    subtitle: string
+    searchPlaceholder: string
+    browseCategories: string
+    featuredProducts: string
+    searchResults: string
+    categories: string
+    allCategories: string
+    products: string
+
+    // Product related
+    auction: string
+    buyNow: string
+    addToCart: string
+    placeBid: string
+    currentBid: string
+    startingPrice: string
+    inStock: string
+    outOfStock: string
+    noProductsFound: string
+    noProductsInCategory: string
+    shopNoProducts: string
+    auctionEnded: string
+    ended: string
+    winning: string
+    youAreWinning: string
+    bids: string
+    loginToBid: string
+    loginToBuy: string
+    youWereOutbid: string
+    addedToCart: string
+
+    // Filters
+    filters: string
+    productType: string
+    allProducts: string
+    auctions: string
+    priceRange: string
+    min: string
+    max: string
+    sortBy: string
+    newest: string
+    priceLowToHigh: string
+    priceHighToLow: string
+    endingSoon: string
+    additionalFilters: string
+    inStockOnly: string
+    endingIn24h: string
+    applyFilters: string
+
+    // Shop
+    verified: string
+    memberSince: string
+
+    // Bidding
+    minimumBid: string
+    quickBid: string
+    yourBid: string
+    confirmBid: string
+    bidPlaced: string
+    bidFailed: string
+    bidTooLow: string
+    buyNowAvailable: string
+
+    noCategoriesFound: string
+  }
+  products: {
+    // Product management
+    addProduct: string
+    editProduct: string
+    deleteProduct: string
+    productDetails: string
+    productInformation: string
+    pricingAndInventory: string
+    auctionSettings: string
+
+    // Form fields
+    productName: string
+    productNamePlaceholder: string
+    productDescription: string
+    productDescriptionPlaceholder: string
+    selectCategory: string
+    selectShop: string
+    regularProduct: string
+    auctionProduct: string
+
+    // Pricing
+    regularPrice: string
+    startingBid: string
+    bidIncrement: string
+    minimumIncrement: string
+    buyNowPrice: string
+    enableBuyNow: string
+
+    // Auction
+    auctionDuration: string
+    auctionStartDate: string
+    auctionEndDate: string
+    days: string
+    hours: string
+    minutes: string
+
+    // Status
+    publish: string
+    draft: string
+    published: string
+    unpublished: string
+    active: string
+    inactive: string
+
+    // Validation
+    nameRequired: string
+    categoryRequired: string
+    priceRequired: string
+    stockRequired: string
+    startingBidRequired: string
+    incrementRequired: string
+    durationRequired: string
+    invalidPrice: string
+    invalidStock: string
+
+    // Success/Error messages
+    productAdded: string
+    productUpdated: string
+    productDeleted: string
+    productNotFound: string
+    updateFailed: string
+    deleteFailed: string
+  }
+  validation: {
+    required: string
+    invalid: string
+    tooShort: string
+    tooLong: string
+    invalidFormat: string
+    mustBeNumber: string
+    mustBePositive: string
+    minValue: string
+    maxValue: string
+    invalidEmail: string
+    invalidPhone: string
+    selectOption: string
+    atLeastOne: string
   }
 }
