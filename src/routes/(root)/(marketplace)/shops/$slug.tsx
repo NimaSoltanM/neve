@@ -14,7 +14,7 @@ const searchSchema = z.object({
   page: z.number().default(1),
 })
 
-export const Route = createFileRoute('/shops/$slug')({
+export const Route = createFileRoute('/(root)/(marketplace)/shops/$slug')({
   validateSearch: (search) => searchSchema.parse(search),
   loaderDeps: ({ search }) => ({ search }),
   loader: async ({ params, deps: { search } }) => {
@@ -71,7 +71,6 @@ function ShopPage() {
               )
             }
 
-            // Convert to expected format for ProductGrid
             const products = result.data.map((p) => ({
               ...p,
               shop: {

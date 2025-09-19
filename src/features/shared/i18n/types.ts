@@ -40,15 +40,8 @@ export type Translations = {
     actions: string
     createdAt: string
     updatedAt: string
-  }
-  nav: {
-    home: string
-    marketplace: string
-    categories: string
-    shops: string
-    dashboard: string
-    profile: string
-    settings: string
+    siteName: string
+    siteTagline: string
   }
   auth: {
     phoneNumber: string
@@ -315,5 +308,54 @@ export type Translations = {
     invalidPhone: string
     selectOption: string
     atLeastOne: string
+  }
+  nav: {
+    main: string
+    marketplace: string
+    categories: string
+    shops: string
+    dashboard: string
+    orders: string
+    bids: string
+    wishlist: string
+    myShop: string
+    overview: string
+    profile: string
+    settings: string
+    account: string
+    selling: string
+    createShop: string
+    backToDashboard: string
+  }
+  shop: {
+    management: string
+    overview: string
+    products: string
+    allProducts: string
+    addProduct: string
+    categories: string
+    orders: string
+    auctions: string
+    insights: string
+    analytics: string
+    revenue: string
+    configuration: string
+    settings: string
+    viewStorefront: string
+  }
+  cart: {
+    title: string
+    empty: string
+    continueShopping: string
+    total: string
+    clear: string
+    checkout: string
+    yourBid: string
+    lowStock: string
+    addToCart: string
+    adding: string
+    added: string
+    inCart: string
+    addedToCart: string
   }
 }

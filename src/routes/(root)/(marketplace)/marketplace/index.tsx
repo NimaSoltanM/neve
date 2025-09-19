@@ -25,7 +25,7 @@ const searchSchema = z.object({
   endingSoon: z.boolean().optional(),
 })
 
-export const Route = createFileRoute('/marketplace/')({
+export const Route = createFileRoute('/(root)/(marketplace)/marketplace/')({
   validateSearch: (search) => searchSchema.parse(search),
   loaderDeps: ({ search }) => ({ search }),
   loader: async ({ deps: { search } }) => {
@@ -92,7 +92,6 @@ function MarketplacePage() {
 
   return (
     <div dir={dir} className="container mx-auto p-6">
-      <LanguageSwitcher />
       {/* Hero Section */}
       <div className="mb-8">
         <h1 className="text-4xl font-bold mb-4">{t('marketplace.title')}</h1>

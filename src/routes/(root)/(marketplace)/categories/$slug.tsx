@@ -23,7 +23,7 @@ const searchSchema = z.object({
   endingSoon: z.boolean().optional(),
 })
 
-export const Route = createFileRoute('/categories/$slug')({
+export const Route = createFileRoute('/(root)/(marketplace)/categories/$slug')({
   validateSearch: (search) => searchSchema.parse(search),
   loaderDeps: ({ search }) => ({ search }),
   loader: async ({ params, deps: { search } }) => {

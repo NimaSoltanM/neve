@@ -15,7 +15,7 @@ import { Link } from '@tanstack/react-router'
 import { ChevronRight } from 'lucide-react'
 import TestSlider from '@/components/ui/test-slider'
 
-export const Route = createFileRoute('/categories/')({
+export const Route = createFileRoute('/(root)/(marketplace)/categories/')({
   loader: async () => {
     const categoriesPromise = getCategories()
     return { categoriesPromise }

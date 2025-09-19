@@ -2,6 +2,7 @@ import { ProductCard } from './product-card'
 import { Button } from '@/components/ui/button'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useI18n } from '@/features/shared/i18n'
+import { ProductCardWithCart } from '../../components/product-card-with-cart'
 
 interface ProductGridProps {
   products: Array<{
@@ -57,9 +58,9 @@ export function ProductGrid({
 
   return (
     <div className="space-y-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product) => (
-          <ProductCard
+          <ProductCardWithCart
             key={product.id}
             product={product}
             onAddToCart={() => onAddToCart?.(product.id)}

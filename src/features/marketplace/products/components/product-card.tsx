@@ -209,7 +209,7 @@ export function ProductCard({
       </div>
 
       {/* Header */}
-      <CardHeader className="p-3">
+      <CardHeader>
         <CardTitle className="text-base font-semibold line-clamp-1 flex items-center gap-2">
           {isAuction && <Gavel className="w-4 h-4 text-amber-500 shrink-0" />}
           {product.name}
