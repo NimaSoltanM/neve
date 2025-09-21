@@ -1,3 +1,4 @@
+import { LanguageSwitcher } from '@/features/shared/i18n'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/(root)/')({
@@ -5,5 +6,5 @@ export const Route = createFileRoute('/(root)/')({
 })
 
 function RouteComponent() {
-  return <div>Hello homepage</div>
+  return <LanguageSwitcher />
 }

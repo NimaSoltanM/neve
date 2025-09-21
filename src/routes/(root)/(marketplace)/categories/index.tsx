@@ -13,7 +13,6 @@ import {
 } from '@/components/ui/breadcrumb'
 import { Link } from '@tanstack/react-router'
 import { ChevronRight } from 'lucide-react'
-import TestSlider from '@/components/ui/test-slider'
 
 export const Route = createFileRoute('/(root)/(marketplace)/categories/')({
   loader: async () => {
@@ -29,8 +28,6 @@ function CategoriesPage() {
 
   return (
     <div dir={dir} className="container mx-auto p-6">
-      <TestSlider />
-      {/* Breadcrumb */}
       <Breadcrumb className="mb-6">
         <BreadcrumbList>
           <BreadcrumbItem>

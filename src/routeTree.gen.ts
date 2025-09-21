@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TestUploadRouteImport } from './routes/test-upload'
 import { Route as rootRouteRouteImport } from './routes/(root)/route'
+import { Route as CheckoutIndexRouteImport } from './routes/checkout/index'
 import { Route as AuthIndexRouteImport } from './routes/auth/index'
 import { Route as rootIndexRouteImport } from './routes/(root)/index'
 import { Route as rootmarketplaceRouteRouteImport } from './routes/(root)/(marketplace)/route'
@@ -23,6 +24,9 @@ import { Route as rootmarketplaceShopsSlugRouteImport } from './routes/(root)/(m
 import { Route as rootmarketplaceCategoriesSlugRouteImport } from './routes/(root)/(marketplace)/categories/$slug'
 import { Route as rootmarketplaceProductsNewIndexRouteImport } from './routes/(root)/(marketplace)/products/new/index'
 import { Route as rootmarketplaceProductsProductSlugIndexRouteImport } from './routes/(root)/(marketplace)/products/$productSlug/index'
+import { Route as rootmarketplaceDashboardOrdersIndexRouteImport } from './routes/(root)/(marketplace)/dashboard/orders/index'
+import { Route as rootmarketplaceDashboardOrdersOrderIdIndexRouteImport } from './routes/(root)/(marketplace)/dashboard/orders/$orderId/index'
+import { Route as rootmarketplaceDashboardOrdersOrderIdSuccessRouteImport } from './routes/(root)/(marketplace)/dashboard/orders/$orderId/success'
 
 const TestUploadRoute = TestUploadRouteImport.update({
   id: '/test-upload',
@@ -31,6 +35,11 @@ const TestUploadRoute = TestUploadRouteImport.update({
 } as any)
 const rootRouteRoute = rootRouteRouteImport.update({
   id: '/(root)',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutIndexRoute = CheckoutIndexRouteImport.update({
+  id: '/checkout/',
+  path: '/checkout/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthIndexRoute = AuthIndexRouteImport.update({
@@ -101,33 +110,59 @@ const rootmarketplaceProductsProductSlugIndexRoute =
     path: '/products/$productSlug/',
     getParentRoute: () => rootmarketplaceRouteRoute,
   } as any)
+const rootmarketplaceDashboardOrdersIndexRoute =
+  rootmarketplaceDashboardOrdersIndexRouteImport.update({
+    id: '/orders/',
+    path: '/orders/',
+    getParentRoute: () => rootmarketplaceDashboardRouteRoute,
+  } as any)
+const rootmarketplaceDashboardOrdersOrderIdIndexRoute =
+  rootmarketplaceDashboardOrdersOrderIdIndexRouteImport.update({
+    id: '/orders/$orderId/',
+    path: '/orders/$orderId/',
+    getParentRoute: () => rootmarketplaceDashboardRouteRoute,
+  } as any)
+const rootmarketplaceDashboardOrdersOrderIdSuccessRoute =
+  rootmarketplaceDashboardOrdersOrderIdSuccessRouteImport.update({
+    id: '/orders/$orderId/success',
+    path: '/orders/$orderId/success',
+    getParentRoute: () => rootmarketplaceDashboardRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof rootIndexRoute
   '/test-upload': typeof TestUploadRoute
   '/auth': typeof AuthIndexRoute
-  '/dashboard': typeof rootmarketplaceDashboardRouteRoute
+  '/checkout': typeof CheckoutIndexRoute
+  '/dashboard': typeof rootmarketplaceDashboardRouteRouteWithChildren
   '/shop': typeof rootmarketplaceShopRouteRouteWithChildren
   '/categories/$slug': typeof rootmarketplaceCategoriesSlugRoute
   '/shops/$slug': typeof rootmarketplaceShopsSlugRoute
   '/categories': typeof rootmarketplaceCategoriesIndexRoute
   '/marketplace': typeof rootmarketplaceMarketplaceIndexRoute
   '/shop/': typeof rootmarketplaceShopIndexRoute
+  '/dashboard/orders': typeof rootmarketplaceDashboardOrdersIndexRoute
   '/products/$productSlug': typeof rootmarketplaceProductsProductSlugIndexRoute
   '/products/new': typeof rootmarketplaceProductsNewIndexRoute
+  '/dashboard/orders/$orderId/success': typeof rootmarketplaceDashboardOrdersOrderIdSuccessRoute
+  '/dashboard/orders/$orderId': typeof rootmarketplaceDashboardOrdersOrderIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/test-upload': typeof TestUploadRoute
   '/': typeof rootIndexRoute
   '/auth': typeof AuthIndexRoute
-  '/dashboard': typeof rootmarketplaceDashboardRouteRoute
+  '/checkout': typeof CheckoutIndexRoute
+  '/dashboard': typeof rootmarketplaceDashboardRouteRouteWithChildren
   '/categories/$slug': typeof rootmarketplaceCategoriesSlugRoute
   '/shops/$slug': typeof rootmarketplaceShopsSlugRoute
   '/categories': typeof rootmarketplaceCategoriesIndexRoute
   '/marketplace': typeof rootmarketplaceMarketplaceIndexRoute
   '/shop': typeof rootmarketplaceShopIndexRoute
+  '/dashboard/orders': typeof rootmarketplaceDashboardOrdersIndexRoute
   '/products/$productSlug': typeof rootmarketplaceProductsProductSlugIndexRoute
   '/products/new': typeof rootmarketplaceProductsNewIndexRoute
+  '/dashboard/orders/$orderId/success': typeof rootmarketplaceDashboardOrdersOrderIdSuccessRoute
+  '/dashboard/orders/$orderId': typeof rootmarketplaceDashboardOrdersOrderIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -136,15 +171,19 @@ export interface FileRoutesById {
   '/(root)/(marketplace)': typeof rootmarketplaceRouteRouteWithChildren
   '/(root)/': typeof rootIndexRoute
   '/auth/': typeof AuthIndexRoute
-  '/(root)/(marketplace)/dashboard': typeof rootmarketplaceDashboardRouteRoute
+  '/checkout/': typeof CheckoutIndexRoute
+  '/(root)/(marketplace)/dashboard': typeof rootmarketplaceDashboardRouteRouteWithChildren
   '/(root)/(marketplace)/shop': typeof rootmarketplaceShopRouteRouteWithChildren
   '/(root)/(marketplace)/categories/$slug': typeof rootmarketplaceCategoriesSlugRoute
   '/(root)/(marketplace)/shops/$slug': typeof rootmarketplaceShopsSlugRoute
   '/(root)/(marketplace)/categories/': typeof rootmarketplaceCategoriesIndexRoute
   '/(root)/(marketplace)/marketplace/': typeof rootmarketplaceMarketplaceIndexRoute
   '/(root)/(marketplace)/shop/': typeof rootmarketplaceShopIndexRoute
+  '/(root)/(marketplace)/dashboard/orders/': typeof rootmarketplaceDashboardOrdersIndexRoute
   '/(root)/(marketplace)/products/$productSlug/': typeof rootmarketplaceProductsProductSlugIndexRoute
   '/(root)/(marketplace)/products/new/': typeof rootmarketplaceProductsNewIndexRoute
+  '/(root)/(marketplace)/dashboard/orders/$orderId/success': typeof rootmarketplaceDashboardOrdersOrderIdSuccessRoute
+  '/(root)/(marketplace)/dashboard/orders/$orderId/': typeof rootmarketplaceDashboardOrdersOrderIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -152,6 +191,7 @@ export interface FileRouteTypes {
     | '/'
     | '/test-upload'
     | '/auth'
+    | '/checkout'
     | '/dashboard'
     | '/shop'
     | '/categories/$slug'
@@ -159,21 +199,28 @@ export interface FileRouteTypes {
     | '/categories'
     | '/marketplace'
     | '/shop/'
+    | '/dashboard/orders'
     | '/products/$productSlug'
     | '/products/new'
+    | '/dashboard/orders/$orderId/success'
+    | '/dashboard/orders/$orderId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/test-upload'
     | '/'
     | '/auth'
+    | '/checkout'
     | '/dashboard'
     | '/categories/$slug'
     | '/shops/$slug'
     | '/categories'
     | '/marketplace'
     | '/shop'
+    | '/dashboard/orders'
     | '/products/$productSlug'
     | '/products/new'
+    | '/dashboard/orders/$orderId/success'
+    | '/dashboard/orders/$orderId'
   id:
     | '__root__'
     | '/(root)'
@@ -181,6 +228,7 @@ export interface FileRouteTypes {
     | '/(root)/(marketplace)'
     | '/(root)/'
     | '/auth/'
+    | '/checkout/'
     | '/(root)/(marketplace)/dashboard'
     | '/(root)/(marketplace)/shop'
     | '/(root)/(marketplace)/categories/$slug'
@@ -188,14 +236,18 @@ export interface FileRouteTypes {
     | '/(root)/(marketplace)/categories/'
     | '/(root)/(marketplace)/marketplace/'
     | '/(root)/(marketplace)/shop/'
+    | '/(root)/(marketplace)/dashboard/orders/'
     | '/(root)/(marketplace)/products/$productSlug/'
     | '/(root)/(marketplace)/products/new/'
+    | '/(root)/(marketplace)/dashboard/orders/$orderId/success'
+    | '/(root)/(marketplace)/dashboard/orders/$orderId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   rootRouteRoute: typeof rootRouteRouteWithChildren
   TestUploadRoute: typeof TestUploadRoute
   AuthIndexRoute: typeof AuthIndexRoute
+  CheckoutIndexRoute: typeof CheckoutIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -212,6 +264,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof rootRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout/': {
+      id: '/checkout/'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/': {
@@ -298,8 +357,50 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof rootmarketplaceProductsProductSlugIndexRouteImport
       parentRoute: typeof rootmarketplaceRouteRoute
     }
+    '/(root)/(marketplace)/dashboard/orders/': {
+      id: '/(root)/(marketplace)/dashboard/orders/'
+      path: '/orders'
+      fullPath: '/dashboard/orders'
+      preLoaderRoute: typeof rootmarketplaceDashboardOrdersIndexRouteImport
+      parentRoute: typeof rootmarketplaceDashboardRouteRoute
+    }
+    '/(root)/(marketplace)/dashboard/orders/$orderId/': {
+      id: '/(root)/(marketplace)/dashboard/orders/$orderId/'
+      path: '/orders/$orderId'
+      fullPath: '/dashboard/orders/$orderId'
+      preLoaderRoute: typeof rootmarketplaceDashboardOrdersOrderIdIndexRouteImport
+      parentRoute: typeof rootmarketplaceDashboardRouteRoute
+    }
+    '/(root)/(marketplace)/dashboard/orders/$orderId/success': {
+      id: '/(root)/(marketplace)/dashboard/orders/$orderId/success'
+      path: '/orders/$orderId/success'
+      fullPath: '/dashboard/orders/$orderId/success'
+      preLoaderRoute: typeof rootmarketplaceDashboardOrdersOrderIdSuccessRouteImport
+      parentRoute: typeof rootmarketplaceDashboardRouteRoute
+    }
   }
 }
+
+interface rootmarketplaceDashboardRouteRouteChildren {
+  rootmarketplaceDashboardOrdersIndexRoute: typeof rootmarketplaceDashboardOrdersIndexRoute
+  rootmarketplaceDashboardOrdersOrderIdSuccessRoute: typeof rootmarketplaceDashboardOrdersOrderIdSuccessRoute
+  rootmarketplaceDashboardOrdersOrderIdIndexRoute: typeof rootmarketplaceDashboardOrdersOrderIdIndexRoute
+}
+
+const rootmarketplaceDashboardRouteRouteChildren: rootmarketplaceDashboardRouteRouteChildren =
+  {
+    rootmarketplaceDashboardOrdersIndexRoute:
+      rootmarketplaceDashboardOrdersIndexRoute,
+    rootmarketplaceDashboardOrdersOrderIdSuccessRoute:
+      rootmarketplaceDashboardOrdersOrderIdSuccessRoute,
+    rootmarketplaceDashboardOrdersOrderIdIndexRoute:
+      rootmarketplaceDashboardOrdersOrderIdIndexRoute,
+  }
+
+const rootmarketplaceDashboardRouteRouteWithChildren =
+  rootmarketplaceDashboardRouteRoute._addFileChildren(
+    rootmarketplaceDashboardRouteRouteChildren,
+  )
 
 interface rootmarketplaceShopRouteRouteChildren {
   rootmarketplaceShopIndexRoute: typeof rootmarketplaceShopIndexRoute
@@ -316,7 +417,7 @@ const rootmarketplaceShopRouteRouteWithChildren =
   )
 
 interface rootmarketplaceRouteRouteChildren {
-  rootmarketplaceDashboardRouteRoute: typeof rootmarketplaceDashboardRouteRoute
+  rootmarketplaceDashboardRouteRoute: typeof rootmarketplaceDashboardRouteRouteWithChildren
   rootmarketplaceShopRouteRoute: typeof rootmarketplaceShopRouteRouteWithChildren
   rootmarketplaceCategoriesSlugRoute: typeof rootmarketplaceCategoriesSlugRoute
   rootmarketplaceShopsSlugRoute: typeof rootmarketplaceShopsSlugRoute
@@ -327,7 +428,8 @@ interface rootmarketplaceRouteRouteChildren {
 }
 
 const rootmarketplaceRouteRouteChildren: rootmarketplaceRouteRouteChildren = {
-  rootmarketplaceDashboardRouteRoute: rootmarketplaceDashboardRouteRoute,
+  rootmarketplaceDashboardRouteRoute:
+    rootmarketplaceDashboardRouteRouteWithChildren,
   rootmarketplaceShopRouteRoute: rootmarketplaceShopRouteRouteWithChildren,
   rootmarketplaceCategoriesSlugRoute: rootmarketplaceCategoriesSlugRoute,
   rootmarketplaceShopsSlugRoute: rootmarketplaceShopsSlugRoute,
@@ -359,6 +461,7 @@ const rootRouteChildren: RootRouteChildren = {
   rootRouteRoute: rootRouteRouteWithChildren,
   TestUploadRoute: TestUploadRoute,
   AuthIndexRoute: AuthIndexRoute,
+  CheckoutIndexRoute: CheckoutIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

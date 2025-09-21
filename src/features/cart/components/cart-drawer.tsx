@@ -42,7 +42,11 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
             <ShoppingCart className="h-12 w-12 text-muted-foreground" />
             <p className="text-muted-foreground">{t('cart.empty')}</p>
             <Button asChild variant="default" size="sm">
-              <Link to="/marketplace" onClick={() => onOpenChange(false)}>
+              <Link
+                to="/marketplace"
+                search={{ page: 1 }}
+                onClick={() => onOpenChange(false)}
+              >
                 {t('cart.continueShopping')}
               </Link>
             </Button>

@@ -8,3 +8,6 @@ export * from '@/features/marketplace/bids/schema'
 export * from '@/features/cart/schemas/cart.schema'
 
 export * from '@/features/shared/upload/schemas/file.schema'
+
+export * from '@/features/orders/schemas/order.schema'
+export * from '@/features/orders/schemas/order-item.schema'

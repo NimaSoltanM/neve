@@ -358,4 +358,47 @@ export type Translations = {
     inCart: string
     addedToCart: string
   }
+  orders: {
+    checkout: string
+    orderSummary: string
+    items: string
+    total: string
+    subtotal: string
+    shipping: string
+    free: string
+    shippingAddress: string
+    fullName: string
+    fullNamePlaceholder: string
+    phoneNumber: string
+    address: string
+    addressPlaceholder: string
+    city: string
+    cityPlaceholder: string
+    postalCode: string
+    placeOrder: string
+    placingOrder: string
+    orderNumber: string
+    soldBy: string
+    auctionWin: string
+    quantity: string
+    payNow: string
+    processing: string
+    cancel: string
+    confirmCancel: string
+    paidAt: string
+    myOrders: string
+    noOrders: string
+    startShopping: string
+    viewDetails: string
+    paymentSuccessful: string
+    thankYouOrder: string
+    paymentDate: string
+    shippingTo: string
+    whatNext: string
+    confirmationEmail: string
+    preparingOrder: string
+    trackingInfo: string
+    viewOrder: string
+    continueShopping: string
+  }
 }
