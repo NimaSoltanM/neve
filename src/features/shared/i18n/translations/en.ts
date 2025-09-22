@@ -413,6 +413,105 @@ const en: Translations = {
     viewOrder: 'View Order',
     continueShopping: 'Continue Shopping',
   },
+  landing: {
+    // Hero Section
+    badge: 'Portfolio Project',
+    title: 'E-Commerce Platform',
+    subtitle:
+      "Hey there! 👋 This isn't your typical landing page. I'm showcasing a full-stack e-commerce platform I built to demonstrate my technical skills. Feel free to explore the features below and see what I can build.",
+    exploreButton: 'Explore the Platform',
+    sourceCodeButton: 'View Source Code',
+    contactButton: 'Contact Me',
+
+    // Stats
+    stats: {
+      features: 'Core Features',
+      featuresCount: '3',
+      fullStack: 'Full-Stack',
+      fullStackValue: '100%',
+      techStack: 'Tech Stack',
+      techStackValue: 'Modern',
+      design: 'Design',
+      designValue: 'Responsive',
+    },
+
+    // Features Section
+    featuresTitle: 'What I Built',
+    featuresSubtitle:
+      'A comprehensive e-commerce solution showcasing modern web development practices and user experience design.',
+
+    // Feature Cards
+    multiVendor: {
+      title: 'Multi-Vendor Shops',
+      description:
+        'Users can create their own shops, customize storefronts, and manage their product catalog with an intuitive dashboard.',
+      point1: 'Shop customization',
+      point2: 'Product management',
+      point3: 'Analytics dashboard',
+    },
+
+    orderFlow: {
+      title: 'Complete Shopping Cart',
+      description:
+        'Full shopping cart functionality with guest checkout support, persistent cart state, and seamless user experience.',
+      point1: 'Shopping cart with guest support',
+      point2: 'Persistent cart state',
+      point3: 'Price tracking & validation',
+    },
+
+    auction: {
+      title: 'Live Auction System',
+      description:
+        'Real-time bidding platform where users can list items for auction and participate in competitive bidding with automatic bid validation.',
+      point1: 'Real-time bidding',
+      point2: 'Auction management',
+      point3: 'Automatic bid increments',
+    },
+
+    // Technical Section
+    technicalTitle: 'Technical Implementation',
+    technicalSubtitle:
+      'Built with modern technologies and best practices to showcase full-stack development capabilities.',
+
+    // Tech Stack
+    frontend: {
+      title: 'Frontend',
+      item1: 'TanStack Start & Router',
+      item2: 'TypeScript for type safety',
+      item3: 'Tailwind CSS & Shadcn UI',
+      item4: 'Jotai for state management',
+    },
+
+    backend: {
+      title: 'Backend & Database',
+      item1: 'Server Functions (RPC-style)',
+      item2: 'Drizzle ORM with PostgreSQL',
+      item3: 'Authentication with sessions',
+      item4: 'File upload system',
+    },
+
+    keyFeatures: {
+      title: 'Key Features',
+      item1: 'Multi-language support (EN/FA)',
+      item2: 'RTL/LTR responsive design',
+      item3: 'Phone OTP authentication',
+      item4: 'SEO & performance optimized',
+    },
+
+    // Why This Project
+    whyProject: {
+      title: 'Why This Project?',
+      description:
+        'This project demonstrates my ability to build complex, real-world applications with multiple user flows, data relationships, and modern web technologies including internationalization and bidirectional text support.',
+    },
+
+    // CTA Section
+    ctaTitle: 'Ready to See More?',
+    ctaSubtitle:
+      'Explore the live platform, check out the code, or get in touch to discuss how I can contribute to your team.',
+    tryPlatformButton: 'Try the Platform',
+    githubButton: 'View on GitHub',
+  },
 }
 
 export default en

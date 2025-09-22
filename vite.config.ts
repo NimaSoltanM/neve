@@ -10,10 +10,8 @@ const config = defineConfig({
     viteTsConfigPaths({
       projects: ['./tsconfig.json'],
     }),
+    tanstackStart({ target: 'bun', customViteReactPlugin: true }),
     tailwindcss(),
-    tanstackStart({
-      customViteReactPlugin: true,
-    }),
     viteReact(),
   ],
 })

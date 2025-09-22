@@ -8,7 +8,6 @@ export const logout = createServerFn({ method: 'POST' }).handler(async () => {
   const sessionToken = getCookie('sessionToken')
 
   if (sessionToken) {
-    // Delete session from database
     await db.delete(sessions).where(eq(sessions.token, sessionToken))
   }
 

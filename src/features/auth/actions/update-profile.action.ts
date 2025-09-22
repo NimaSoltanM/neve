@@ -13,14 +13,12 @@ const updateProfileSchema = z.object({
 export const updateProfile = createServerFn({ method: 'POST' })
   .validator(updateProfileSchema)
   .handler(async ({ data }) => {
-    // Don't use authMiddleware here - do manual session check only
     const sessionToken = getCookie('sessionToken')
 
     if (!sessionToken) {
       throw new Error('Not authenticated')
     }
 
-    // Get user from session WITHOUT checking profile completion
     const session = await db
       .select({ userId: sessions.userId })
       .from(sessions)
@@ -38,7 +36,6 @@ export const updateProfile = createServerFn({ method: 'POST' })
 
     const { firstName, lastName } = data
 
-    // Update user profile
     const updatedUser = await db
       .update(users)
       .set({

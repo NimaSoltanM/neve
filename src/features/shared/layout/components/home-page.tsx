@@ -1,5 +1,3 @@
-// src/routes/index.tsx
-import { createFileRoute } from '@tanstack/react-router'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -9,45 +7,35 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { useNavigate } from '@tanstack/react-router'
+import { useRouter } from '@tanstack/react-router'
 import {
   ArrowRight,
   ShoppingCart,
   Gavel,
   Store,
+  Users,
   CreditCard,
   Shield,
-  Globe,
 } from 'lucide-react'
-import { useI18n, LanguageSwitcher } from '@/features/shared/i18n'
 
-export const Route = createFileRoute('/(root)/')({
-  component: HomePage,
-})
-
-function HomePage() {
-  const navigate = useNavigate()
-  const { t, dir, locale } = useI18n()
+export default function HomePage() {
+  const router = useRouter()
 
   return (
-    <div className="min-h-screen bg-background" dir={dir}>
-      {/* Language Switcher */}
-      <div className="absolute top-4 end-4 z-10">
-        <LanguageSwitcher />
-      </div>
-
-      {/* Hero Section */}
+    <div className="min-h-screen bg-background">
       <section className="px-6 py-20 md:py-32">
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
             <Badge variant="secondary" className="mb-4">
-              {t('landing.badge')}
+              Resume Project
             </Badge>
             <h1 className="text-4xl md:text-6xl font-bold text-balance mb-6">
-              {t('landing.title')}
+              E-Commerce Platform
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground text-pretty leading-relaxed mb-8">
-              {t('landing.subtitle')}
+              {
+                "Hey there! 👋 This isn't your typical landing page. I'm showcasing a full-stack e-commerce platform I built to demonstrate my technical skills. Feel free to explore the features below and see what I can build."
+              }
             </p>
           </div>
 
@@ -56,48 +44,37 @@ function HomePage() {
               size="lg"
               className="group"
               onClick={() =>
-                navigate({ to: '/marketplace', search: { page: 1 } })
+                router.navigate({ to: '/marketplace', search: { page: 1 } })
               }
             >
-              {t('landing.exploreButton')}
-              <ArrowRight className="ms-2 h-4 w-4 transition-transform group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1 rtl:group-hover:translate-x-0" />
+              Explore the Platform
+              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
-            <a
-              href="https://github.com/NimaSoltanM/neve"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href="https://github.com/NimaSoltanM/neve" target="_blank">
               <Button variant="outline" size="lg">
-                {t('landing.sourceCodeButton')}
+                View Source Code
               </Button>
             </a>
           </div>
 
-          {/* Stats Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-muted-foreground">
             <div>
-              <div className="text-2xl font-bold text-foreground">
-                {locale === 'fa' ? '۳' : '3'}
-              </div>
-              <div>{t('landing.stats.features')}</div>
+              <div className="text-2xl font-bold text-foreground">3</div>
+              <div>Core Features</div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold text-foreground">100%</div>
+              <div>Full-Stack</div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold text-foreground">Modern</div>
+              <div>Tech Stack</div>
             </div>
             <div>
               <div className="text-2xl font-bold text-foreground">
-                {t('landing.stats.fullStackValue')}
+                Responsive
               </div>
-              <div>{t('landing.stats.fullStack')}</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-foreground">
-                {t('landing.stats.techStackValue')}
-              </div>
-              <div>{t('landing.stats.techStack')}</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-foreground">
-                {t('landing.stats.designValue')}
-              </div>
-              <div>{t('landing.stats.design')}</div>
+              <div>Design</div>
             </div>
           </div>
         </div>
@@ -108,96 +85,99 @@ function HomePage() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              {t('landing.featuresTitle')}
+              What I Built
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-pretty">
-              {t('landing.featuresSubtitle')}
+              {
+                'A comprehensive e-commerce solution showcasing modern web development practices and user experience design.'
+              }
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {/* Multi-Vendor Card */}
             <Card className="group hover:bg-accent/50 transition-colors">
               <CardHeader>
                 <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                   <Store className="h-6 w-6 text-primary" />
                 </div>
-                <CardTitle>{t('landing.multiVendor.title')}</CardTitle>
+                <CardTitle>Multi-Vendor Shops</CardTitle>
                 <CardDescription>
-                  {t('landing.multiVendor.description')}
+                  Users can create their own shops, customize storefronts, and
+                  manage their product catalog with an intuitive dashboard.
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2 text-sm text-muted-foreground">
                   <div className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-primary rounded-full flex-shrink-0" />
-                    <span>{t('landing.multiVendor.point1')}</span>
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full" />
+                    Shop customization
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-primary rounded-full flex-shrink-0" />
-                    <span>{t('landing.multiVendor.point2')}</span>
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full" />
+                    Product management
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-primary rounded-full flex-shrink-0" />
-                    <span>{t('landing.multiVendor.point3')}</span>
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full" />
+                    Analytics dashboard
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Order Flow Card */}
             <Card className="group hover:bg-accent/50 transition-colors">
               <CardHeader>
                 <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                   <ShoppingCart className="h-6 w-6 text-primary" />
                 </div>
-                <CardTitle>{t('landing.orderFlow.title')}</CardTitle>
+                <CardTitle>Complete Order Flow</CardTitle>
                 <CardDescription>
-                  {t('landing.orderFlow.description')}
+                  Full shopping cart functionality with secure checkout, payment
+                  processing, and order tracking for seamless transactions.
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2 text-sm text-muted-foreground">
                   <div className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-primary rounded-full flex-shrink-0" />
-                    <span>{t('landing.orderFlow.point1')}</span>
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full" />
+                    Shopping cart & wishlist
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-primary rounded-full flex-shrink-0" />
-                    <span>{t('landing.orderFlow.point2')}</span>
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full" />
+                    Secure payments
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-primary rounded-full flex-shrink-0" />
-                    <span>{t('landing.orderFlow.point3')}</span>
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full" />
+                    Order tracking
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Auction Card */}
             <Card className="group hover:bg-accent/50 transition-colors">
               <CardHeader>
                 <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                   <Gavel className="h-6 w-6 text-primary" />
                 </div>
-                <CardTitle>{t('landing.auction.title')}</CardTitle>
+                <CardTitle>Live Auction System</CardTitle>
                 <CardDescription>
-                  {t('landing.auction.description')}
+                  Real-time bidding platform where users can list items for
+                  auction and participate in competitive bidding with live
+                  updates.
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2 text-sm text-muted-foreground">
                   <div className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-primary rounded-full flex-shrink-0" />
-                    <span>{t('landing.auction.point1')}</span>
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full" />
+                    Real-time bidding
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-primary rounded-full flex-shrink-0" />
-                    <span>{t('landing.auction.point2')}</span>
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full" />
+                    Auction management
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-primary rounded-full flex-shrink-0" />
-                    <span>{t('landing.auction.point3')}</span>
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full" />
+                    Bid notifications
                   </div>
                 </div>
               </CardContent>
@@ -211,76 +191,74 @@ function HomePage() {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              {t('landing.technicalTitle')}
+              Technical Implementation
             </h2>
             <p className="text-lg text-muted-foreground text-pretty">
-              {t('landing.technicalSubtitle')}
+              {
+                'Built with modern technologies and best practices to showcase full-stack development capabilities.'
+              }
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
             <div className="space-y-6">
-              {/* Frontend */}
               <div>
-                <h3 className="text-xl font-semibold mb-3">
-                  {t('landing.frontend.title')}
-                </h3>
+                <h3 className="text-xl font-semibold mb-3">Frontend</h3>
                 <div className="space-y-2">
                   <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
+                    <div className="w-2 h-2 bg-primary rounded-full" />
                     <span className="text-muted-foreground">
-                      {t('landing.frontend.item1')}
+                      Next.js 14 with App Router
                     </span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
+                    <div className="w-2 h-2 bg-primary rounded-full" />
                     <span className="text-muted-foreground">
-                      {t('landing.frontend.item2')}
+                      TypeScript for type safety
                     </span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
+                    <div className="w-2 h-2 bg-primary rounded-full" />
                     <span className="text-muted-foreground">
-                      {t('landing.frontend.item3')}
+                      Tailwind CSS for styling
                     </span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
+                    <div className="w-2 h-2 bg-primary rounded-full" />
                     <span className="text-muted-foreground">
-                      {t('landing.frontend.item4')}
+                      Responsive design patterns
                     </span>
                   </div>
                 </div>
               </div>
 
-              {/* Backend */}
               <div>
                 <h3 className="text-xl font-semibold mb-3">
-                  {t('landing.backend.title')}
+                  Backend & Database
                 </h3>
                 <div className="space-y-2">
                   <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
+                    <div className="w-2 h-2 bg-primary rounded-full" />
                     <span className="text-muted-foreground">
-                      {t('landing.backend.item1')}
+                      Server Actions & API Routes
                     </span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
+                    <div className="w-2 h-2 bg-primary rounded-full" />
                     <span className="text-muted-foreground">
-                      {t('landing.backend.item2')}
+                      Database integration
                     </span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
+                    <div className="w-2 h-2 bg-primary rounded-full" />
                     <span className="text-muted-foreground">
-                      {t('landing.backend.item3')}
+                      Authentication & authorization
                     </span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
+                    <div className="w-2 h-2 bg-primary rounded-full" />
                     <span className="text-muted-foreground">
-                      {t('landing.backend.item4')}
+                      Real-time updates
                     </span>
                   </div>
                 </div>
@@ -288,46 +266,42 @@ function HomePage() {
             </div>
 
             <div className="space-y-6">
-              {/* Key Features */}
               <div>
-                <h3 className="text-xl font-semibold mb-3">
-                  {t('landing.keyFeatures.title')}
-                </h3>
+                <h3 className="text-xl font-semibold mb-3">Key Features</h3>
                 <div className="space-y-2">
                   <div className="flex items-center gap-3">
-                    <Globe className="h-4 w-4 text-primary flex-shrink-0" />
+                    <Users className="h-4 w-4 text-primary" />
                     <span className="text-muted-foreground">
-                      {t('landing.keyFeatures.item1')}
+                      User management system
                     </span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <CreditCard className="h-4 w-4 text-primary flex-shrink-0" />
+                    <CreditCard className="h-4 w-4 text-primary" />
                     <span className="text-muted-foreground">
-                      {t('landing.keyFeatures.item2')}
+                      Payment processing
                     </span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <Shield className="h-4 w-4 text-primary flex-shrink-0" />
+                    <Shield className="h-4 w-4 text-primary" />
                     <span className="text-muted-foreground">
-                      {t('landing.keyFeatures.item3')}
+                      Security best practices
                     </span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <ArrowRight className="h-4 w-4 text-primary flex-shrink-0 rtl:rotate-180" />
+                    <ArrowRight className="h-4 w-4 text-primary" />
                     <span className="text-muted-foreground">
-                      {t('landing.keyFeatures.item4')}
+                      SEO optimization
                     </span>
                   </div>
                 </div>
               </div>
 
-              {/* Why This Project Box */}
               <div className="p-6 bg-card rounded-lg border">
-                <h4 className="font-semibold mb-2">
-                  {t('landing.whyProject.title')}
-                </h4>
+                <h4 className="font-semibold mb-2">{'Why This Project?'}</h4>
                 <p className="text-sm text-muted-foreground text-pretty">
-                  {t('landing.whyProject.description')}
+                  {
+                    'This project demonstrates my ability to build complex, real-world applications with multiple user flows, data relationships, and modern web technologies.'
+                  }
                 </p>
               </div>
             </div>
@@ -339,10 +313,12 @@ function HomePage() {
       <section className="px-6 py-20">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            {t('landing.ctaTitle')}
+            {'Ready to See More?'}
           </h2>
           <p className="text-lg text-muted-foreground mb-8 text-pretty">
-            {t('landing.ctaSubtitle')}
+            {
+              'Explore the live platform, check out the code, or get in touch to discuss how I can contribute to your team.'
+            }
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -350,23 +326,19 @@ function HomePage() {
               size="lg"
               className="group"
               onClick={() =>
-                navigate({ to: '/marketplace', search: { page: 1 } })
+                router.navigate({ to: '/marketplace', search: { page: 1 } })
               }
             >
-              {t('landing.tryPlatformButton')}
-              <ArrowRight className="ms-2 h-4 w-4 transition-transform group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1 rtl:group-hover:translate-x-0" />
+              Try the Platform
+              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
-            <a
-              href="https://github.com/NimaSoltanM/neve"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href="https://github.com/NimaSoltanM/neve" target="_blank">
               <Button variant="outline" size="lg">
-                {t('landing.githubButton')}
+                View on GitHub
               </Button>
             </a>
             <Button variant="outline" size="lg">
-              {t('landing.contactButton')}
+              Contact Me
             </Button>
           </div>
         </div>

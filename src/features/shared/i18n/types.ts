@@ -401,4 +401,95 @@ export type Translations = {
     viewOrder: string
     continueShopping: string
   }
+  landing: {
+    // Hero Section
+    badge: string
+    title: string
+    subtitle: string
+    exploreButton: string
+    sourceCodeButton: string
+    contactButton: string
+
+    // Stats
+    stats: {
+      features: string
+      featuresCount: string
+      fullStack: string
+      fullStackValue: string
+      techStack: string
+      techStackValue: string
+      design: string
+      designValue: string
+    }
+
+    // Features Section
+    featuresTitle: string
+    featuresSubtitle: string
+
+    // Feature Cards
+    multiVendor: {
+      title: string
+      description: string
+      point1: string
+      point2: string
+      point3: string
+    }
+
+    orderFlow: {
+      title: string
+      description: string
+      point1: string
+      point2: string
+      point3: string
+    }
+
+    auction: {
+      title: string
+      description: string
+      point1: string
+      point2: string
+      point3: string
+    }
+
+    // Technical Section
+    technicalTitle: string
+    technicalSubtitle: string
+
+    // Tech Stack
+    frontend: {
+      title: string
+      item1: string
+      item2: string
+      item3: string
+      item4: string
+    }
+
+    backend: {
+      title: string
+      item1: string
+      item2: string
+      item3: string
+      item4: string
+    }
+
+    keyFeatures: {
+      title: string
+      item1: string
+      item2: string
+      item3: string
+      item4: string
+    }
+
+    // Why This Project
+    whyProject: {
+      title: string
+      description: string
+    }
+
+    // CTA Section
+    ctaTitle: string
+    ctaSubtitle: string
+    tryPlatformButton: string
+    githubButton: string
+  }
 }
