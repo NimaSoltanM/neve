@@ -1,5 +1,4 @@
-import { createFileRoute, redirect, Link } from '@tanstack/react-router'
-import { getCurrentUser } from '@/features/auth/actions/get-current-user.action'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { useOrders } from '@/features/orders/hooks/use-orders'
 import { useI18n } from '@/features/shared/i18n'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -9,23 +8,9 @@ import { ORDER_STATUS_CONFIG } from '@/features/orders/types/order.types'
 import { Package, Calendar, ChevronRight, Loader2 } from 'lucide-react'
 import { format } from 'date-fns'
 
-export const Route = createFileRoute('/(root)/(marketplace)/dashboard/orders/')(
-  {
-    beforeLoad: async () => {
-      const { isAuthenticated } = await getCurrentUser()
-
-      if (!isAuthenticated) {
-        throw redirect({
-          to: '/auth',
-          search: {
-            callbackUrl: '/orders',
-          },
-        })
-      }
-    },
-    component: OrdersListPage,
-  },
-)
+export const Route = createFileRoute('/(root)/dashboard/orders/')({
+  component: OrdersListPage,
+})
 
 function OrdersListPage() {
   const { t, dir, locale } = useI18n()

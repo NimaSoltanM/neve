@@ -14,19 +14,20 @@ import { Route as rootRouteRouteImport } from './routes/(root)/route'
 import { Route as CheckoutIndexRouteImport } from './routes/checkout/index'
 import { Route as AuthIndexRouteImport } from './routes/auth/index'
 import { Route as rootIndexRouteImport } from './routes/(root)/index'
+import { Route as rootDashboardRouteRouteImport } from './routes/(root)/dashboard/route'
 import { Route as rootmarketplaceRouteRouteImport } from './routes/(root)/(marketplace)/route'
 import { Route as rootmarketplaceShopRouteRouteImport } from './routes/(root)/(marketplace)/shop/route'
-import { Route as rootmarketplaceDashboardRouteRouteImport } from './routes/(root)/(marketplace)/dashboard/route'
+import { Route as rootDashboardOrdersIndexRouteImport } from './routes/(root)/dashboard/orders/index'
+import { Route as rootDashboardNotificationsIndexRouteImport } from './routes/(root)/dashboard/notifications/index'
 import { Route as rootmarketplaceShopIndexRouteImport } from './routes/(root)/(marketplace)/shop/index'
 import { Route as rootmarketplaceMarketplaceIndexRouteImport } from './routes/(root)/(marketplace)/marketplace/index'
 import { Route as rootmarketplaceCategoriesIndexRouteImport } from './routes/(root)/(marketplace)/categories/index'
 import { Route as rootmarketplaceShopsSlugRouteImport } from './routes/(root)/(marketplace)/shops/$slug'
 import { Route as rootmarketplaceCategoriesSlugRouteImport } from './routes/(root)/(marketplace)/categories/$slug'
+import { Route as rootDashboardOrdersOrderIdIndexRouteImport } from './routes/(root)/dashboard/orders/$orderId/index'
 import { Route as rootmarketplaceProductsNewIndexRouteImport } from './routes/(root)/(marketplace)/products/new/index'
 import { Route as rootmarketplaceProductsProductSlugIndexRouteImport } from './routes/(root)/(marketplace)/products/$productSlug/index'
-import { Route as rootmarketplaceDashboardOrdersIndexRouteImport } from './routes/(root)/(marketplace)/dashboard/orders/index'
-import { Route as rootmarketplaceDashboardOrdersOrderIdIndexRouteImport } from './routes/(root)/(marketplace)/dashboard/orders/$orderId/index'
-import { Route as rootmarketplaceDashboardOrdersOrderIdSuccessRouteImport } from './routes/(root)/(marketplace)/dashboard/orders/$orderId/success'
+import { Route as rootDashboardOrdersOrderIdSuccessRouteImport } from './routes/(root)/dashboard/orders/$orderId/success'
 
 const TestUploadRoute = TestUploadRouteImport.update({
   id: '/test-upload',
@@ -52,6 +53,11 @@ const rootIndexRoute = rootIndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteRoute,
 } as any)
+const rootDashboardRouteRoute = rootDashboardRouteRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteRoute,
+} as any)
 const rootmarketplaceRouteRoute = rootmarketplaceRouteRouteImport.update({
   id: '/(marketplace)',
   getParentRoute: () => rootRouteRoute,
@@ -62,11 +68,17 @@ const rootmarketplaceShopRouteRoute =
     path: '/shop',
     getParentRoute: () => rootmarketplaceRouteRoute,
   } as any)
-const rootmarketplaceDashboardRouteRoute =
-  rootmarketplaceDashboardRouteRouteImport.update({
-    id: '/dashboard',
-    path: '/dashboard',
-    getParentRoute: () => rootmarketplaceRouteRoute,
+const rootDashboardOrdersIndexRoute =
+  rootDashboardOrdersIndexRouteImport.update({
+    id: '/orders/',
+    path: '/orders/',
+    getParentRoute: () => rootDashboardRouteRoute,
+  } as any)
+const rootDashboardNotificationsIndexRoute =
+  rootDashboardNotificationsIndexRouteImport.update({
+    id: '/notifications/',
+    path: '/notifications/',
+    getParentRoute: () => rootDashboardRouteRoute,
   } as any)
 const rootmarketplaceShopIndexRoute =
   rootmarketplaceShopIndexRouteImport.update({
@@ -98,6 +110,12 @@ const rootmarketplaceCategoriesSlugRoute =
     path: '/categories/$slug',
     getParentRoute: () => rootmarketplaceRouteRoute,
   } as any)
+const rootDashboardOrdersOrderIdIndexRoute =
+  rootDashboardOrdersOrderIdIndexRouteImport.update({
+    id: '/orders/$orderId/',
+    path: '/orders/$orderId/',
+    getParentRoute: () => rootDashboardRouteRoute,
+  } as any)
 const rootmarketplaceProductsNewIndexRoute =
   rootmarketplaceProductsNewIndexRouteImport.update({
     id: '/products/new/',
@@ -110,137 +128,131 @@ const rootmarketplaceProductsProductSlugIndexRoute =
     path: '/products/$productSlug/',
     getParentRoute: () => rootmarketplaceRouteRoute,
   } as any)
-const rootmarketplaceDashboardOrdersIndexRoute =
-  rootmarketplaceDashboardOrdersIndexRouteImport.update({
-    id: '/orders/',
-    path: '/orders/',
-    getParentRoute: () => rootmarketplaceDashboardRouteRoute,
-  } as any)
-const rootmarketplaceDashboardOrdersOrderIdIndexRoute =
-  rootmarketplaceDashboardOrdersOrderIdIndexRouteImport.update({
-    id: '/orders/$orderId/',
-    path: '/orders/$orderId/',
-    getParentRoute: () => rootmarketplaceDashboardRouteRoute,
-  } as any)
-const rootmarketplaceDashboardOrdersOrderIdSuccessRoute =
-  rootmarketplaceDashboardOrdersOrderIdSuccessRouteImport.update({
+const rootDashboardOrdersOrderIdSuccessRoute =
+  rootDashboardOrdersOrderIdSuccessRouteImport.update({
     id: '/orders/$orderId/success',
     path: '/orders/$orderId/success',
-    getParentRoute: () => rootmarketplaceDashboardRouteRoute,
+    getParentRoute: () => rootDashboardRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof rootIndexRoute
   '/test-upload': typeof TestUploadRoute
+  '/dashboard': typeof rootDashboardRouteRouteWithChildren
   '/auth': typeof AuthIndexRoute
   '/checkout': typeof CheckoutIndexRoute
-  '/dashboard': typeof rootmarketplaceDashboardRouteRouteWithChildren
   '/shop': typeof rootmarketplaceShopRouteRouteWithChildren
   '/categories/$slug': typeof rootmarketplaceCategoriesSlugRoute
   '/shops/$slug': typeof rootmarketplaceShopsSlugRoute
   '/categories': typeof rootmarketplaceCategoriesIndexRoute
   '/marketplace': typeof rootmarketplaceMarketplaceIndexRoute
   '/shop/': typeof rootmarketplaceShopIndexRoute
-  '/dashboard/orders': typeof rootmarketplaceDashboardOrdersIndexRoute
+  '/dashboard/notifications': typeof rootDashboardNotificationsIndexRoute
+  '/dashboard/orders': typeof rootDashboardOrdersIndexRoute
+  '/dashboard/orders/$orderId/success': typeof rootDashboardOrdersOrderIdSuccessRoute
   '/products/$productSlug': typeof rootmarketplaceProductsProductSlugIndexRoute
   '/products/new': typeof rootmarketplaceProductsNewIndexRoute
-  '/dashboard/orders/$orderId/success': typeof rootmarketplaceDashboardOrdersOrderIdSuccessRoute
-  '/dashboard/orders/$orderId': typeof rootmarketplaceDashboardOrdersOrderIdIndexRoute
+  '/dashboard/orders/$orderId': typeof rootDashboardOrdersOrderIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/test-upload': typeof TestUploadRoute
   '/': typeof rootIndexRoute
+  '/dashboard': typeof rootDashboardRouteRouteWithChildren
   '/auth': typeof AuthIndexRoute
   '/checkout': typeof CheckoutIndexRoute
-  '/dashboard': typeof rootmarketplaceDashboardRouteRouteWithChildren
   '/categories/$slug': typeof rootmarketplaceCategoriesSlugRoute
   '/shops/$slug': typeof rootmarketplaceShopsSlugRoute
   '/categories': typeof rootmarketplaceCategoriesIndexRoute
   '/marketplace': typeof rootmarketplaceMarketplaceIndexRoute
   '/shop': typeof rootmarketplaceShopIndexRoute
-  '/dashboard/orders': typeof rootmarketplaceDashboardOrdersIndexRoute
+  '/dashboard/notifications': typeof rootDashboardNotificationsIndexRoute
+  '/dashboard/orders': typeof rootDashboardOrdersIndexRoute
+  '/dashboard/orders/$orderId/success': typeof rootDashboardOrdersOrderIdSuccessRoute
   '/products/$productSlug': typeof rootmarketplaceProductsProductSlugIndexRoute
   '/products/new': typeof rootmarketplaceProductsNewIndexRoute
-  '/dashboard/orders/$orderId/success': typeof rootmarketplaceDashboardOrdersOrderIdSuccessRoute
-  '/dashboard/orders/$orderId': typeof rootmarketplaceDashboardOrdersOrderIdIndexRoute
+  '/dashboard/orders/$orderId': typeof rootDashboardOrdersOrderIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/(root)': typeof rootRouteRouteWithChildren
   '/test-upload': typeof TestUploadRoute
   '/(root)/(marketplace)': typeof rootmarketplaceRouteRouteWithChildren
+  '/(root)/dashboard': typeof rootDashboardRouteRouteWithChildren
   '/(root)/': typeof rootIndexRoute
   '/auth/': typeof AuthIndexRoute
   '/checkout/': typeof CheckoutIndexRoute
-  '/(root)/(marketplace)/dashboard': typeof rootmarketplaceDashboardRouteRouteWithChildren
   '/(root)/(marketplace)/shop': typeof rootmarketplaceShopRouteRouteWithChildren
   '/(root)/(marketplace)/categories/$slug': typeof rootmarketplaceCategoriesSlugRoute
   '/(root)/(marketplace)/shops/$slug': typeof rootmarketplaceShopsSlugRoute
   '/(root)/(marketplace)/categories/': typeof rootmarketplaceCategoriesIndexRoute
   '/(root)/(marketplace)/marketplace/': typeof rootmarketplaceMarketplaceIndexRoute
   '/(root)/(marketplace)/shop/': typeof rootmarketplaceShopIndexRoute
-  '/(root)/(marketplace)/dashboard/orders/': typeof rootmarketplaceDashboardOrdersIndexRoute
+  '/(root)/dashboard/notifications/': typeof rootDashboardNotificationsIndexRoute
+  '/(root)/dashboard/orders/': typeof rootDashboardOrdersIndexRoute
+  '/(root)/dashboard/orders/$orderId/success': typeof rootDashboardOrdersOrderIdSuccessRoute
   '/(root)/(marketplace)/products/$productSlug/': typeof rootmarketplaceProductsProductSlugIndexRoute
   '/(root)/(marketplace)/products/new/': typeof rootmarketplaceProductsNewIndexRoute
-  '/(root)/(marketplace)/dashboard/orders/$orderId/success': typeof rootmarketplaceDashboardOrdersOrderIdSuccessRoute
-  '/(root)/(marketplace)/dashboard/orders/$orderId/': typeof rootmarketplaceDashboardOrdersOrderIdIndexRoute
+  '/(root)/dashboard/orders/$orderId/': typeof rootDashboardOrdersOrderIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/test-upload'
+    | '/dashboard'
     | '/auth'
     | '/checkout'
-    | '/dashboard'
     | '/shop'
     | '/categories/$slug'
     | '/shops/$slug'
     | '/categories'
     | '/marketplace'
     | '/shop/'
+    | '/dashboard/notifications'
     | '/dashboard/orders'
+    | '/dashboard/orders/$orderId/success'
     | '/products/$productSlug'
     | '/products/new'
-    | '/dashboard/orders/$orderId/success'
     | '/dashboard/orders/$orderId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/test-upload'
     | '/'
+    | '/dashboard'
     | '/auth'
     | '/checkout'
-    | '/dashboard'
     | '/categories/$slug'
     | '/shops/$slug'
     | '/categories'
     | '/marketplace'
     | '/shop'
+    | '/dashboard/notifications'
     | '/dashboard/orders'
+    | '/dashboard/orders/$orderId/success'
     | '/products/$productSlug'
     | '/products/new'
-    | '/dashboard/orders/$orderId/success'
     | '/dashboard/orders/$orderId'
   id:
     | '__root__'
     | '/(root)'
     | '/test-upload'
     | '/(root)/(marketplace)'
+    | '/(root)/dashboard'
     | '/(root)/'
     | '/auth/'
     | '/checkout/'
-    | '/(root)/(marketplace)/dashboard'
     | '/(root)/(marketplace)/shop'
     | '/(root)/(marketplace)/categories/$slug'
     | '/(root)/(marketplace)/shops/$slug'
     | '/(root)/(marketplace)/categories/'
     | '/(root)/(marketplace)/marketplace/'
     | '/(root)/(marketplace)/shop/'
-    | '/(root)/(marketplace)/dashboard/orders/'
+    | '/(root)/dashboard/notifications/'
+    | '/(root)/dashboard/orders/'
+    | '/(root)/dashboard/orders/$orderId/success'
     | '/(root)/(marketplace)/products/$productSlug/'
     | '/(root)/(marketplace)/products/new/'
-    | '/(root)/(marketplace)/dashboard/orders/$orderId/success'
-    | '/(root)/(marketplace)/dashboard/orders/$orderId/'
+    | '/(root)/dashboard/orders/$orderId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -287,6 +299,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof rootIndexRouteImport
       parentRoute: typeof rootRouteRoute
     }
+    '/(root)/dashboard': {
+      id: '/(root)/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof rootDashboardRouteRouteImport
+      parentRoute: typeof rootRouteRoute
+    }
     '/(root)/(marketplace)': {
       id: '/(root)/(marketplace)'
       path: '/'
@@ -301,12 +320,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof rootmarketplaceShopRouteRouteImport
       parentRoute: typeof rootmarketplaceRouteRoute
     }
-    '/(root)/(marketplace)/dashboard': {
-      id: '/(root)/(marketplace)/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof rootmarketplaceDashboardRouteRouteImport
-      parentRoute: typeof rootmarketplaceRouteRoute
+    '/(root)/dashboard/orders/': {
+      id: '/(root)/dashboard/orders/'
+      path: '/orders'
+      fullPath: '/dashboard/orders'
+      preLoaderRoute: typeof rootDashboardOrdersIndexRouteImport
+      parentRoute: typeof rootDashboardRouteRoute
+    }
+    '/(root)/dashboard/notifications/': {
+      id: '/(root)/dashboard/notifications/'
+      path: '/notifications'
+      fullPath: '/dashboard/notifications'
+      preLoaderRoute: typeof rootDashboardNotificationsIndexRouteImport
+      parentRoute: typeof rootDashboardRouteRoute
     }
     '/(root)/(marketplace)/shop/': {
       id: '/(root)/(marketplace)/shop/'
@@ -343,6 +369,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof rootmarketplaceCategoriesSlugRouteImport
       parentRoute: typeof rootmarketplaceRouteRoute
     }
+    '/(root)/dashboard/orders/$orderId/': {
+      id: '/(root)/dashboard/orders/$orderId/'
+      path: '/orders/$orderId'
+      fullPath: '/dashboard/orders/$orderId'
+      preLoaderRoute: typeof rootDashboardOrdersOrderIdIndexRouteImport
+      parentRoute: typeof rootDashboardRouteRoute
+    }
     '/(root)/(marketplace)/products/new/': {
       id: '/(root)/(marketplace)/products/new/'
       path: '/products/new'
@@ -357,50 +390,15 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof rootmarketplaceProductsProductSlugIndexRouteImport
       parentRoute: typeof rootmarketplaceRouteRoute
     }
-    '/(root)/(marketplace)/dashboard/orders/': {
-      id: '/(root)/(marketplace)/dashboard/orders/'
-      path: '/orders'
-      fullPath: '/dashboard/orders'
-      preLoaderRoute: typeof rootmarketplaceDashboardOrdersIndexRouteImport
-      parentRoute: typeof rootmarketplaceDashboardRouteRoute
-    }
-    '/(root)/(marketplace)/dashboard/orders/$orderId/': {
-      id: '/(root)/(marketplace)/dashboard/orders/$orderId/'
-      path: '/orders/$orderId'
-      fullPath: '/dashboard/orders/$orderId'
-      preLoaderRoute: typeof rootmarketplaceDashboardOrdersOrderIdIndexRouteImport
-      parentRoute: typeof rootmarketplaceDashboardRouteRoute
-    }
-    '/(root)/(marketplace)/dashboard/orders/$orderId/success': {
-      id: '/(root)/(marketplace)/dashboard/orders/$orderId/success'
+    '/(root)/dashboard/orders/$orderId/success': {
+      id: '/(root)/dashboard/orders/$orderId/success'
       path: '/orders/$orderId/success'
       fullPath: '/dashboard/orders/$orderId/success'
-      preLoaderRoute: typeof rootmarketplaceDashboardOrdersOrderIdSuccessRouteImport
-      parentRoute: typeof rootmarketplaceDashboardRouteRoute
+      preLoaderRoute: typeof rootDashboardOrdersOrderIdSuccessRouteImport
+      parentRoute: typeof rootDashboardRouteRoute
     }
   }
 }
-
-interface rootmarketplaceDashboardRouteRouteChildren {
-  rootmarketplaceDashboardOrdersIndexRoute: typeof rootmarketplaceDashboardOrdersIndexRoute
-  rootmarketplaceDashboardOrdersOrderIdSuccessRoute: typeof rootmarketplaceDashboardOrdersOrderIdSuccessRoute
-  rootmarketplaceDashboardOrdersOrderIdIndexRoute: typeof rootmarketplaceDashboardOrdersOrderIdIndexRoute
-}
-
-const rootmarketplaceDashboardRouteRouteChildren: rootmarketplaceDashboardRouteRouteChildren =
-  {
-    rootmarketplaceDashboardOrdersIndexRoute:
-      rootmarketplaceDashboardOrdersIndexRoute,
-    rootmarketplaceDashboardOrdersOrderIdSuccessRoute:
-      rootmarketplaceDashboardOrdersOrderIdSuccessRoute,
-    rootmarketplaceDashboardOrdersOrderIdIndexRoute:
-      rootmarketplaceDashboardOrdersOrderIdIndexRoute,
-  }
-
-const rootmarketplaceDashboardRouteRouteWithChildren =
-  rootmarketplaceDashboardRouteRoute._addFileChildren(
-    rootmarketplaceDashboardRouteRouteChildren,
-  )
 
 interface rootmarketplaceShopRouteRouteChildren {
   rootmarketplaceShopIndexRoute: typeof rootmarketplaceShopIndexRoute
@@ -417,7 +415,6 @@ const rootmarketplaceShopRouteRouteWithChildren =
   )
 
 interface rootmarketplaceRouteRouteChildren {
-  rootmarketplaceDashboardRouteRoute: typeof rootmarketplaceDashboardRouteRouteWithChildren
   rootmarketplaceShopRouteRoute: typeof rootmarketplaceShopRouteRouteWithChildren
   rootmarketplaceCategoriesSlugRoute: typeof rootmarketplaceCategoriesSlugRoute
   rootmarketplaceShopsSlugRoute: typeof rootmarketplaceShopsSlugRoute
@@ -428,8 +425,6 @@ interface rootmarketplaceRouteRouteChildren {
 }
 
 const rootmarketplaceRouteRouteChildren: rootmarketplaceRouteRouteChildren = {
-  rootmarketplaceDashboardRouteRoute:
-    rootmarketplaceDashboardRouteRouteWithChildren,
   rootmarketplaceShopRouteRoute: rootmarketplaceShopRouteRouteWithChildren,
   rootmarketplaceCategoriesSlugRoute: rootmarketplaceCategoriesSlugRoute,
   rootmarketplaceShopsSlugRoute: rootmarketplaceShopsSlugRoute,
@@ -443,13 +438,33 @@ const rootmarketplaceRouteRouteChildren: rootmarketplaceRouteRouteChildren = {
 const rootmarketplaceRouteRouteWithChildren =
   rootmarketplaceRouteRoute._addFileChildren(rootmarketplaceRouteRouteChildren)
 
+interface rootDashboardRouteRouteChildren {
+  rootDashboardNotificationsIndexRoute: typeof rootDashboardNotificationsIndexRoute
+  rootDashboardOrdersIndexRoute: typeof rootDashboardOrdersIndexRoute
+  rootDashboardOrdersOrderIdSuccessRoute: typeof rootDashboardOrdersOrderIdSuccessRoute
+  rootDashboardOrdersOrderIdIndexRoute: typeof rootDashboardOrdersOrderIdIndexRoute
+}
+
+const rootDashboardRouteRouteChildren: rootDashboardRouteRouteChildren = {
+  rootDashboardNotificationsIndexRoute: rootDashboardNotificationsIndexRoute,
+  rootDashboardOrdersIndexRoute: rootDashboardOrdersIndexRoute,
+  rootDashboardOrdersOrderIdSuccessRoute:
+    rootDashboardOrdersOrderIdSuccessRoute,
+  rootDashboardOrdersOrderIdIndexRoute: rootDashboardOrdersOrderIdIndexRoute,
+}
+
+const rootDashboardRouteRouteWithChildren =
+  rootDashboardRouteRoute._addFileChildren(rootDashboardRouteRouteChildren)
+
 interface rootRouteRouteChildren {
   rootmarketplaceRouteRoute: typeof rootmarketplaceRouteRouteWithChildren
+  rootDashboardRouteRoute: typeof rootDashboardRouteRouteWithChildren
   rootIndexRoute: typeof rootIndexRoute
 }
 
 const rootRouteRouteChildren: rootRouteRouteChildren = {
   rootmarketplaceRouteRoute: rootmarketplaceRouteRouteWithChildren,
+  rootDashboardRouteRoute: rootDashboardRouteRouteWithChildren,
   rootIndexRoute: rootIndexRoute,
 }
 

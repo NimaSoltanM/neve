@@ -5,7 +5,7 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 import { DashboardSidebar } from '@/features/dashboard/components/dashboard-sidebar'
 import { useI18n } from '@/features/shared/i18n'
 
-export const Route = createFileRoute('/(root)/(marketplace)/dashboard')({
+export const Route = createFileRoute('/(root)/dashboard')({
   beforeLoad: async () => {
     const { isAuthenticated, user, needsProfile } = await getCurrentUser()
 

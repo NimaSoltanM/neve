@@ -11,3 +11,5 @@ export * from '@/features/shared/upload/schemas/file.schema'
 
 export * from '@/features/orders/schemas/order.schema'
 export * from '@/features/orders/schemas/order-item.schema'
+
+export * from '@/features/notifications/schemas/notification.schema'

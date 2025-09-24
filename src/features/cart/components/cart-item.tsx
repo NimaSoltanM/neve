@@ -4,7 +4,6 @@ import { useI18n } from '@/features/shared/i18n'
 import { useCartItem } from '../hooks/use-cart-item'
 import { formatPrice } from '@/lib/utils'
 import { Minus, Plus, Trash2, Gavel } from 'lucide-react'
-import { Link } from '@tanstack/react-router'
 import { CartItemWithProduct } from '../schemas/cart.schema'
 
 interface CartItemProps {
@@ -20,26 +19,14 @@ export function CartItem({ item }: CartItemProps) {
 
   return (
     <div className="flex gap-4">
-      <Link
-        to="/products/$slug"
-        params={{ slug: item.product.slug }}
-        className="shrink-0"
-      >
-        <img
-          src={image}
-          alt={item.product.name}
-          className="h-20 w-20 rounded-lg object-cover"
-        />
-      </Link>
+      <img
+        src={image}
+        alt={item.product.name}
+        className="h-20 w-20 rounded-lg object-cover"
+      />
 
       <div className="flex-1 space-y-1">
-        <Link
-          to="/products/$slug"
-          params={{ slug: item.product.slug }}
-          className="font-medium hover:underline line-clamp-1"
-        >
-          {item.product.name}
-        </Link>
+        {item.product.name}
 
         {isAuction ? (
           <div className="flex items-center gap-1">

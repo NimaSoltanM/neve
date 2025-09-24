@@ -512,6 +512,34 @@ const en: Translations = {
     tryPlatformButton: 'Try the Platform',
     githubButton: 'View on GitHub',
   },
+  notifications: {
+    title: 'Notifications',
+    empty: 'No notifications yet',
+    emptyTitle: 'All caught up!',
+    emptyDescription:
+      "You'll see new notifications here when there's activity on your account",
+    viewAll: 'View all notifications',
+    markAllRead: 'Mark all as read',
+    clearAll: 'Clear all',
+    unreadCount: '{count} unread notifications',
+    all: 'All',
+    unread: 'Unread',
+    read: 'Read',
+    noUnread: 'No unread notifications',
+    noRead: 'No read notifications',
+    noNotifications: 'No notifications',
+    bids: 'Bids',
+    orders: 'Orders',
+    system: 'System',
+    total: 'Total',
+    delete: 'Delete',
+    priority: {
+      urgent: 'Urgent',
+      high: 'High',
+      normal: 'Normal',
+      low: 'Low',
+    },
+  },
 }
 
 export default en

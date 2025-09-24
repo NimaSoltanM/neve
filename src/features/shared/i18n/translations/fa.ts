@@ -509,6 +509,34 @@ const fa: Translations = {
     tryPlatformButton: 'امتحان پلتفرم',
     githubButton: 'مشاهده در GitHub',
   },
+  notifications: {
+    title: 'اعلان‌ها',
+    empty: 'هنوز اعلانی ندارید',
+    emptyTitle: 'همه چیز به روز است!',
+    emptyDescription:
+      'وقتی فعالیتی در حساب شما انجام شود، اعلان‌های جدید را اینجا خواهید دید',
+    viewAll: 'مشاهده همه اعلان‌ها',
+    markAllRead: 'علامت‌گذاری همه به عنوان خوانده شده',
+    clearAll: 'پاک کردن همه',
+    unreadCount: '{count} اعلان خوانده نشده',
+    all: 'همه',
+    unread: 'خوانده نشده',
+    read: 'خوانده شده',
+    noUnread: 'اعلان خوانده نشده‌ای ندارید',
+    noRead: 'اعلان خوانده شده‌ای ندارید',
+    noNotifications: 'اعلانی وجود ندارد',
+    bids: 'مزایده‌ها',
+    orders: 'سفارش‌ها',
+    system: 'سیستم',
+    total: 'مجموع',
+    delete: 'حذف',
+    priority: {
+      urgent: 'فوری',
+      high: 'مهم',
+      normal: 'عادی',
+      low: 'کم اهمیت',
+    },
+  },
 }
 
 export default fa

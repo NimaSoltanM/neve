@@ -1,5 +1,4 @@
 import { createFileRoute, redirect, Link } from '@tanstack/react-router'
-import { getCurrentUser } from '@/features/auth/actions/get-current-user.action'
 import { getOrderDetails } from '@/features/orders/actions/get-order-details.action'
 import { useI18n } from '@/features/shared/i18n'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -9,20 +8,8 @@ import { CheckCircle, Package, Home, Receipt, Loader2 } from 'lucide-react'
 import { format } from 'date-fns'
 
 export const Route = createFileRoute(
-  '/(root)/(marketplace)/dashboard/orders/$orderId/success',
+  '/(root)/dashboard/orders/$orderId/success',
 )({
-  beforeLoad: async () => {
-    const { isAuthenticated } = await getCurrentUser()
-
-    if (!isAuthenticated) {
-      throw redirect({
-        to: '/auth',
-        search: {
-          callbackUrl: window.location.pathname,
-        },
-      })
-    }
-  },
   loader: async ({ params }) => {
     const orderId = Number(params.orderId)
 

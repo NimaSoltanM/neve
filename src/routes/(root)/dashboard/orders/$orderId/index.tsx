@@ -1,25 +1,10 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
-import { getCurrentUser } from '@/features/auth/actions/get-current-user.action'
 import { getOrderDetails } from '@/features/orders/actions/get-order-details.action'
 import { OrderDetail } from '@/features/orders/components/order-detail'
 import { useI18n } from '@/features/shared/i18n'
 import { Loader2 } from 'lucide-react'
 
-export const Route = createFileRoute(
-  '/(root)/(marketplace)/dashboard/orders/$orderId/',
-)({
-  beforeLoad: async () => {
-    const { isAuthenticated } = await getCurrentUser()
-
-    if (!isAuthenticated) {
-      throw redirect({
-        to: '/auth',
-        search: {
-          callbackUrl: window.location.pathname,
-        },
-      })
-    }
-  },
+export const Route = createFileRoute('/(root)/dashboard/orders/$orderId/')({
   loader: async ({ params }) => {
     const orderId = Number(params.orderId)
 

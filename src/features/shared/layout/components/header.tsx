@@ -20,9 +20,7 @@ import {
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
 import {
-  ShoppingCart,
   Store,
   Package,
   LogOut,
@@ -31,6 +29,7 @@ import {
   Gavel,
 } from 'lucide-react'
 import { CartButton } from '@/features/cart/components/cart-button'
+import { NotificationBell } from '@/features/notifications/components/notification-bell'
 
 export function Header() {
   const { t, dir } = useI18n()
@@ -52,7 +51,7 @@ export function Header() {
         <NavigationMenu className="hidden md:flex">
           <NavigationMenuList>
             <NavigationMenuItem>
-              <Link to="/marketplace">
+              <Link to="/marketplace" search={{ page: 1 }}>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                   {t('nav.marketplace')}
                 </NavigationMenuLink>
@@ -65,19 +64,14 @@ export function Header() {
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link to="/shops">
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  {t('nav.shops')}
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
 
         {/* Right side actions */}
         <div className="ms-auto flex items-center gap-2">
           <CartButton />
+
+          {isAuthenticated && <NotificationBell />}
 
           {/* Language Switcher */}
           <LanguageSwitcher />
@@ -129,7 +123,10 @@ export function Header() {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/dashboard/wishlist" className="cursor-pointer">
+                  <Link
+                    to="/dashboard/dashboard/wishlist"
+                    className="cursor-pointer"
+                  >
                     <Heart className="me-2 h-4 w-4" />
                     {t('nav.wishlist')}
                   </Link>

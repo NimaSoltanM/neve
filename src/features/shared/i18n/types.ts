@@ -492,4 +492,32 @@ export type Translations = {
     tryPlatformButton: string
     githubButton: string
   }
+
+  notifications: {
+    title: string
+    empty: string
+    emptyTitle: string
+    emptyDescription: string
+    viewAll: string
+    markAllRead: string
+    clearAll: string
+    unreadCount: string
+    all: string
+    unread: string
+    read: string
+    noUnread: string
+    noRead: string
+    noNotifications: string
+    bids: string
+    orders: string
+    system: string
+    total: string
+    delete: string
+    priority: {
+      urgent: string
+      high: string
+      normal: string
+      low: string
+    }
+  }
 }
