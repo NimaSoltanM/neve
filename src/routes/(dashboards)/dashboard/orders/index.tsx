@@ -8,7 +8,7 @@ import { ORDER_STATUS_CONFIG } from '@/features/orders/types/order.types'
 import { Package, Calendar, ChevronRight, Loader2 } from 'lucide-react'
 import { format } from 'date-fns'
 
-export const Route = createFileRoute('/(root)/dashboard/orders/')({
+export const Route = createFileRoute('/(dashboards)/dashboard/orders/')({
   component: OrdersListPage,
 })
 

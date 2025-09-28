@@ -540,6 +540,47 @@ const en: Translations = {
       low: 'Low',
     },
   },
+  bids: {
+    title: 'My Bids',
+    tabs: {
+      active: 'Active',
+      won: 'Won',
+      lost: 'Lost',
+    },
+    stats: {
+      activeBids: 'Active Bids',
+      currentlyBidding: 'Currently bidding on',
+      wonAuctions: 'Won Auctions',
+      totalWins: 'Total wins',
+      totalBids: 'Total Bids',
+      last30Days: 'Last 30 days',
+      totalSpent: 'Total Spent',
+      paidAuctions: 'On paid auctions',
+    },
+    empty: {
+      active: 'You have no active bids',
+      won: "You haven't won any auctions yet",
+      lost: 'No lost auctions in the last 7 days',
+    },
+    yourBid: 'Your bid',
+    currentBid: 'Current',
+    status: {
+      winning: 'Winning',
+      outbid: 'Outbid',
+    },
+    bidAgain: 'Bid',
+    browseAuctions: 'Browse Auctions',
+    wonFor: 'Won for',
+    remaining: 'remaining',
+    checkout: 'Checkout',
+    inCart: 'In Cart',
+    pendingPayment: 'Pending Payment',
+    overduePayment: 'Overdue Payment',
+    overdueDescription: 'You have auctions with overdue payment deadlines',
+    soldFor: 'Sold for',
+    wonBy: 'Won by',
+    viewSimilar: 'View Similar',
+  },
 }
 
 export default en

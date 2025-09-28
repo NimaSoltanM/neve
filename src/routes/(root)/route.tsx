@@ -2,6 +2,7 @@
 import { Header } from '@/features/shared/layout/components/header'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 import { useI18n } from '@/features/shared/i18n'
+import { useAuctionChecker } from '@/features/marketplace/bids/hooks/use-auction-checker'
 
 export const Route = createFileRoute('/(root)')({
   component: RootLayout,
@@ -9,6 +10,7 @@ export const Route = createFileRoute('/(root)')({
 
 function RootLayout() {
   const { dir } = useI18n()
+  useAuctionChecker()
 
   return (
     <div className="min-h-screen flex flex-col" dir={dir}>

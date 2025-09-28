@@ -7,6 +7,7 @@ import { eq, and, sql } from 'drizzle-orm'
 import { z } from 'zod'
 import { orderItems } from '../schemas/order-item.schema'
 import { products } from '@/server/db/schema'
+import { createNotification } from '@/features/notifications/actions/create-notification.action'
 
 const createOrderSchema = z.object({
   shippingAddress: z.object({
@@ -47,6 +48,10 @@ export const createOrder = createServerFn()
     // Calculate total and validate stock
     let totalAmount = 0
     const orderItemsData: Omit<typeof orderItems.$inferInsert, 'orderId'>[] = []
+    const shopItemsMap = new Map<
+      number,
+      { shopUserId: string; items: any[]; totalValue: number }
+    >()
 
     for (const item of userCart.items) {
       const product = item.product
@@ -79,6 +84,20 @@ export const createOrder = createServerFn()
           bidAmount: item.bidAmount || undefined,
         },
       })
+
+      // Group items by shop for notifications
+      const shopData = shopItemsMap.get(product.shopId) || {
+        shopUserId: product.shop.userId,
+        items: [],
+        totalValue: 0,
+      }
+      shopData.items.push({
+        productName: product.name,
+        quantity: item.quantity,
+        price: unitPrice,
+      })
+      shopData.totalValue += itemTotal
+      shopItemsMap.set(product.shopId, shopData)
     }
 
     // Create order in transaction
@@ -123,6 +142,48 @@ export const createOrder = createServerFn()
 
       return [order]
     })
+
+    // Send notifications after successful order creation
+    try {
+      // Notify buyer about order confirmation
+      await createNotification({
+        data: {
+          userId: userId,
+          type: 'order.placed',
+          title: 'Order confirmed!',
+          message: `Your order #${newOrder.id} has been placed successfully. Total: $${newOrder.totalAmount}`,
+          priority: 'normal',
+          actionUrl: `/dashboard/orders/${newOrder.id}`,
+          metadata: {
+            orderId: newOrder.id,
+            totalAmount: newOrder.totalAmount,
+            itemCount: orderItemsData.length,
+          },
+        },
+      })
+
+      // Notify each shop owner about new order
+      for (const [shopId, data] of shopItemsMap) {
+        await createNotification({
+          data: {
+            userId: data.shopUserId,
+            type: 'shop.new_order',
+            title: 'New order received!',
+            message: `You have a new order #${newOrder.id} with ${data.items.length} item(s) worth $${data.totalValue.toFixed(2)}`,
+            priority: 'high',
+            actionUrl: `/shop/orders/${newOrder.id}`,
+            metadata: {
+              orderId: newOrder.id,
+              shopId: shopId,
+              items: data.items,
+              totalValue: data.totalValue,
+            },
+          },
+        })
+      }
+    } catch (notifError) {
+      console.error('Failed to send order notifications:', notifError)
+    }
 
     return {
       success: true,

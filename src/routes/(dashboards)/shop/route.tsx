@@ -6,7 +6,7 @@ import { Header } from '@/features/shared/layout/components/header'
 import { useI18n } from '@/features/shared/i18n'
 import { getMyShop } from '@/features/marketplace/shops/actions'
 
-export const Route = createFileRoute('/(root)/(marketplace)/shop')({
+export const Route = createFileRoute('/(dashboards)/shop')({
   beforeLoad: async () => {
     const { isAuthenticated } = await getCurrentUser()
 

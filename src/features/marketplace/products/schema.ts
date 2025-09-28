@@ -12,8 +12,16 @@ import { relations } from 'drizzle-orm'
 import { categories } from '@/features/marketplace/categories/schema'
 import { shops } from '@/features/marketplace/shops/schema'
 import { bids } from '../bids/schema'
+import { users } from '@/server/db/schema'
 
 export const productTypeEnum = pgEnum('product_type', ['regular', 'auction'])
+
+export const auctionStatusEnum = pgEnum('auction_status', [
+  'active',
+  'ended',
+  'paid',
+  'cancelled',
+])
 
 export const products = pgTable('products', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity({ startWith: 1000 }),
@@ -44,6 +52,12 @@ export const products = pgTable('products', {
   ),
   auctionEndsAt: timestamp('auction_ends_at'),
 
+  // Auction finalization fields
+  auctionStatus: auctionStatusEnum('auction_status').default('active'),
+  winnerId: text('winner_id').references(() => users.id),
+  endedAt: timestamp('ended_at'),
+  paymentDeadline: timestamp('payment_deadline'),
+
   isActive: boolean('is_active').notNull().default(true),
   createdAt: timestamp('created_at').notNull().defaultNow(),
 })
@@ -57,5 +71,9 @@ export const productsRelations = relations(products, ({ one, many }) => ({
     fields: [products.categoryId],
     references: [categories.id],
   }),
-  bids: many(bids), // will create next
+  bids: many(bids),
+  winner: one(users, {
+    fields: [products.winnerId],
+    references: [users.id],
+  }),
 }))

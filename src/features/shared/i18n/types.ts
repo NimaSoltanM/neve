@@ -520,4 +520,45 @@ export type Translations = {
       low: string
     }
   }
+  bids: {
+    title: string
+    tabs: {
+      active: string
+      won: string
+      lost: string
+    }
+    stats: {
+      activeBids: string
+      currentlyBidding: string
+      wonAuctions: string
+      totalWins: string
+      totalBids: string
+      last30Days: string
+      totalSpent: string
+      paidAuctions: string
+    }
+    empty: {
+      active: string
+      won: string
+      lost: string
+    }
+    yourBid: string
+    currentBid: string
+    status: {
+      winning: string
+      outbid: string
+    }
+    bidAgain: string
+    browseAuctions: string
+    wonFor: string
+    remaining: string
+    checkout: string
+    inCart: string
+    pendingPayment: string
+    overduePayment: string
+    overdueDescription: string
+    soldFor: string
+    wonBy: string
+    viewSimilar: string
+  }
 }

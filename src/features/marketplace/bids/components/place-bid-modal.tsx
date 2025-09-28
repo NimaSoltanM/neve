@@ -13,8 +13,8 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { useI18n } from '@/features/shared/i18n'
 import { formatPrice } from '@/lib/utils'
 import { Gavel, Plus, AlertCircle } from 'lucide-react'
-import { placeBid } from '@/features/marketplace/bids/actions'
 import { toast } from 'sonner'
+import { placeBid } from '../actions/place-bid.action'
 
 interface PlaceBidModalProps {
   open: boolean

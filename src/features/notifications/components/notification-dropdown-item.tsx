@@ -110,7 +110,7 @@ export function NotificationDropdownItem({
 
   if (notification.actionUrl) {
     return (
-      <Link to={notification.actionUrl} className="block">
+      <Link to="/dashboard/notifications" className="block">
         {content}
       </Link>
     )

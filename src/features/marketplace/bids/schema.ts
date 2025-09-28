@@ -19,7 +19,7 @@ export const bids = pgTable('bids', {
     .notNull()
     .references(() => users.id),
   amount: decimal('amount', { precision: 10, scale: 2 }).notNull(),
-  isWinning: boolean('is_winning').notNull().default(false), // current highest bid
+  isWinning: boolean('is_winning').notNull().default(false),
   createdAt: timestamp('created_at').notNull().defaultNow(),
 })
 

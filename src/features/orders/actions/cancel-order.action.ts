@@ -5,6 +5,7 @@ import { orders } from '../schemas/order.schema'
 import { products } from '@/server/db/schema'
 import { eq, and, sql } from 'drizzle-orm'
 import { z } from 'zod'
+import { createNotification } from '@/features/notifications/actions/create-notification.action'
 
 const cancelOrderSchema = z.object({
   orderId: z.number(),
@@ -21,7 +22,11 @@ export const cancelOrder = createServerFn()
     const order = await db.query.orders.findFirst({
       where: and(eq(orders.id, orderId), eq(orders.userId, userId)),
       with: {
-        items: true,
+        items: {
+          with: {
+            shop: true,
+          },
+        },
       },
     })
 
@@ -60,6 +65,72 @@ export const cancelOrder = createServerFn()
         }
       }
     })
+
+    // Send notifications after successful cancellation
+    try {
+      // Notify buyer about cancellation
+      await createNotification({
+        data: {
+          userId: userId,
+          type: 'order.cancelled',
+          title: 'Order cancelled',
+          message: `Your order #${orderId} has been cancelled. Total refund: $${order.totalAmount}`,
+          priority: 'normal',
+          actionUrl: `/dashboard/orders/${orderId}`,
+          metadata: {
+            orderId: orderId,
+            totalAmount: order.totalAmount,
+          },
+        },
+      })
+
+      // Notify each shop owner about cancelled items
+      const shopNotifications = new Map<
+        number,
+        {
+          shopId: number
+          shopUserId: string
+          itemCount: number
+          totalValue: number
+        }
+      >()
+
+      for (const item of order.items) {
+        if (item.shop) {
+          const existing = shopNotifications.get(item.shopId) || {
+            shopId: item.shopId,
+            shopUserId: item.shop.userId,
+            itemCount: 0,
+            totalValue: 0,
+          }
+          existing.itemCount += item.quantity
+          existing.totalValue += parseFloat(item.totalPrice)
+          shopNotifications.set(item.shopId, existing)
+        }
+      }
+
+      // Send notification to each affected shop owner
+      for (const [shopId, data] of shopNotifications) {
+        await createNotification({
+          data: {
+            userId: data.shopUserId,
+            type: 'shop.order_cancelled',
+            title: 'Order cancelled by customer',
+            message: `Customer cancelled order #${orderId} containing ${data.itemCount} item(s) worth $${data.totalValue.toFixed(2)}`,
+            priority: 'normal',
+            actionUrl: `/shop/orders/${orderId}`,
+            metadata: {
+              orderId: orderId,
+              shopId: shopId,
+              itemCount: data.itemCount,
+              totalValue: data.totalValue,
+            },
+          },
+        })
+      }
+    } catch (notifError) {
+      console.error('Failed to send cancellation notifications:', notifError)
+    }
 
     return {
       success: true,

@@ -1,18 +1,16 @@
 import { createServerFn } from '@tanstack/react-start'
 import { authMiddleware } from '@/features/auth/middleware/auth.middleware'
 import db from '@/server/db'
-import { bids } from './schema'
-import { products } from '../products/schema'
-import { eq, desc } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 import { z } from 'zod'
+import { createNotification } from '@/features/notifications/actions/create-notification.action'
+import { bids, products } from '@/server/db/schema'
 
 const placeBidSchema = z.object({
   productId: z.number(),
   amount: z.string().regex(/^\d+(\.\d{1,2})?$/),
 })
 
-// Place a bid on an auction
-// Place a bid on an auction (with better validation)
 export const placeBid = createServerFn()
   .middleware([authMiddleware])
   .validator((input: unknown) => placeBidSchema.parse(input))
@@ -94,14 +92,19 @@ export const placeBid = createServerFn()
 
         // Anti-sniping: Extend auction by 2 minutes if bid in last 2 minutes
         let newEndTime = product.auctionEndsAt
+        let wasExtended = false
         if (product.auctionEndsAt) {
           const timeLeft = product.auctionEndsAt.getTime() - now.getTime()
           const twoMinutes = 2 * 60 * 1000
 
           if (timeLeft > 0 && timeLeft < twoMinutes) {
             newEndTime = new Date(now.getTime() + twoMinutes)
+            wasExtended = true
           }
         }
+
+        // Store previous winner info for notification
+        const previousWinnerId = product.bids[0]?.userId
 
         // Update previous winning bid
         if (product.bids[0]) {
@@ -112,7 +115,7 @@ export const placeBid = createServerFn()
         }
 
         // Insert new bid
-        const [newBid] = await tx
+        await tx
           .insert(bids)
           .values({
             productId: data.productId,
@@ -133,6 +136,87 @@ export const placeBid = createServerFn()
           })
           .where(eq(products.id, data.productId))
 
+        // Send notifications after successful bid
+        try {
+          // Notify the previous highest bidder they've been outbid
+          if (previousWinnerId) {
+            await createNotification({
+              data: {
+                userId: previousWinnerId,
+                type: 'bid.outbid',
+                title: `You've been outbid!`,
+                message: `Someone placed a higher bid of $${roundedBid.toFixed(2)} on "${product.name}". Current bid is now $${roundedBid.toFixed(2)}`,
+                priority: 'high',
+                actionUrl: `/products/${product.slug}`,
+                metadata: {
+                  productId: product.id,
+                  productName: product.name,
+                  newBid: roundedBid,
+                  previousBid: currentBid,
+                },
+                groupKey: `auction-${product.id}`,
+              },
+            })
+          }
+
+          // Notify current bidder of successful bid
+          await createNotification({
+            data: {
+              userId: context.user.id,
+              type: 'bid.placed',
+              title: `Bid placed successfully!`,
+              message: `You're now the highest bidder on "${product.name}" with a bid of $${roundedBid.toFixed(2)}`,
+              priority: 'normal',
+              actionUrl: `/products/${product.slug}`,
+              metadata: {
+                productId: product.id,
+                productName: product.name,
+                bidAmount: roundedBid,
+              },
+              groupKey: `auction-${product.id}`,
+            },
+          })
+
+          // If auction was extended, notify all recent bidders
+          if (wasExtended) {
+            // Get all unique bidders for this product
+            const allBidders = await tx.query.bids.findMany({
+              where: eq(bids.productId, data.productId),
+              columns: { userId: true },
+            })
+
+            const uniqueBidderIds = [
+              ...new Set(allBidders.map((b) => b.userId)),
+            ]
+
+            // Notify all bidders about extension
+            await Promise.all(
+              uniqueBidderIds.map((bidderId) =>
+                createNotification({
+                  data: {
+                    userId: bidderId,
+                    type: 'auction.ending',
+                    title: `Auction extended!`,
+                    message: `The auction for "${product.name}" has been extended by 2 minutes due to last-minute bidding`,
+                    priority: 'high',
+                    actionUrl: `/products/${product.slug}`,
+                    metadata: {
+                      productId: product.id,
+                      productName: product.name,
+                      newEndTime: newEndTime,
+                    },
+                    groupKey: `auction-${product.id}`,
+                    expiresAt: newEndTime, // Expire when auction ends
+                  },
+                }),
+              ),
+            )
+          }
+        } catch (notifError) {
+          // Don't fail the bid if notifications fail
+          console.error('Failed to send notifications:', notifError)
+        }
+
         return {
           success: true,
           data: {
@@ -148,100 +232,4 @@ export const placeBid = createServerFn()
         }
       }
     })
-  })
-// Get bid history for a product
-export const getBidHistory = createServerFn()
-  .validator((input: unknown) => z.number().parse(input))
-  .handler(async ({ data: productId }) => {
-    try {
-      const bidHistory = await db.query.bids.findMany({
-        where: eq(bids.productId, productId),
-        with: {
-          user: {
-            columns: {
-              id: true,
-              firstName: true,
-              lastName: true,
-            },
-          },
-        },
-        orderBy: desc(bids.createdAt),
-        limit: 20,
-      })
-
-      return {
-        success: true,
-        data: bidHistory.map((bid) => ({
-          id: bid.id,
-          amount: bid.amount,
-          isWinning: bid.isWinning,
-          userName: `${bid.user.firstName} ${bid.user.lastName?.[0]}.`, // John D.
-          createdAt: bid.createdAt,
-        })),
-      }
-    } catch (error) {
-      return {
-        success: false,
-        error: 'Failed to load bid history',
-      }
-    }
-  })
-
-// Get user's active bids
-export const getUserBids = createServerFn()
-  .middleware([authMiddleware])
-  .handler(async ({ context }) => {
-    try {
-      const userBids = await db.query.bids.findMany({
-        where: eq(bids.userId, context.user.id),
-        with: {
-          product: {
-            columns: {
-              id: true,
-              name: true,
-              slug: true,
-              images: true,
-              auctionEndsAt: true,
-              currentBid: true,
-            },
-          },
-        },
-        orderBy: desc(bids.createdAt),
-      })
-
-      // Group by product and only show latest bid per product
-      const latestBids = Object.values(
-        userBids.reduce(
-          (acc, bid) => {
-            if (
-              !acc[bid.productId] ||
-              acc[bid.productId].createdAt < bid.createdAt
-            ) {
-              acc[bid.productId] = bid
-            }
-            return acc
-          },
-          {} as Record<number, (typeof userBids)[0]>,
-        ),
-      )
-
-      return {
-        success: true,
-        data: latestBids.map((bid) => ({
-          ...bid,
-          status: bid.isWinning ? 'winning' : 'outbid',
-          timeLeft: bid.product.auctionEndsAt
-            ? Math.max(
-                0,
-                new Date(bid.product.auctionEndsAt).getTime() - Date.now(),
-              )
-            : 0,
-        })),
-      }
-    } catch (error) {
-      return {
-        success: false,
-        error: 'Failed to load your bids',
-      }
-    }
   })

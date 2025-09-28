@@ -537,6 +537,47 @@ const fa: Translations = {
       low: 'کم اهمیت',
     },
   },
+  bids: {
+    title: 'پیشنهادهای من',
+    tabs: {
+      active: 'فعال',
+      won: 'برنده شده',
+      lost: 'باخته شده',
+    },
+    stats: {
+      activeBids: 'پیشنهادهای فعال',
+      currentlyBidding: 'در حال پیشنهاد دادن',
+      wonAuctions: 'مزایده‌های برنده شده',
+      totalWins: 'تعداد کل بردها',
+      totalBids: 'تعداد کل پیشنهادها',
+      last30Days: '۳۰ روز گذشته',
+      totalSpent: 'مجموع هزینه‌شده',
+      paidAuctions: 'در مزایده‌های پرداختی',
+    },
+    empty: {
+      active: 'هیچ پیشنهاد فعالی ندارید',
+      won: 'هنوز هیچ مزایده‌ای را برنده نشده‌اید',
+      lost: 'هیچ مزایده باخته‌ای در ۷ روز گذشته وجود ندارد',
+    },
+    yourBid: 'پیشنهاد شما',
+    currentBid: 'جاری',
+    status: {
+      winning: 'در حال بردن',
+      outbid: 'پیشنهاد بهتر شده',
+    },
+    bidAgain: 'پیشنهاد',
+    browseAuctions: 'مرور مزایده‌ها',
+    wonFor: 'برنده شده با',
+    remaining: 'باقی‌مانده',
+    checkout: 'تسویه حساب',
+    inCart: 'در سبد',
+    pendingPayment: 'در انتظار پرداخت',
+    overduePayment: 'پرداخت معوقه',
+    overdueDescription: 'مزایده‌هایی با مهلت پرداخت گذشته دارید',
+    soldFor: 'فروخته شده با',
+    wonBy: 'برنده شده توسط',
+    viewSimilar: 'مشاهده مشابه‌ها',
+  },
 }
 
 export default fa

@@ -8,7 +8,7 @@ import { CheckCircle, Package, Home, Receipt, Loader2 } from 'lucide-react'
 import { format } from 'date-fns'
 
 export const Route = createFileRoute(
-  '/(root)/dashboard/orders/$orderId/success',
+  '/(dashboards)/dashboard/orders/$orderId/success',
 )({
   loader: async ({ params }) => {
     const orderId = Number(params.orderId)
