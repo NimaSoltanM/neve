@@ -20,20 +20,16 @@ import {
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import {
-  Store,
-  Package,
-  LogOut,
-  LayoutDashboard,
-  Heart,
-  Gavel,
-} from 'lucide-react'
+import { Store, Package, LogOut, LayoutDashboard, Gavel } from 'lucide-react'
 import { CartButton } from '@/features/cart/components/cart-button'
 import { NotificationBell } from '@/features/notifications/components/notification-bell'
+import { Skeleton } from '@/components/ui/skeleton'
+import { LogoIcon } from '@/components/logo-icon'
+import { Logo } from '@/components/logo'
 
 export function Header() {
   const { t, dir } = useI18n()
-  const { user, isAuthenticated, logout } = useAuth()
+  const { user, isAuthenticated, logout, isLoading } = useAuth()
 
   return (
     <header
@@ -43,11 +39,10 @@ export function Header() {
       <div className="container flex h-16 items-center px-4">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 font-bold text-lg me-6">
-          <Store className="h-5 w-5" />
-          <span className="hidden sm:inline">{t('common.siteName')}</span>
+          <LogoIcon className="h-8 w-8 sm:hidden" />
+          <Logo className="hidden sm:block h-8" />
         </Link>
 
-        {/* Desktop Navigation */}
         <NavigationMenu className="hidden md:flex">
           <NavigationMenuList>
             <NavigationMenuItem>
@@ -67,17 +62,28 @@ export function Header() {
           </NavigationMenuList>
         </NavigationMenu>
 
-        {/* Right side actions */}
         <div className="ms-auto flex items-center gap-2">
-          <CartButton />
+          {/* Cart */}
+          {isLoading ? (
+            <Skeleton className="h-9 w-9 rounded-md" />
+          ) : (
+            <CartButton />
+          )}
 
-          {isAuthenticated && <NotificationBell />}
+          {/* Notifications */}
+          {isLoading ? (
+            <Skeleton className="h-9 w-9 rounded-md" />
+          ) : (
+            isAuthenticated && <NotificationBell />
+          )}
 
-          {/* Language Switcher */}
+          {/* Language always available */}
           <LanguageSwitcher />
 
           {/* User Menu */}
-          {isAuthenticated ? (
+          {isLoading ? (
+            <Skeleton className="h-9 w-9 rounded-full" />
+          ) : isAuthenticated ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -123,15 +129,6 @@ export function Header() {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link
-                    to="/dashboard/dashboard/wishlist"
-                    className="cursor-pointer"
-                  >
-                    <Heart className="me-2 h-4 w-4" />
-                    {t('nav.wishlist')}
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
                   <Link to="/shop" className="cursor-pointer">
                     <Store className="me-2 h-4 w-4" />
                     {t('nav.myShop')}
@@ -142,14 +139,14 @@ export function Header() {
                   className="cursor-pointer text-destructive focus:text-destructive"
                   onClick={() => logout()}
                 >
-                  <LogOut className="me-2 h-4 w-4" />
+                  <LogOut className="me-2 h-4 w-4 text-destructive" />
                   {t('auth.logout')}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
             <Button asChild size="sm">
-              <Link to="/auth">{t('auth.login')}</Link>
+              <Link to="/auth">{t('nav.login')}</Link>
             </Button>
           )}
         </div>

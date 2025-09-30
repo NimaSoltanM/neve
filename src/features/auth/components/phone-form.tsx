@@ -41,7 +41,6 @@ export function PhoneForm({ onSuccess }: PhoneFormProps) {
     mutationFn: sendOtp,
     onSuccess: (data, variables) => {
       toast.success(t('auth.codeSent'))
-      // Show OTP code in development
       if (data.code) {
         toast.info(`Your OTP code: ${data.code}`, {
           duration: 10000,

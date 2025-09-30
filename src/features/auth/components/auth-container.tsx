@@ -38,8 +38,7 @@ export function AuthContainer({
     if (data.needsProfile) {
       setStep('profile')
     } else {
-      router.invalidate()
-      router.navigate({ to: callbackUrl })
+      router.navigate({ to: callbackUrl, reloadDocument: true })
     }
   }
 

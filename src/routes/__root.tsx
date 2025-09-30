@@ -6,7 +6,6 @@ import {
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanstackDevtools } from '@tanstack/react-devtools'
-import { useI18n } from '@/features/shared/i18n'
 import { useEffect } from 'react'
 
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
@@ -15,7 +14,7 @@ import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
 import { Toaster } from '@/components/ui/sonner'
-import { I18nLoader } from '@/features/shared/i18n/components/i18n-loader'
+import { useI18n } from '@/features/shared/i18n/context'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -32,7 +31,10 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'E-Commerce Platform',
+        title: 'névé | E-Commerce Platform',
+      },
+      {
+        name: 'meta',
       },
     ],
     links: [
@@ -82,9 +84,5 @@ function RootComponent() {
     document.documentElement.dir = dir
   }, [locale, dir])
 
-  return (
-    <I18nLoader>
-      <Outlet />
-    </I18nLoader>
-  )
+  return <Outlet />
 }

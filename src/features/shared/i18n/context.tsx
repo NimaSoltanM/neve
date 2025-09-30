@@ -13,16 +13,15 @@ import {
   getNestedTranslation,
 } from './utils'
 import { isRTL } from './constants'
-import { loadTranslations } from './translations'
 import type { Locale } from './constants'
-import type { Translations } from './types'
+import type { TranslationParams } from './types'
+import { translations } from './'
 
 interface I18nContextValue {
   locale: Locale
   setLocale: (locale: Locale) => void
-  t: (key: string, params?: any) => string
+  t: (key: string, params?: TranslationParams) => string
   dir: 'ltr' | 'rtl'
-  isLoading: boolean
 }
 
 const I18nContext = createContext<I18nContextValue | undefined>(undefined)
@@ -33,25 +32,6 @@ interface I18nProviderProps {
 
 export function I18nProvider({ children }: I18nProviderProps) {
   const [locale, setLocaleState] = useState<Locale>(getStoredLocale)
-  const [translations, setTranslations] = useState<Translations | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-
-  // Load translations for current locale
-  useEffect(() => {
-    let cancelled = false
-
-    setIsLoading(true)
-    loadTranslations(locale).then((trans) => {
-      if (!cancelled) {
-        setTranslations(trans)
-        setIsLoading(false)
-      }
-    })
-
-    return () => {
-      cancelled = true
-    }
-  }, [locale])
 
   const setLocale = useCallback((newLocale: Locale) => {
     setLocaleState(newLocale)
@@ -61,13 +41,8 @@ export function I18nProvider({ children }: I18nProviderProps) {
   }, [])
 
   const t = useCallback(
-    (key: string, params?: any) => {
-      if (!translations) {
-        // Fallback to key while loading
-        return key
-      }
-
-      const translation = getNestedTranslation(translations, key)
+    (key: string, params?: TranslationParams) => {
+      const translation = getNestedTranslation(translations[locale], key)
 
       if (!translation) {
         console.warn(`Translation missing for key: ${key} in locale: ${locale}`)
@@ -76,7 +51,7 @@ export function I18nProvider({ children }: I18nProviderProps) {
 
       return interpolate(translation, params)
     },
-    [locale, translations],
+    [locale],
   )
 
   useEffect(() => {
@@ -89,7 +64,6 @@ export function I18nProvider({ children }: I18nProviderProps) {
     setLocale,
     t,
     dir: isRTL(locale) ? 'rtl' : 'ltr',
-    isLoading,
   }
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>

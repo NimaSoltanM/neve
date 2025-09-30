@@ -326,6 +326,7 @@ export type Translations = {
     selling: string
     createShop: string
     backToDashboard: string
+    login: string
   }
   shop: {
     management: string
@@ -562,3 +563,5 @@ export type Translations = {
     viewSimilar: string
   }
 }
+
+export type TranslationParams = Record<string, string | number>

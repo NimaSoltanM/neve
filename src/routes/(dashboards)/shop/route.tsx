@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
+import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { getCurrentUser } from '@/features/auth/actions/get-current-user.action'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { ShopSidebar } from '@/features/shop/components/shop-sidebar'
@@ -22,8 +22,7 @@ export const Route = createFileRoute('/(dashboards)/shop')({
     // Check if user has a shop
     const shop = await getMyShop()
 
-    if (!shop) {
-      // Redirect to shop creation if no shop exists
+    if (!shop.data) {
       throw redirect({
         to: '/',
       })

@@ -56,10 +56,18 @@ export function OtpForm({ phoneNumber, onSuccess, onBack }: OtpFormProps) {
   const verifyMutation = useMutation({
     mutationFn: verifyOtp,
     onSuccess: (data) => {
-      onSuccess(data)
+      if (data.success) {
+        onSuccess({
+          needsProfile: !!data.needsProfile,
+          userId: data.userId!,
+        })
+      } else {
+        toast.error(data.message || t('auth.invalidCode'))
+        form.reset()
+      }
     },
     onError: () => {
-      toast.error(t('auth.invalidCode'))
+      toast.error(t('common.error'))
       form.reset()
     },
   })

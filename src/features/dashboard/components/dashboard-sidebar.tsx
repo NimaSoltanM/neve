@@ -39,11 +39,6 @@ export function DashboardSidebar() {
           href: '/dashboard/bids',
           icon: Gavel,
         },
-        {
-          title: t('nav.wishlist'),
-          href: '/dashboard/wishlist',
-          icon: Heart,
-        },
       ],
     },
     {

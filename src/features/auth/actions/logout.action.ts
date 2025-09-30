@@ -11,7 +11,6 @@ export const logout = createServerFn({ method: 'POST' }).handler(async () => {
     await db.delete(sessions).where(eq(sessions.token, sessionToken))
   }
 
-  // Remove cookie
   deleteCookie('sessionToken')
 
   return { success: true }

@@ -1,8 +1,8 @@
+import db from '@/server/db'
 import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
-import db from '@/server/db'
-import { otpCodes } from '../schemas/auth.schema'
 import { and, eq, gte } from 'drizzle-orm'
+import { otpCodes } from '../schemas/auth.schema'
 
 const sendOtpSchema = z.object({
   phoneNumber: z
@@ -16,7 +16,6 @@ export const sendOtp = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     const { phoneNumber } = data
 
-    // Check for recent OTP (prevent spam)
     const recentOtp = await db
       .select()
       .from(otpCodes)
@@ -29,7 +28,10 @@ export const sendOtp = createServerFn({ method: 'POST' })
       .limit(1)
 
     if (recentOtp.length > 0) {
-      throw new Error('Please wait before requesting a new code')
+      return {
+        success: false,
+        message: 'Please wait before requesting a new code',
+      }
     }
 
     // Generate 5-digit code
@@ -39,13 +41,11 @@ export const sendOtp = createServerFn({ method: 'POST' })
     await db.insert(otpCodes).values({
       phoneNumber,
       code,
-      expiresAt: new Date(Date.now() + 2 * 60 * 1000), // 2 minutes
+      expiresAt: new Date(Date.now() + 2 * 60 * 1000),
     })
 
-    // TODO: Send SMS via provider
-    // For development, return the code to display in toast
     return {
       success: true,
-      code: process.env.NODE_ENV === 'development' ? code : undefined,
+      code,
     }
   })

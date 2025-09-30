@@ -26,6 +26,13 @@ const searchSchema = z.object({
 })
 
 export const Route = createFileRoute('/(root)/(marketplace)/marketplace/')({
+  head: () => ({
+    meta: [
+      {
+        title: 'névé | Marketplace',
+      },
+    ],
+  }),
   validateSearch: (search) => searchSchema.parse(search),
   loaderDeps: ({ search }) => ({ search }),
   loader: async ({ deps: { search } }) => {

@@ -45,7 +45,7 @@ export function ProfileForm({ callbackUrl = '/dashboard' }: ProfileFormProps) {
     mutationFn: updateProfile,
     onSuccess: () => {
       toast.success(t('common.success'))
-      router.navigate({ to: callbackUrl })
+      router.navigate({ to: callbackUrl, reloadDocument: true })
     },
     onError: () => {
       toast.error(t('common.error'))

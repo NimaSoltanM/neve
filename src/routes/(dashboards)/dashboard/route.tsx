@@ -1,9 +1,8 @@
-// src/routes/(root)/(marketplace)/dashboard.tsx
-import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
+import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { getCurrentUser } from '@/features/auth/actions/get-current-user.action'
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 import { DashboardSidebar } from '@/features/dashboard/components/dashboard-sidebar'
-import { useI18n } from '@/features/shared/i18n'
+import { Header } from '@/features/shared/layout/components/header'
 
 export const Route = createFileRoute('/(dashboards)/dashboard')({
   beforeLoad: async () => {
@@ -33,9 +32,6 @@ export const Route = createFileRoute('/(dashboards)/dashboard')({
 })
 
 function DashboardLayout() {
-  const { dir } = useI18n()
-  const { user } = Route.useRouteContext()
-
   return (
     <SidebarProvider>
       <div className="flex min-h-[calc(100vh-4rem)] w-full">
@@ -45,6 +41,7 @@ function DashboardLayout() {
           <div className="flex items-center px-4 py-2 lg:hidden border-b">
             <SidebarTrigger />
           </div>
+          <Header />
           <main className="flex-1 container py-6">
             <Outlet />
           </main>

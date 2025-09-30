@@ -1,6 +1,5 @@
-// src/routes/(root).tsx
+import { Outlet, createFileRoute } from '@tanstack/react-router'
 import { Header } from '@/features/shared/layout/components/header'
-import { createFileRoute, Outlet } from '@tanstack/react-router'
 import { useI18n } from '@/features/shared/i18n'
 import { useAuctionChecker } from '@/features/marketplace/bids/hooks/use-auction-checker'
 

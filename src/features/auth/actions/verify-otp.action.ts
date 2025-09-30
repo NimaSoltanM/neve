@@ -40,8 +40,7 @@ export const verifyOtp = createServerFn({ method: 'POST' })
         .where(
           and(eq(otpCodes.phoneNumber, phoneNumber), eq(otpCodes.code, code)),
         )
-
-      throw new Error('Invalid or expired code')
+      return { success: false, message: 'Invalid or expired code' }
     }
 
     // Check if user exists
@@ -67,10 +66,8 @@ export const verifyOtp = createServerFn({ method: 'POST' })
       user = newUser
     }
 
-    // Delete used OTP
     await db.delete(otpCodes).where(eq(otpCodes.id, validOtp[0].id))
 
-    // Create session
     const session = await db
       .insert(sessions)
       .values({
@@ -79,7 +76,6 @@ export const verifyOtp = createServerFn({ method: 'POST' })
       })
       .returning()
 
-    // Set session token in cookie
     setCookie('sessionToken', session[0].token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',

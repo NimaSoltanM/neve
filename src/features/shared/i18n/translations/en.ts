@@ -338,6 +338,7 @@ const en: Translations = {
     selling: 'Selling',
     createShop: 'Create Shop',
     backToDashboard: 'Back to Dashboard',
+    login: 'Login',
   },
   shop: {
     management: 'Management',

@@ -139,7 +139,7 @@ export default function HomePage() {
                 <div className="space-y-2 text-sm text-muted-foreground">
                   <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 bg-primary rounded-full" />
-                    Shopping cart & wishlist
+                    Shopping cart
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 bg-primary rounded-full" />
