@@ -176,10 +176,6 @@ export function ProductCard({
   }
 
   const handleAddToCart = () => {
-    if (!user) {
-      toast.error(t('marketplace.loginToBuy'))
-      return
-    }
     if (!hasStock) {
       toast.error(t('marketplace.outOfStock'))
       return

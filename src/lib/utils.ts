@@ -40,7 +40,7 @@ export function formatPrice(
   const numericPrice = typeof price === 'string' ? parseFloat(price) : price
 
   if (isNaN(numericPrice)) {
-    return '$0.00'
+    return options?.locale === 'fa' ? '۰ تومان' : '$0.00'
   }
 
   const {
@@ -49,10 +49,20 @@ export function formatPrice(
     notation = 'standard',
   } = options || {}
 
-  // For Persian locale, use Persian numerals
-  const formatLocale = locale === 'fa' ? 'fa-IR' : locale
+  // Persian/Iranian Toman handling
+  if (locale === 'fa') {
+    const tomanPrice = numericPrice * 100000
+    const formatted = new Intl.NumberFormat('fa-IR', {
+      notation,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(tomanPrice)
 
-  return new Intl.NumberFormat(formatLocale, {
+    return `${formatted} تومان`
+  }
+
+  // Other locales use standard currency formatting
+  return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency,
     notation,
@@ -61,7 +71,6 @@ export function formatPrice(
   }).format(numericPrice)
 }
 
-// Optional: Add a hook for easier use with i18n
 export function useFormatPrice() {
   const { locale } = useI18n()
 

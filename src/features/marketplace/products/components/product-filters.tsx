@@ -4,7 +4,6 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Slider } from '@/components/ui/slider'
 import {
   Drawer,
   DrawerContent,
@@ -34,21 +33,30 @@ export function ProductFilters(props: ProductFiltersProps) {
   const isDesktop = useMediaQuery('(min-width: 1024px)')
   const [open, setOpen] = useState(false)
 
-  const [priceRange, setPriceRange] = useState<[number, number]>([
-    parseInt(props.minPrice || '0'),
-    parseInt(props.maxPrice || '5000'),
-  ])
+  const [minPrice, setMinPrice] = useState(props.minPrice || '')
+  const [maxPrice, setMaxPrice] = useState(props.maxPrice || '')
   const [productType, setProductType] = useState(props.type || 'all')
   const [sortBy, setSortBy] = useState(props.sortBy || 'newest')
   const [inStock, setInStock] = useState(props.inStock || false)
   const [endingSoon, setEndingSoon] = useState(props.endingSoon || false)
 
   const applyFilters = () => {
+    // Validate price range
+    const min = minPrice ? parseInt(minPrice) : 0
+    const max = maxPrice ? parseInt(maxPrice) : undefined
+
+    if (max && min > max) {
+      // Swap if min is greater than max
+      setMinPrice(maxPrice)
+      setMaxPrice(minPrice)
+      return
+    }
+
     navigate({
       search: (prev) => ({
         ...prev,
-        minPrice: priceRange[0] > 0 ? priceRange[0].toString() : undefined,
-        maxPrice: priceRange[1] < 5000 ? priceRange[1].toString() : undefined,
+        minPrice: minPrice || undefined,
+        maxPrice: maxPrice || undefined,
         type: productType !== 'all' ? productType : undefined,
         sort: sortBy !== 'newest' ? sortBy : undefined,
         inStock: inStock || undefined,
@@ -60,7 +68,8 @@ export function ProductFilters(props: ProductFiltersProps) {
   }
 
   const clearFilters = () => {
-    setPriceRange([0, 5000])
+    setMinPrice('')
+    setMaxPrice('')
     setProductType('all')
     setSortBy('newest')
     setInStock(false)
@@ -112,34 +121,82 @@ export function ProductFilters(props: ProductFiltersProps) {
         <Label className="text-sm font-medium">
           {t('marketplace.priceRange')}
         </Label>
-        <Slider
-          value={priceRange}
-          onValueChange={setPriceRange as any}
-          min={0}
-          max={5000}
-          step={50}
-          className="w-full"
-        />
-        <div className="flex items-center gap-2">
-          <Input
-            type="number"
-            value={priceRange[0]}
-            onChange={(e) =>
-              setPriceRange([parseInt(e.target.value) || 0, priceRange[1]])
-            }
-            className="h-8 w-full"
-            placeholder={t('marketplace.min')}
-          />
-          <span className="text-muted-foreground">-</span>
-          <Input
-            type="number"
-            value={priceRange[1]}
-            onChange={(e) =>
-              setPriceRange([priceRange[0], parseInt(e.target.value) || 5000])
-            }
-            className="h-8 w-full"
-            placeholder={t('marketplace.max')}
-          />
+        <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-2">
+            <Label htmlFor="minPrice" className="text-xs text-muted-foreground">
+              {t('marketplace.min')}
+            </Label>
+            <Input
+              id="minPrice"
+              type="number"
+              value={minPrice}
+              onChange={(e) => setMinPrice(e.target.value)}
+              placeholder="0"
+              min="0"
+              className="h-9"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="maxPrice" className="text-xs text-muted-foreground">
+              {t('marketplace.max')}
+            </Label>
+            <Input
+              id="maxPrice"
+              type="number"
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(e.target.value)}
+              placeholder="5000"
+              min="0"
+              className="h-9"
+            />
+          </div>
+        </div>
+        {/* Quick price presets */}
+        <div className="flex flex-wrap gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              setMinPrice('')
+              setMaxPrice('100')
+            }}
+            className="h-7 text-xs"
+          >
+            {t('marketplace.under')} 100
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              setMinPrice('100')
+              setMaxPrice('500')
+            }}
+            className="h-7 text-xs"
+          >
+            100-500
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              setMinPrice('500')
+              setMaxPrice('1000')
+            }}
+            className="h-7 text-xs"
+          >
+            500-1000
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              setMinPrice('1000')
+              setMaxPrice('')
+            }}
+            className="h-7 text-xs"
+          >
+            {t('marketplace.above')} 1000
+          </Button>
         </div>
       </div>
 

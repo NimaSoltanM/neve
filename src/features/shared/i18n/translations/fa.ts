@@ -44,6 +44,7 @@ const fa: Translations = {
     updatedAt: 'تاریخ بروزرسانی',
     siteName: 'بازار',
     siteTagline: 'خرید، فروش، مزایده',
+    goHome: 'بازگشت به صفحه اصلی',
   },
   auth: {
     phoneNumber: 'شماره موبایل',
@@ -246,6 +247,8 @@ const fa: Translations = {
     loginToBuy: 'برای خرید وارد شوید',
     youWereOutbid: 'پیشنهاد بالاتری داده شد!',
     addedToCart: 'به سبد خرید اضافه شد',
+    under: 'زیر',
+    above: 'بالای',
   },
   products: {
     addProduct: 'افزودن محصول',
@@ -320,7 +323,7 @@ const fa: Translations = {
   },
   nav: {
     main: 'صفحه اصلی',
-    marketplace: 'بازارگاه',
+    marketplace: 'بازارچه',
     categories: 'دسته‌بندی‌ها',
     shops: 'فروشگاه‌ها',
     dashboard: 'پنل کاربری',
@@ -578,6 +581,11 @@ const fa: Translations = {
     soldFor: 'فروخته شده با',
     wonBy: 'برنده شده توسط',
     viewSimilar: 'مشاهده مشابه‌ها',
+  },
+  notFoundErrors: {
+    notFound: 'صفحه یافت نشد',
+    notFoundDescription:
+      'صفحه‌ای که به دنبال آن هستید وجود ندارد یا منتقل شده است.',
   },
 }
 

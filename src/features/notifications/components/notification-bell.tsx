@@ -7,6 +7,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useNotifications } from '../hooks/use-notifications'
 import { NotificationList } from './notification-list'
+import { Badge } from '@/components/ui/badge'
 
 export function NotificationBell() {
   const { unreadCount } = useNotifications()
@@ -17,9 +18,12 @@ export function NotificationBell() {
         <Button variant="ghost" size="icon" className="relative">
           <Bell className="h-5 w-5" />
           {unreadCount > 0 && (
-            <span className="absolute -top-1 -end-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground">
+            <Badge
+              className="absolute -top-1 -end-1 h-5 w-5 p-0 flex items-center justify-center"
+              variant="destructive"
+            >
               {unreadCount > 99 ? '99+' : unreadCount}
-            </span>
+            </Badge>
           )}
         </Button>
       </DropdownMenuTrigger>

@@ -15,7 +15,7 @@ export function useI18n() {
 
   return {
     ...base,
-    t, // Now with autocomplete!
+    t,
   }
 }
 

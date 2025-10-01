@@ -44,6 +44,7 @@ const en: Translations = {
     updatedAt: 'Updated At',
     siteName: 'Marketplace',
     siteTagline: 'Buy, Sell, Bid',
+    goHome: 'Go to Homepage',
   },
   auth: {
     phoneNumber: 'Phone Number',
@@ -249,6 +250,8 @@ const en: Translations = {
     loginToBuy: 'Please login to buy',
     youWereOutbid: 'You were outbid!',
     addedToCart: 'Added to cart',
+    under: 'Under',
+    above: 'Above',
   },
   products: {
     addProduct: 'Add Product',
@@ -581,6 +584,11 @@ const en: Translations = {
     soldFor: 'Sold for',
     wonBy: 'Won by',
     viewSimilar: 'View Similar',
+  },
+  notFoundErrors: {
+    notFound: 'Page Not Found',
+    notFoundDescription:
+      'The page you are looking for does not exist or has been moved.',
   },
 }
 

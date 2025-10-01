@@ -17,7 +17,6 @@ export const getCategories = createServerFn().handler(async () => {
       orderBy: (categories, { asc }) => [asc(categories.id)],
     })
 
-    // Return only parent categories (children are nested inside)
     return allCategories.filter((cat) => !cat.parentId)
   } catch (error) {
     console.error('Failed to fetch categories:', error)
@@ -25,8 +24,6 @@ export const getCategories = createServerFn().handler(async () => {
   }
 })
 
-// Get single category by slug with validation
-// Get single category by slug with validation
 export const getCategoryBySlug = createServerFn()
   .validator((slug: string) => {
     const schema = z

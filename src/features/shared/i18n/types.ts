@@ -42,6 +42,7 @@ export type Translations = {
     updatedAt: string
     siteName: string
     siteTagline: string
+    goHome: string
   }
   auth: {
     phoneNumber: string
@@ -230,6 +231,9 @@ export type Translations = {
     buyNowAvailable: string
 
     noCategoriesFound: string
+
+    under: string
+    above: string
   }
   products: {
     // Product management
@@ -561,6 +565,10 @@ export type Translations = {
     soldFor: string
     wonBy: string
     viewSimilar: string
+  }
+  notFoundErrors: {
+    notFound: string
+    notFoundDescription: string
   }
 }
 

@@ -8,7 +8,7 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { useI18n } from '@/features/shared/i18n'
-import { ChevronRight, Package } from 'lucide-react'
+import { ChevronRight, Package, Home, Zap, Shirt } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 
 interface CategoryHeaderProps {
@@ -30,12 +30,23 @@ interface CategoryHeaderProps {
   }
 }
 
+// Only load the icons you actually need
+const ICONS: Record<string, any> = {
+  Home,
+  Shirt,
+  Zap,
+}
+
 export function CategoryHeader({ category }: CategoryHeaderProps) {
   const { t, locale } = useI18n()
 
   const categoryName = category.name[locale as 'en' | 'fa'] || category.name.en
   const parentName =
     category.parent?.name[locale as 'en' | 'fa'] || category.parent?.name.en
+
+  // Get the matching icon or fallback to Package
+  const IconComponent =
+    category.icon && ICONS[category.icon] ? ICONS[category.icon] : Package
 
   return (
     <div className="space-y-4">
@@ -67,6 +78,7 @@ export function CategoryHeader({ category }: CategoryHeaderProps) {
                   <Link
                     to="/categories/$slug"
                     params={{ slug: category.parent.slug }}
+                    search={{ page: 1 }}
                   >
                     {parentName}
                   </Link>
@@ -86,15 +98,9 @@ export function CategoryHeader({ category }: CategoryHeaderProps) {
 
       {/* Category Title */}
       <div className="flex items-center gap-4">
-        {category.icon ? (
-          <div className="w-16 h-16 rounded-lg bg-primary/10 flex items-center justify-center">
-            <img src={category.icon} alt={categoryName} className="w-8 h-8" />
-          </div>
-        ) : (
-          <div className="w-16 h-16 rounded-lg bg-primary/10 flex items-center justify-center">
-            <Package className="w-8 h-8 text-primary" />
-          </div>
-        )}
+        <div className="w-16 h-16 rounded-lg bg-primary/10 flex items-center justify-center">
+          <IconComponent className="w-8 h-8 text-primary" />
+        </div>
         <h1 className="text-3xl font-bold">{categoryName}</h1>
       </div>
 
@@ -108,6 +114,7 @@ export function CategoryHeader({ category }: CategoryHeaderProps) {
                 key={child.id}
                 to="/categories/$slug"
                 params={{ slug: child.slug }}
+                search={{ page: 1 }}
               >
                 <Badge
                   variant="secondary"
