@@ -214,7 +214,7 @@ async function main() {
       type: 'regular',
       price: '49.99',
       stock: 50,
-      images: ['static/shirts.jpg'],
+      images: ['/static/shirts.jpg'],
       isActive: true,
     },
     // Auction products
