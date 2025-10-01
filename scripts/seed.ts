@@ -190,9 +190,7 @@ async function main() {
       type: 'regular',
       price: '999.00',
       stock: 15,
-      images: [
-        'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=800',
-      ],
+      images: ['/static/iphone15.jpg'],
       isActive: true,
     },
     {
@@ -204,9 +202,7 @@ async function main() {
       type: 'regular',
       price: '1999.00',
       stock: 8,
-      images: [
-        'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800',
-      ],
+      images: ['/static/m3.jpg'],
       isActive: true,
     },
     {
@@ -218,9 +214,7 @@ async function main() {
       type: 'regular',
       price: '49.99',
       stock: 50,
-      images: [
-        'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=800',
-      ],
+      images: ['static/shirts.jpg'],
       isActive: true,
     },
     // Auction products
@@ -237,9 +231,7 @@ async function main() {
       buyNowPrice: '3000.00',
       bidIncrement: '50.00',
       auctionEndsAt: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 days
-      images: [
-        'https://images.unsplash.com/photo-1606986628025-35d57e735ae0?w=800',
-      ],
+      images: ['/static/camera1.jpg'],
       isActive: true,
     },
     {
@@ -255,9 +247,7 @@ async function main() {
       buyNowPrice: '15000.00',
       bidIncrement: '100.00',
       auctionEndsAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
-      images: [
-        'https://images.unsplash.com/photo-1510878933023-e2e2e3942fb0?w=800',
-      ],
+      images: ['/static/iphone2g.jpg'],
       isActive: true,
     },
     {
@@ -272,9 +262,7 @@ async function main() {
       currentBid: '2000.00',
       bidIncrement: '100.00',
       auctionEndsAt: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5 days
-      images: [
-        'https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=800',
-      ],
+      images: ['/static/lisa.jpg'],
       isActive: true,
     },
   ]
