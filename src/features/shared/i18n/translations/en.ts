@@ -45,6 +45,8 @@ const en: Translations = {
     siteName: 'Marketplace',
     siteTagline: 'Buy, Sell, Bid',
     goHome: 'Go to Homepage',
+    copy: 'copy',
+    characters: 'characters',
   },
   auth: {
     phoneNumber: 'Phone Number',
@@ -71,6 +73,13 @@ const en: Translations = {
     invalidCode: 'Invalid or expired code',
     codeSent: 'Code sent successfully',
     logout: 'Logout',
+    invalidOtp: 'Invalid or expired verification code',
+    tooManyAttempts:
+      'Too many verification attempts. Please request a new code',
+    tooManyOtpRequests:
+      'Too many requests. Please wait 1 minute before trying again',
+    otpStillValid:
+      'A verification code was already sent. Please check your messages or wait 2 minutes',
   },
   dashboard: {
     profileInfo: 'Profile Information',
@@ -173,6 +182,91 @@ const en: Translations = {
     // Warnings
     shopInactiveWarning: 'Shop is currently inactive',
     shopNotVerifiedWarning: 'Shop is not verified yet',
+    alreadyHaveShop: 'You Already Have a Shop!',
+    noDescription: 'No description',
+    manageShop: 'Manage Shop',
+
+    // Form headers
+    startBusiness: 'Start Your Business',
+    createShopDesc: 'Create your shop today and reach customers worldwide',
+    basicInfo: 'Basic Information',
+    basicInfoDesc: 'Choose a name and URL for your shop',
+    updateInfoDesc: 'Update your shop details',
+    description: 'Shop Description',
+    descriptionHelper: 'Describe your shop in both languages for better reach',
+    branding: 'Branding',
+    brandingHelper: 'Customize your shop appearance',
+
+    // Fields
+    shopName: 'Shop Name',
+    shopNamePlaceholder: 'My Amazing Shop',
+    shopNameHelper: "This is your shop's display name that customers will see",
+    shopUrl: 'Shop URL',
+    shopUrlPlaceholder: 'my-amazing-shop',
+    shopUrlHelper:
+      'This will be your unique shop URL. Choose carefully as it cannot be changed later.',
+    urlPrefix: 'neve-shop.com/shops/',
+    manualRequired: 'Manual entry required',
+    persianDetected: 'Persian text detected. Please enter an English URL.',
+
+    logo: 'Logo URL',
+    logoPlaceholder: 'https://example.com/logo.png',
+    logoHelper: 'Optional: Add a URL to your shop logo',
+    banner: 'Banner URL',
+    bannerPlaceholder: 'https://example.com/banner.png',
+    bannerHelper: 'Optional: Add a URL to your shop banner',
+
+    // Alerts
+    beforeContinue: 'Before You Continue',
+    urlNoChange: 'Your shop URL cannot be changed after creation',
+    addLaterInfo:
+      'You can add logo, banner, and more details after creating your shop',
+    oneShopPerUser: 'Each user can only have one shop',
+
+    // Actions
+    updateShop: 'Update Shop',
+    creating: 'Creating...',
+    updating: 'Updating...',
+    created: 'Shop created successfully!',
+    updated: 'Shop updated successfully!',
+
+    shopStatus: 'Shop Status',
+    shopActiveDesc: 'Your shop is live and visible to customers',
+    shopInactiveDesc: 'Your shop is currently hidden from customers',
+    whatsNext: "What's Next?",
+    readyToLaunch: 'Ready to Launch?',
+    activeShopInfo:
+      'Customers can browse and purchase from your shop. You can manage products and orders anytime.',
+    inactiveShopInfo:
+      'Complete your shop setup and activate when ready. You can always deactivate later.',
+    activateShop: 'Activate Shop',
+    deactivateShop: 'Deactivate Shop',
+    activating: 'Activating...',
+    deactivating: 'Deactivating...',
+    confirmActivation: 'Activate Your Shop?',
+    confirmDeactivation: 'Deactivate Your Shop?',
+    activationDialogDesc:
+      'Your shop will go live and become visible to all customers.',
+    deactivationDialogDesc:
+      'Your shop will be hidden from customers until you activate it again.',
+    activationNote: 'What This Means:',
+    deactivationNote: 'What This Means:',
+    activationPoint1: 'Customers can find and visit your shop',
+    activationPoint2: 'Your products will appear in search results',
+    activationPoint3: 'You can start receiving orders',
+    deactivationPoint1: 'Your shop will be hidden from public view',
+    deactivationPoint2: "Products won't appear in search",
+    deactivationPoint3: 'No new orders can be placed',
+    yesActivate: 'Yes, Activate Shop',
+    yesDeactivate: 'Yes, Deactivate Shop',
+    activationSuccess: 'Shop activated successfully! 🎉',
+    deactivationSuccess: 'Shop deactivated',
+    settingsUpdated: 'Settings updated successfully!',
+    brandingDesc: 'Upload your shop logo and banner image',
+    saveChanges: 'Save Changes',
+    saving: 'Saving...',
+    settings: 'Settings',
+    settingsDesc: "You can configure your shop's settings here.",
   },
   upload: {
     dragOrClick: 'Drag files here or click to browse',

@@ -43,6 +43,8 @@ export type Translations = {
     siteName: string
     siteTagline: string
     goHome: string
+    copy: string
+    characters: string
   }
   auth: {
     phoneNumber: string
@@ -69,6 +71,10 @@ export type Translations = {
     invalidCode: string
     codeSent: string
     logout: string
+    invalidOtp: string
+    tooManyAttempts: string
+    tooManyOtpRequests: string
+    otpStillValid: string
   }
   dashboard: {
     profileInfo: string
@@ -154,6 +160,86 @@ export type Translations = {
     daysActive: string
     shopInactiveWarning: string
     shopNotVerifiedWarning: string
+
+    alreadyHaveShop: string
+    noDescription: string
+    manageShop: string
+
+    // Form headers
+    startBusiness: string
+    createShopDesc: string
+    basicInfo: string
+    basicInfoDesc: string
+    updateInfoDesc: string
+    description: string
+    descriptionHelper: string
+    branding: string
+    brandingHelper: string
+
+    // Fields
+    shopName: string
+    shopNamePlaceholder: string
+    shopNameHelper: string
+    shopUrl: string
+    shopUrlPlaceholder: string
+    shopUrlHelper: string
+    urlPrefix: string
+    manualRequired: string
+    persianDetected: string
+
+    logo: string
+    logoPlaceholder: string
+    logoHelper: string
+    banner: string
+    bannerPlaceholder: string
+    bannerHelper: string
+
+    // Alerts
+    beforeContinue: string
+    urlNoChange: string
+    addLaterInfo: string
+    oneShopPerUser: string
+
+    updateShop: string
+    creating: string
+    updating: string
+    created: string
+    updated: string
+
+    shopStatus: string
+
+    shopActiveDesc: string
+    shopInactiveDesc: string
+    whatsNext: string
+    readyToLaunch: string
+    activeShopInfo: string
+    inactiveShopInfo: string
+    activateShop: string
+    deactivateShop: string
+    activating: string
+    deactivating: string
+    confirmActivation: string
+    confirmDeactivation: string
+    activationDialogDesc: string
+    deactivationDialogDesc: string
+    activationNote: string
+    deactivationNote: string
+    activationPoint1: string
+    activationPoint2: string
+    activationPoint3: string
+    deactivationPoint1: string
+    deactivationPoint2: string
+    deactivationPoint3: string
+    yesActivate: string
+    yesDeactivate: string
+    activationSuccess: string
+    deactivationSuccess: string
+    settingsUpdated: string
+    brandingDesc: string
+    saveChanges: string
+    saving: string
+    settings: string
+    settingsDesc: string
   }
   upload: {
     dragOrClick: string
@@ -497,7 +583,6 @@ export type Translations = {
     tryPlatformButton: string
     githubButton: string
   }
-
   notifications: {
     title: string
     empty: string

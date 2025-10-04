@@ -1,4 +1,3 @@
-// src/features/dashboard/components/dashboard-sidebar.tsx
 import { AppSidebar } from '@/features/shared/layout/components/app-sidebar'
 import { useI18n } from '@/features/shared/i18n'
 import { useAuth } from '@/features/auth/hooks/use-auth'
@@ -7,17 +6,25 @@ import {
   Home,
   Package,
   Gavel,
-  Heart,
   User,
   Store,
   Plus,
   Settings,
   LogOut,
 } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
+import { getMyShop } from '@/features/marketplace/shops/actions'
 
 export function DashboardSidebar() {
   const { t } = useI18n()
   const { logout } = useAuth()
+
+  const { data: alreadyHasShop, isLoading } = useQuery({
+    queryKey: ['shop'],
+    queryFn: async () => {
+      return getMyShop()
+    },
+  })
 
   const sidebarItems = [
     {
@@ -63,12 +70,15 @@ export function DashboardSidebar() {
           title: t('nav.createShop'),
           href: '/dashboard/shop-setup',
           icon: Plus,
+          isloading: isLoading,
+          hide: !isLoading && !!alreadyHasShop,
         },
         {
           title: t('nav.myShop'),
           href: '/shop',
           icon: Store,
           external: true,
+          hide: !isLoading && !alreadyHasShop,
         },
       ],
     },

@@ -1,7 +1,7 @@
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { getCurrentUser } from '@/features/auth/actions/get-current-user.action'
 import { SidebarProvider } from '@/components/ui/sidebar'
-import { ShopSidebar } from '@/features/shop/components/shop-sidebar'
+import { ShopSidebar } from '@/features/marketplace/shops/components/shop-sidebar'
 import { Header } from '@/features/shared/layout/components/header'
 import { useI18n } from '@/features/shared/i18n'
 import { getMyShop } from '@/features/marketplace/shops/actions'
@@ -19,7 +19,6 @@ export const Route = createFileRoute('/(dashboards)/shop')({
       })
     }
 
-    // Check if user has a shop
     const shop = await getMyShop()
 
     if (!shop.data) {

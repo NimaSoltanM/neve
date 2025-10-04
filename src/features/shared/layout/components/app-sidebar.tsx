@@ -20,6 +20,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
+import { Skeleton } from '@/components/ui/skeleton'
 import { ChevronRight } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
@@ -30,6 +31,8 @@ export interface SidebarNavItem {
   badge?: string | number
   children?: SidebarNavItem[]
   external?: boolean
+  hide?: boolean
+  isloading?: boolean
 }
 
 interface AppSidebarProps {
@@ -53,6 +56,7 @@ export function AppSidebar({ items, footer }: AppSidebarProps) {
 
   return (
     <Sidebar collapsible="icon" side={dir === 'rtl' ? 'right' : 'left'}>
+      {/* ===== Header ===== */}
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -73,6 +77,7 @@ export function AppSidebar({ items, footer }: AppSidebarProps) {
         </SidebarMenu>
       </SidebarHeader>
 
+      {/* ===== Content ===== */}
       <SidebarContent>
         {items.map((group) => (
           <SidebarGroup key={group.title}>
@@ -80,10 +85,33 @@ export function AppSidebar({ items, footer }: AppSidebarProps) {
             <SidebarGroupContent>
               <SidebarMenu>
                 {group.items.map((item) => {
+                  if (item.hide) return null // 🔹 Skip hidden items
+
                   const Icon = item.icon
                   const active = isActive(item.href)
 
+                  // ---- Loading state (skeleton) ----
+                  if (item.isloading) {
+                    return (
+                      <SidebarMenuItem key={item.title}>
+                        <SidebarMenuButton disabled>
+                          <div className="flex items-center gap-2 w-full">
+                            <Skeleton className="h-4 w-4 rounded" />
+                            <Skeleton className="h-4 flex-1 rounded" />
+                          </div>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    )
+                  }
+
+                  // ---- Collapsible with children ----
                   if (item.children?.length) {
+                    const visibleChildren = item.children.filter(
+                      (child) => !child.hide,
+                    )
+
+                    if (!visibleChildren.length) return null // 🔹 Skip parent if all children hidden
+
                     return (
                       <Collapsible key={item.title} defaultOpen={active}>
                         <SidebarMenuItem>
@@ -96,16 +124,25 @@ export function AppSidebar({ items, footer }: AppSidebarProps) {
                           </CollapsibleTrigger>
                           <CollapsibleContent>
                             <SidebarMenuSub>
-                              {item.children.map((child) => (
+                              {visibleChildren.map((child) => (
                                 <SidebarMenuSubItem key={child.title}>
-                                  <SidebarMenuSubButton
-                                    asChild
-                                    isActive={isActive(child.href)}
-                                  >
-                                    <Link to={child.href || '#'}>
-                                      {child.title}
-                                    </Link>
-                                  </SidebarMenuSubButton>
+                                  {child.isloading ? (
+                                    <SidebarMenuSubButton>
+                                      <div className="flex items-center gap-2 w-full">
+                                        <Skeleton className="h-3 w-3 rounded" />
+                                        <Skeleton className="h-3 flex-1 rounded" />
+                                      </div>
+                                    </SidebarMenuSubButton>
+                                  ) : (
+                                    <SidebarMenuSubButton
+                                      asChild
+                                      isActive={isActive(child.href)}
+                                    >
+                                      <Link to={child.href || '#'}>
+                                        {child.title}
+                                      </Link>
+                                    </SidebarMenuSubButton>
+                                  )}
                                 </SidebarMenuSubItem>
                               ))}
                             </SidebarMenuSub>
@@ -115,6 +152,7 @@ export function AppSidebar({ items, footer }: AppSidebarProps) {
                     )
                   }
 
+                  // ---- Regular link ----
                   return (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton asChild isActive={active}>
@@ -137,6 +175,7 @@ export function AppSidebar({ items, footer }: AppSidebarProps) {
         ))}
       </SidebarContent>
 
+      {/* ===== Footer ===== */}
       {footer && <SidebarFooter>{footer}</SidebarFooter>}
     </Sidebar>
   )

@@ -62,7 +62,7 @@ export function OtpForm({ phoneNumber, onSuccess, onBack }: OtpFormProps) {
           userId: data.userId!,
         })
       } else {
-        toast.error(data.message || t('auth.invalidCode'))
+        toast.error(t(data.errorKey))
         form.reset()
       }
     },

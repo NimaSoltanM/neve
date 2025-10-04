@@ -20,8 +20,11 @@ import { Route as dashboardsDashboardRouteRouteImport } from './routes/(dashboar
 import { Route as dashboardsShopIndexRouteImport } from './routes/(dashboards)/shop/index'
 import { Route as rootmarketplaceMarketplaceIndexRouteImport } from './routes/(root)/(marketplace)/marketplace/index'
 import { Route as rootmarketplaceCategoriesIndexRouteImport } from './routes/(root)/(marketplace)/categories/index'
+import { Route as dashboardsShopSettingsIndexRouteImport } from './routes/(dashboards)/shop/settings/index'
 import { Route as dashboardsShopProductsIndexRouteImport } from './routes/(dashboards)/shop/products/index'
+import { Route as dashboardsShopEditIndexRouteImport } from './routes/(dashboards)/shop/edit/index'
 import { Route as dashboardsShopAuctionsIndexRouteImport } from './routes/(dashboards)/shop/auctions/index'
+import { Route as dashboardsDashboardShopSetupIndexRouteImport } from './routes/(dashboards)/dashboard/shop-setup/index'
 import { Route as dashboardsDashboardOrdersIndexRouteImport } from './routes/(dashboards)/dashboard/orders/index'
 import { Route as dashboardsDashboardNotificationsIndexRouteImport } from './routes/(dashboards)/dashboard/notifications/index'
 import { Route as dashboardsDashboardBidsIndexRouteImport } from './routes/(dashboards)/dashboard/bids/index'
@@ -88,17 +91,34 @@ const rootmarketplaceCategoriesIndexRoute =
     path: '/categories/',
     getParentRoute: () => rootmarketplaceRouteRoute,
   } as any)
+const dashboardsShopSettingsIndexRoute =
+  dashboardsShopSettingsIndexRouteImport.update({
+    id: '/settings/',
+    path: '/settings/',
+    getParentRoute: () => dashboardsShopRouteRoute,
+  } as any)
 const dashboardsShopProductsIndexRoute =
   dashboardsShopProductsIndexRouteImport.update({
     id: '/products/',
     path: '/products/',
     getParentRoute: () => dashboardsShopRouteRoute,
   } as any)
+const dashboardsShopEditIndexRoute = dashboardsShopEditIndexRouteImport.update({
+  id: '/edit/',
+  path: '/edit/',
+  getParentRoute: () => dashboardsShopRouteRoute,
+} as any)
 const dashboardsShopAuctionsIndexRoute =
   dashboardsShopAuctionsIndexRouteImport.update({
     id: '/auctions/',
     path: '/auctions/',
     getParentRoute: () => dashboardsShopRouteRoute,
+  } as any)
+const dashboardsDashboardShopSetupIndexRoute =
+  dashboardsDashboardShopSetupIndexRouteImport.update({
+    id: '/shop-setup/',
+    path: '/shop-setup/',
+    getParentRoute: () => dashboardsDashboardRouteRoute,
   } as any)
 const dashboardsDashboardOrdersIndexRoute =
   dashboardsDashboardOrdersIndexRouteImport.update({
@@ -168,8 +188,11 @@ export interface FileRoutesByFullPath {
   '/dashboard/bids': typeof dashboardsDashboardBidsIndexRoute
   '/dashboard/notifications': typeof dashboardsDashboardNotificationsIndexRoute
   '/dashboard/orders': typeof dashboardsDashboardOrdersIndexRoute
+  '/dashboard/shop-setup': typeof dashboardsDashboardShopSetupIndexRoute
   '/shop/auctions': typeof dashboardsShopAuctionsIndexRoute
+  '/shop/edit': typeof dashboardsShopEditIndexRoute
   '/shop/products': typeof dashboardsShopProductsIndexRoute
+  '/shop/settings': typeof dashboardsShopSettingsIndexRoute
   '/categories': typeof rootmarketplaceCategoriesIndexRoute
   '/marketplace': typeof rootmarketplaceMarketplaceIndexRoute
   '/dashboard/orders/$orderId/success': typeof dashboardsDashboardOrdersOrderIdSuccessRoute
@@ -189,8 +212,11 @@ export interface FileRoutesByTo {
   '/dashboard/bids': typeof dashboardsDashboardBidsIndexRoute
   '/dashboard/notifications': typeof dashboardsDashboardNotificationsIndexRoute
   '/dashboard/orders': typeof dashboardsDashboardOrdersIndexRoute
+  '/dashboard/shop-setup': typeof dashboardsDashboardShopSetupIndexRoute
   '/shop/auctions': typeof dashboardsShopAuctionsIndexRoute
+  '/shop/edit': typeof dashboardsShopEditIndexRoute
   '/shop/products': typeof dashboardsShopProductsIndexRoute
+  '/shop/settings': typeof dashboardsShopSettingsIndexRoute
   '/categories': typeof rootmarketplaceCategoriesIndexRoute
   '/marketplace': typeof rootmarketplaceMarketplaceIndexRoute
   '/dashboard/orders/$orderId/success': typeof dashboardsDashboardOrdersOrderIdSuccessRoute
@@ -214,8 +240,11 @@ export interface FileRoutesById {
   '/(dashboards)/dashboard/bids/': typeof dashboardsDashboardBidsIndexRoute
   '/(dashboards)/dashboard/notifications/': typeof dashboardsDashboardNotificationsIndexRoute
   '/(dashboards)/dashboard/orders/': typeof dashboardsDashboardOrdersIndexRoute
+  '/(dashboards)/dashboard/shop-setup/': typeof dashboardsDashboardShopSetupIndexRoute
   '/(dashboards)/shop/auctions/': typeof dashboardsShopAuctionsIndexRoute
+  '/(dashboards)/shop/edit/': typeof dashboardsShopEditIndexRoute
   '/(dashboards)/shop/products/': typeof dashboardsShopProductsIndexRoute
+  '/(dashboards)/shop/settings/': typeof dashboardsShopSettingsIndexRoute
   '/(root)/(marketplace)/categories/': typeof rootmarketplaceCategoriesIndexRoute
   '/(root)/(marketplace)/marketplace/': typeof rootmarketplaceMarketplaceIndexRoute
   '/(dashboards)/dashboard/orders/$orderId/success': typeof dashboardsDashboardOrdersOrderIdSuccessRoute
@@ -238,8 +267,11 @@ export interface FileRouteTypes {
     | '/dashboard/bids'
     | '/dashboard/notifications'
     | '/dashboard/orders'
+    | '/dashboard/shop-setup'
     | '/shop/auctions'
+    | '/shop/edit'
     | '/shop/products'
+    | '/shop/settings'
     | '/categories'
     | '/marketplace'
     | '/dashboard/orders/$orderId/success'
@@ -259,8 +291,11 @@ export interface FileRouteTypes {
     | '/dashboard/bids'
     | '/dashboard/notifications'
     | '/dashboard/orders'
+    | '/dashboard/shop-setup'
     | '/shop/auctions'
+    | '/shop/edit'
     | '/shop/products'
+    | '/shop/settings'
     | '/categories'
     | '/marketplace'
     | '/dashboard/orders/$orderId/success'
@@ -283,8 +318,11 @@ export interface FileRouteTypes {
     | '/(dashboards)/dashboard/bids/'
     | '/(dashboards)/dashboard/notifications/'
     | '/(dashboards)/dashboard/orders/'
+    | '/(dashboards)/dashboard/shop-setup/'
     | '/(dashboards)/shop/auctions/'
+    | '/(dashboards)/shop/edit/'
     | '/(dashboards)/shop/products/'
+    | '/(dashboards)/shop/settings/'
     | '/(root)/(marketplace)/categories/'
     | '/(root)/(marketplace)/marketplace/'
     | '/(dashboards)/dashboard/orders/$orderId/success'
@@ -381,11 +419,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof rootmarketplaceCategoriesIndexRouteImport
       parentRoute: typeof rootmarketplaceRouteRoute
     }
+    '/(dashboards)/shop/settings/': {
+      id: '/(dashboards)/shop/settings/'
+      path: '/settings'
+      fullPath: '/shop/settings'
+      preLoaderRoute: typeof dashboardsShopSettingsIndexRouteImport
+      parentRoute: typeof dashboardsShopRouteRoute
+    }
     '/(dashboards)/shop/products/': {
       id: '/(dashboards)/shop/products/'
       path: '/products'
       fullPath: '/shop/products'
       preLoaderRoute: typeof dashboardsShopProductsIndexRouteImport
+      parentRoute: typeof dashboardsShopRouteRoute
+    }
+    '/(dashboards)/shop/edit/': {
+      id: '/(dashboards)/shop/edit/'
+      path: '/edit'
+      fullPath: '/shop/edit'
+      preLoaderRoute: typeof dashboardsShopEditIndexRouteImport
       parentRoute: typeof dashboardsShopRouteRoute
     }
     '/(dashboards)/shop/auctions/': {
@@ -394,6 +446,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/shop/auctions'
       preLoaderRoute: typeof dashboardsShopAuctionsIndexRouteImport
       parentRoute: typeof dashboardsShopRouteRoute
+    }
+    '/(dashboards)/dashboard/shop-setup/': {
+      id: '/(dashboards)/dashboard/shop-setup/'
+      path: '/shop-setup'
+      fullPath: '/dashboard/shop-setup'
+      preLoaderRoute: typeof dashboardsDashboardShopSetupIndexRouteImport
+      parentRoute: typeof dashboardsDashboardRouteRoute
     }
     '/(dashboards)/dashboard/orders/': {
       id: '/(dashboards)/dashboard/orders/'
@@ -499,6 +558,7 @@ interface dashboardsDashboardRouteRouteChildren {
   dashboardsDashboardBidsIndexRoute: typeof dashboardsDashboardBidsIndexRoute
   dashboardsDashboardNotificationsIndexRoute: typeof dashboardsDashboardNotificationsIndexRoute
   dashboardsDashboardOrdersIndexRoute: typeof dashboardsDashboardOrdersIndexRoute
+  dashboardsDashboardShopSetupIndexRoute: typeof dashboardsDashboardShopSetupIndexRoute
   dashboardsDashboardOrdersOrderIdSuccessRoute: typeof dashboardsDashboardOrdersOrderIdSuccessRoute
   dashboardsDashboardOrdersOrderIdIndexRoute: typeof dashboardsDashboardOrdersOrderIdIndexRoute
 }
@@ -509,6 +569,8 @@ const dashboardsDashboardRouteRouteChildren: dashboardsDashboardRouteRouteChildr
     dashboardsDashboardNotificationsIndexRoute:
       dashboardsDashboardNotificationsIndexRoute,
     dashboardsDashboardOrdersIndexRoute: dashboardsDashboardOrdersIndexRoute,
+    dashboardsDashboardShopSetupIndexRoute:
+      dashboardsDashboardShopSetupIndexRoute,
     dashboardsDashboardOrdersOrderIdSuccessRoute:
       dashboardsDashboardOrdersOrderIdSuccessRoute,
     dashboardsDashboardOrdersOrderIdIndexRoute:
@@ -523,14 +585,18 @@ const dashboardsDashboardRouteRouteWithChildren =
 interface dashboardsShopRouteRouteChildren {
   dashboardsShopIndexRoute: typeof dashboardsShopIndexRoute
   dashboardsShopAuctionsIndexRoute: typeof dashboardsShopAuctionsIndexRoute
+  dashboardsShopEditIndexRoute: typeof dashboardsShopEditIndexRoute
   dashboardsShopProductsIndexRoute: typeof dashboardsShopProductsIndexRoute
+  dashboardsShopSettingsIndexRoute: typeof dashboardsShopSettingsIndexRoute
   dashboardsShopProductsNewIndexRoute: typeof dashboardsShopProductsNewIndexRoute
 }
 
 const dashboardsShopRouteRouteChildren: dashboardsShopRouteRouteChildren = {
   dashboardsShopIndexRoute: dashboardsShopIndexRoute,
   dashboardsShopAuctionsIndexRoute: dashboardsShopAuctionsIndexRoute,
+  dashboardsShopEditIndexRoute: dashboardsShopEditIndexRoute,
   dashboardsShopProductsIndexRoute: dashboardsShopProductsIndexRoute,
+  dashboardsShopSettingsIndexRoute: dashboardsShopSettingsIndexRoute,
   dashboardsShopProductsNewIndexRoute: dashboardsShopProductsNewIndexRoute,
 }
 

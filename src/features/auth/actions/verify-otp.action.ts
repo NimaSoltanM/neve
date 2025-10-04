@@ -1,8 +1,9 @@
+// src/features/auth/actions/verify-otp.action.ts
 import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
 import db from '@/server/db'
 import { users, otpCodes, sessions } from '../schemas/auth.schema'
-import { eq, and, gte, lt, sql } from 'drizzle-orm'
+import { eq, and, gte } from 'drizzle-orm'
 import { setCookie } from '@tanstack/react-start/server'
 
 const verifyOtpSchema = z.object({
@@ -18,7 +19,7 @@ export const verifyOtp = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     const { phoneNumber, code } = data
 
-    // Find valid OTP
+    // Find valid OTP (removed attempt check)
     const validOtp = await db
       .select()
       .from(otpCodes)
@@ -27,20 +28,15 @@ export const verifyOtp = createServerFn({ method: 'POST' })
           eq(otpCodes.phoneNumber, phoneNumber),
           eq(otpCodes.code, code),
           gte(otpCodes.expiresAt, new Date()),
-          lt(otpCodes.attempts, 3),
         ),
       )
       .limit(1)
 
     if (validOtp.length === 0) {
-      // Increment attempts for any matching phone/code
-      await db
-        .update(otpCodes)
-        .set({ attempts: sql`${otpCodes.attempts} + 1` })
-        .where(
-          and(eq(otpCodes.phoneNumber, phoneNumber), eq(otpCodes.code, code)),
-        )
-      return { success: false, message: 'Invalid or expired code' }
+      return {
+        success: false as const,
+        errorKey: 'auth.invalidOtp' as const,
+      }
     }
 
     // Check if user exists
@@ -66,8 +62,10 @@ export const verifyOtp = createServerFn({ method: 'POST' })
       user = newUser
     }
 
+    // Delete used OTP
     await db.delete(otpCodes).where(eq(otpCodes.id, validOtp[0].id))
 
+    // Create session
     const session = await db
       .insert(sessions)
       .values({
@@ -84,7 +82,7 @@ export const verifyOtp = createServerFn({ method: 'POST' })
     })
 
     return {
-      success: true,
+      success: true as const,
       needsProfile,
       userId: user[0].id,
     }

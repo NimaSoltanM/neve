@@ -15,7 +15,7 @@ export function useNotifications() {
   const { data: notifications = [], isLoading } = useQuery({
     queryKey: ['notifications', 'list'],
     queryFn: () => getUserNotifications(),
-    refetchInterval: 60000,
+    refetchInterval: 20000,
   })
 
   const { data: unreadCount = 0 } = useQuery({

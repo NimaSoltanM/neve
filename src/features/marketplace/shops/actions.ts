@@ -238,3 +238,45 @@ export const getShopProducts = createServerFn()
       }
     }
   })
+
+export const toggleShopActivation = createServerFn()
+  .middleware([authMiddleware])
+  .validator((input: unknown) =>
+    z
+      .object({
+        isActive: z.boolean(),
+      })
+      .parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    try {
+      const shop = await db.query.shops.findFirst({
+        where: eq(shops.userId, context.user.id),
+      })
+
+      if (!shop) {
+        return {
+          success: false,
+          error: 'Shop not found',
+        }
+      }
+
+      const [updated] = await db
+        .update(shops)
+        .set({
+          isActive: data.isActive,
+        })
+        .where(eq(shops.id, shop.id))
+        .returning()
+
+      return {
+        success: true,
+        data: updated,
+      }
+    } catch (error) {
+      return {
+        success: false,
+        error: 'Failed to update shop status',
+      }
+    }
+  })

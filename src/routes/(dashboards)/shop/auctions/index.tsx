@@ -52,17 +52,6 @@ import { useState, useMemo } from 'react'
 import { toast } from 'sonner'
 
 export const Route = createFileRoute('/(dashboards)/shop/auctions/')({
-  beforeLoad: async () => {
-    const { isAuthenticated } = await getCurrentUser()
-    if (!isAuthenticated) {
-      throw redirect({ to: '/auth', search: { callbackUrl: '/shop/auctions' } })
-    }
-
-    const shop = await getMyShop()
-    if (!shop.success) {
-      throw redirect({ to: '/shop/create' })
-    }
-  },
   loader: async () => {
     const auctions = await getShopAuctions()
     return {

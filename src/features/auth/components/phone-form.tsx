@@ -40,19 +40,33 @@ export function PhoneForm({ onSuccess }: PhoneFormProps) {
   const sendOtpMutation = useMutation({
     mutationFn: sendOtp,
     onSuccess: (data, variables) => {
+      // Check if action returned success or error
+      if (!data.success) {
+        toast.error(t(data.errorKey)) // ✅ Translate error key
+        return
+      }
+
+      // Success case
       toast.success(t('auth.codeSent'))
+      console.log('code is:', data.code)
+
       if (data.code) {
         toast.info(`Your OTP code: ${data.code}`, {
           duration: 10000,
+          action: {
+            label: t('common.copy'),
+            onClick: () => navigator.clipboard.writeText(data.code),
+          },
         })
       }
+
       onSuccess(variables.data.phoneNumber)
     },
     onError: () => {
+      // Network/unexpected errors only
       toast.error(t('common.error'))
     },
   })
-
   const onSubmit = (data: PhoneFormData) => {
     sendOtpMutation.mutate({ data })
   }

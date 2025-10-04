@@ -1,4 +1,3 @@
-// src/features/shop/components/shop-sidebar.tsx
 import { AppSidebar } from '@/features/shared/layout/components/app-sidebar'
 import { useI18n } from '@/features/shared/i18n'
 import { Button } from '@/components/ui/button'
@@ -14,9 +13,18 @@ import {
   Tags,
   DollarSign,
 } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
+import { getMyShop } from '../actions'
 
 export function ShopSidebar() {
   const { t } = useI18n()
+
+  const { data: shop, isLoading } = useQuery({
+    queryKey: ['shop'],
+    queryFn: async () => {
+      return getMyShop()
+    },
+  })
 
   const sidebarItems = [
     {
@@ -84,9 +92,10 @@ export function ShopSidebar() {
         },
         {
           title: t('shop.viewStorefront'),
-          href: '/shops/my-shop',
+          href: `/shops/${shop?.data?.slug}`,
           icon: Store,
           external: true,
+          isLoading,
         },
       ],
     },
