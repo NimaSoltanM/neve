@@ -28,9 +28,10 @@ interface ProductFiltersProps {
 }
 
 export function ProductFilters(props: ProductFiltersProps) {
-  const { t } = useI18n()
+  const { t, locale } = useI18n()
   const navigate = useNavigate()
   const isDesktop = useMediaQuery('(min-width: 1024px)')
+  const isRTL = locale === 'fa'
   const [open, setOpen] = useState(false)
 
   const [minPrice, setMinPrice] = useState(props.minPrice || '')
@@ -84,7 +85,7 @@ export function ProductFilters(props: ProductFiltersProps) {
   }
 
   const FilterContent = () => (
-    <div className="space-y-6">
+    <div className="space-y-6" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Product Type */}
       <div className="space-y-3">
         <Label className="text-sm font-medium">
@@ -93,23 +94,24 @@ export function ProductFilters(props: ProductFiltersProps) {
         <RadioGroup
           value={productType}
           onValueChange={setProductType}
+          dir={isRTL ? 'rtl' : 'ltr'}
           className="space-y-2"
         >
-          <div className="flex items-center gap-2">
+          <div className="flex items-center">
             <RadioGroupItem value="all" id="all" />
-            <Label htmlFor="all" className="cursor-pointer">
+            <Label htmlFor="all" className="cursor-pointer ms-2">
               {t('marketplace.allProducts')}
             </Label>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center">
             <RadioGroupItem value="regular" id="regular" />
-            <Label htmlFor="regular" className="cursor-pointer">
+            <Label htmlFor="regular" className="cursor-pointer ms-2">
               {t('marketplace.buyNow')}
             </Label>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center">
             <RadioGroupItem value="auction" id="auction" />
-            <Label htmlFor="auction" className="cursor-pointer">
+            <Label htmlFor="auction" className="cursor-pointer ms-2">
               {t('marketplace.auctions')}
             </Label>
           </div>
@@ -134,6 +136,7 @@ export function ProductFilters(props: ProductFiltersProps) {
               placeholder="0"
               min="0"
               className="h-9"
+              dir="ltr"
             />
           </div>
           <div className="space-y-2">
@@ -148,6 +151,7 @@ export function ProductFilters(props: ProductFiltersProps) {
               placeholder="5000"
               min="0"
               className="h-9"
+              dir="ltr"
             />
           </div>
         </div>
@@ -206,30 +210,31 @@ export function ProductFilters(props: ProductFiltersProps) {
         <RadioGroup
           value={sortBy}
           onValueChange={setSortBy}
+          dir={isRTL ? 'rtl' : 'ltr'}
           className="space-y-2"
         >
-          <div className="flex items-center gap-2">
+          <div className="flex items-center">
             <RadioGroupItem value="newest" id="newest" />
-            <Label htmlFor="newest" className="cursor-pointer">
+            <Label htmlFor="newest" className="cursor-pointer ms-2">
               {t('marketplace.newest')}
             </Label>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center">
             <RadioGroupItem value="price_asc" id="price_asc" />
-            <Label htmlFor="price_asc" className="cursor-pointer">
+            <Label htmlFor="price_asc" className="cursor-pointer ms-2">
               {t('marketplace.priceLowToHigh')}
             </Label>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center">
             <RadioGroupItem value="price_desc" id="price_desc" />
-            <Label htmlFor="price_desc" className="cursor-pointer">
+            <Label htmlFor="price_desc" className="cursor-pointer ms-2">
               {t('marketplace.priceHighToLow')}
             </Label>
           </div>
           {productType === 'auction' && (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center">
               <RadioGroupItem value="ending_soon" id="ending_soon" />
-              <Label htmlFor="ending_soon" className="cursor-pointer">
+              <Label htmlFor="ending_soon" className="cursor-pointer ms-2">
                 {t('marketplace.endingSoon')}
               </Label>
             </div>
@@ -243,25 +248,25 @@ export function ProductFilters(props: ProductFiltersProps) {
           {t('marketplace.additionalFilters')}
         </Label>
         {productType !== 'auction' && (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center">
             <Checkbox
               id="inStock"
               checked={inStock}
               onCheckedChange={setInStock as any}
             />
-            <Label htmlFor="inStock" className="cursor-pointer">
+            <Label htmlFor="inStock" className="cursor-pointer ms-2">
               {t('marketplace.inStockOnly')}
             </Label>
           </div>
         )}
         {productType === 'auction' && (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center">
             <Checkbox
               id="endingSoon"
               checked={endingSoon}
               onCheckedChange={setEndingSoon as any}
             />
-            <Label htmlFor="endingSoon" className="cursor-pointer">
+            <Label htmlFor="endingSoon" className="cursor-pointer ms-2">
               {t('marketplace.endingIn24h')}
             </Label>
           </div>

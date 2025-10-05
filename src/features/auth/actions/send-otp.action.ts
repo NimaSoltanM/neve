@@ -1,4 +1,4 @@
-// src/features/auth/actions/send-otp.action.ts
+// features/auth/actions/send-otp.action.ts
 import db from '@/server/db'
 import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
@@ -12,13 +12,12 @@ const sendOtpSchema = z.object({
     .transform((val) => val.replace(/^0/, '+98')),
 })
 
-// src/features/auth/actions/send-otp.action.ts
 export const sendOtp = createServerFn({ method: 'POST' })
   .validator(sendOtpSchema)
   .handler(async ({ data }) => {
     const { phoneNumber } = data
 
-    const activeOtp = await db
+    const recentOtp = await db
       .select()
       .from(otpCodes)
       .where(
@@ -29,13 +28,15 @@ export const sendOtp = createServerFn({ method: 'POST' })
       )
       .limit(1)
 
-    if (activeOtp.length > 0) {
+    if (recentOtp.length > 0) {
       return {
-        success: false as const,
+        success: false,
         errorKey: 'auth.otpStillValid' as const,
+        code: null,
       }
     }
 
+    // Generate 5-digit code
     const code = Math.floor(10000 + Math.random() * 90000).toString()
 
     await db.insert(otpCodes).values({
@@ -44,10 +45,11 @@ export const sendOtp = createServerFn({ method: 'POST' })
       expiresAt: new Date(Date.now() + 2 * 60 * 1000),
     })
 
-    console.log(`OTP for ${phoneNumber}: ${code}`)
-
-    return {
-      success: true as const,
-      code, // ✅ Added back for dev/testing
+    const response = {
+      success: true,
+      code: code,
+      errorKey: 'common.success' as const,
     }
+
+    return response
   })

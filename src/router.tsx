@@ -5,6 +5,7 @@ import { I18nProvider } from '@/features/shared/i18n'
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
+import { Provider as JotaiProvider } from 'jotai'
 
 // Create a new router instance
 export const createRouter = () => {
@@ -16,9 +17,11 @@ export const createRouter = () => {
     scrollRestoration: true,
     Wrap: (props: { children: React.ReactNode }) => {
       return (
-        <TanstackQuery.Provider {...rqContext}>
-          <I18nProvider>{props.children}</I18nProvider>
-        </TanstackQuery.Provider>
+        <JotaiProvider>
+          <TanstackQuery.Provider {...rqContext}>
+            <I18nProvider>{props.children}</I18nProvider>
+          </TanstackQuery.Provider>
+        </JotaiProvider>
       )
     },
   })

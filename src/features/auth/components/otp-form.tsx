@@ -1,3 +1,4 @@
+// features/auth/components/otp-form.tsx
 import { useState, useEffect } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
@@ -20,8 +21,17 @@ import {
 import { useI18n } from '@/features/shared/i18n'
 import { verifyOtp } from '../actions/verify-otp.action'
 import { sendOtp } from '../actions/send-otp.action'
-import { Loader2, ChevronLeft, ChevronRight } from 'lucide-react'
+import {
+  Loader2,
+  ChevronLeft,
+  ChevronRight,
+  Copy,
+  CheckCircle2,
+} from 'lucide-react'
 import { toast } from 'sonner'
+import { useAtom } from 'jotai'
+import { otpAtom } from '../stores/otp.store'
+import { Card } from '@/components/ui/card'
 
 const otpSchema = z.object({
   code: z.string().length(5, 'auth.invalidCode'),
@@ -38,6 +48,8 @@ interface OtpFormProps {
 export function OtpForm({ phoneNumber, onSuccess, onBack }: OtpFormProps) {
   const { t, dir } = useI18n()
   const [resendTimer, setResendTimer] = useState(120)
+  const [otp, setOtp] = useAtom(otpAtom)
+  const [copied, setCopied] = useState(false)
 
   useEffect(() => {
     if (resendTimer > 0) {
@@ -53,16 +65,19 @@ export function OtpForm({ phoneNumber, onSuccess, onBack }: OtpFormProps) {
     },
   })
 
+  // REMOVED: Auto-fill effect
+
   const verifyMutation = useMutation({
     mutationFn: verifyOtp,
     onSuccess: (data) => {
       if (data.success) {
+        setOtp({ code: null, phoneNumber: null, expiresAt: null })
         onSuccess({
           needsProfile: !!data.needsProfile,
           userId: data.userId!,
         })
       } else {
-        toast.error(t(data.errorKey))
+        toast.error(t(data.errorKey) || t('common.error'))
         form.reset()
       }
     },
@@ -74,9 +89,25 @@ export function OtpForm({ phoneNumber, onSuccess, onBack }: OtpFormProps) {
 
   const resendMutation = useMutation({
     mutationFn: sendOtp,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      if (!data.success) {
+        toast.error(t(data.errorKey) || t('common.error'))
+        return
+      }
+
+      if (data.code) {
+        setOtp({
+          code: data.code,
+          phoneNumber: phoneNumber,
+          expiresAt: Date.now() + 120000,
+        })
+      }
+
       toast.success(t('auth.codeSent'))
       setResendTimer(120)
+    },
+    onError: () => {
+      toast.error(t('common.error'))
     },
   })
 
@@ -87,6 +118,15 @@ export function OtpForm({ phoneNumber, onSuccess, onBack }: OtpFormProps) {
   const handleResend = () => {
     if (resendTimer === 0) {
       resendMutation.mutate({ data: { phoneNumber } })
+    }
+  }
+
+  const handleCopyCode = () => {
+    if (otp.code) {
+      navigator.clipboard.writeText(otp.code)
+      setCopied(true)
+      toast.success('Code copied!')
+      setTimeout(() => setCopied(false), 2000)
     }
   }
 
@@ -106,6 +146,37 @@ export function OtpForm({ phoneNumber, onSuccess, onBack }: OtpFormProps) {
         </span>
       </p>
 
+      {/* Prominent OTP Display */}
+      {otp.code && (
+        <Card className="border-2 border-primary/30 bg-primary/5 p-4">
+          <div className="space-y-3">
+            <p className="text-sm font-medium text-center text-muted-foreground">
+              Development Mode - Your OTP Code:
+            </p>
+            <div className="flex items-center justify-center gap-3">
+              <div className="text-4xl font-mono font-bold tracking-[0.5em] text-primary">
+                {otp.code}
+              </div>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={handleCopyCode}
+                className="h-10 w-10"
+              >
+                {copied ? (
+                  <CheckCircle2 className="h-5 w-5 text-green-600" />
+                ) : (
+                  <Copy className="h-5 w-5" />
+                )}
+              </Button>
+            </div>
+            <p className="text-xs text-center text-muted-foreground opacity-70">
+              This is only visible in development mode
+            </p>
+          </div>
+        </Card>
+      )}
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
@@ -116,7 +187,7 @@ export function OtpForm({ phoneNumber, onSuccess, onBack }: OtpFormProps) {
                 <FormLabel>{t('auth.otpCode')}</FormLabel>
                 <FormControl>
                   <InputOTP maxLength={5} {...field}>
-                    <InputOTPGroup dir="ltr" className="text-5xl">
+                    <InputOTPGroup dir="ltr" className="justify-center">
                       <InputOTPSlot index={0} />
                       <InputOTPSlot index={1} />
                       <InputOTPSlot index={2} />
