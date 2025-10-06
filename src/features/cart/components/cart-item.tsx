@@ -1,105 +1,108 @@
+// features/cart/components/cart-item.tsx (ENHANCED)
+
+import { HighlightWrapper } from '@/features/shared/highlight/components/highlight-wrapper'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { useI18n } from '@/features/shared/i18n'
-import { useCartItem } from '../hooks/use-cart-item'
+import { Input } from '@/components/ui/input'
+import { Trash2, Plus, Minus } from 'lucide-react'
+import { useCart } from '../hooks/use-cart'
 import { formatPrice } from '@/lib/utils'
-import { Minus, Plus, Trash2, Gavel } from 'lucide-react'
+import { useI18n } from '@/features/shared/i18n'
 import { CartItemWithProduct } from '../schemas/cart.schema'
 
 interface CartItemProps {
   item: CartItemWithProduct
+  isHighlighted?: boolean
+  onHighlightEnd?: () => void
 }
 
-export function CartItem({ item }: CartItemProps) {
+export function CartItem({
+  item,
+  isHighlighted,
+  onHighlightEnd,
+}: CartItemProps) {
+  const { updateQuantity, removeFromCart } = useCart()
   const { t } = useI18n()
-  const { increment, decrement, remove, quantity } = useCartItem(item.productId)
 
-  const isAuction = item.product.type === 'auction'
-  const image = item.product.images?.[0] || '/placeholder.png'
+  // FIX: updateQuantity expects an object with productId and quantity
+  const handleQuantityChange = (newQuantity: number) => {
+    updateQuantity({
+      productId: item.productId,
+      quantity: Math.max(1, newQuantity), // Ensure minimum of 1
+    })
+  }
+
+  const handleRemove = () => {
+    removeFromCart(item.productId)
+  }
 
   return (
-    <div className="flex gap-4">
-      <img
-        src={image}
-        alt={item.product.name}
-        className="h-20 w-20 rounded-lg object-cover"
-      />
+    <HighlightWrapper
+      id={`cart-item-${item.productId}`}
+      type="pulse"
+      className="p-4 border rounded-lg"
+      onHighlightEnd={onHighlightEnd}
+      scrollIntoView={isHighlighted}
+    >
+      <div className="flex gap-4">
+        <img
+          src={item.product.images[0]}
+          alt={item.product.name}
+          className="w-20 h-20 object-cover rounded"
+        />
 
-      <div className="flex-1 space-y-1">
-        {item.product.name}
+        <div className="flex-1">
+          <h4 className="font-medium">{item.product.name}</h4>
+          <p className="text-sm text-muted-foreground">
+            {formatPrice(item.priceAtAdd)}
+          </p>
 
-        {isAuction ? (
-          <div className="flex items-center gap-1">
-            <Gavel className="h-3 w-3 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">
-              {t('cart.yourBid')}
-            </span>
-            <span className="text-sm font-medium">
-              {formatPrice(item.bidAmount || '0')}
-            </span>
-          </div>
-        ) : (
-          <>
-            <div className="text-sm text-muted-foreground">
-              {formatPrice(item.product.price || '0')}
-            </div>
-
-            {/* Quantity controls for regular products */}
-            <div className="flex items-center gap-1">
+          {item.product.type === 'auction' ? (
+            <p className="text-sm text-primary">
+              {t('cart.bidAmount')}: {formatPrice(item.bidAmount || '0')}
+            </p>
+          ) : (
+            <div className="flex items-center gap-2 mt-2">
               <Button
-                variant="outline"
                 size="icon"
-                className="h-7 w-7"
-                onClick={decrement}
+                variant="outline"
+                className="h-8 w-8"
+                onClick={() => handleQuantityChange(item.quantity - 1)}
               >
                 <Minus className="h-3 w-3" />
               </Button>
 
-              <span className="w-8 text-center text-sm">{quantity}</span>
+              <Input
+                type="number"
+                value={item.quantity}
+                onChange={(e) => {
+                  const newQuantity = parseInt(e.target.value) || 1
+                  handleQuantityChange(newQuantity)
+                }}
+                className="w-16 h-8 text-center"
+                min="1"
+              />
 
               <Button
-                variant="outline"
                 size="icon"
-                className="h-7 w-7"
-                onClick={increment}
-                disabled={
-                  item.product.stock !== null && quantity >= item.product.stock
-                }
+                variant="outline"
+                className="h-8 w-8"
+                onClick={() => handleQuantityChange(item.quantity + 1)}
               >
                 <Plus className="h-3 w-3" />
               </Button>
             </div>
-          </>
-        )}
-
-        {/* Stock warning */}
-        {!isAuction &&
-          item.product.stock !== null &&
-          item.product.stock <= 5 && (
-            <Badge variant="destructive" className="text-xs">
-              {t('cart.lowStock', { count: item.product.stock })}
-            </Badge>
           )}
-      </div>
+        </div>
 
-      <div className="flex flex-col items-end justify-between">
         <Button
-          variant="ghost"
           size="icon"
-          className="h-7 w-7"
-          onClick={remove}
+          variant="ghost"
+          className="h-8 w-8"
+          onClick={handleRemove}
         >
           <Trash2 className="h-4 w-4" />
         </Button>
-
-        <div className="text-sm font-semibold">
-          {isAuction
-            ? formatPrice(item.bidAmount || '0')
-            : formatPrice(
-                (parseFloat(item.product.price || '0') * quantity).toString(),
-              )}
-        </div>
       </div>
-    </div>
+    </HighlightWrapper>
   )
 }

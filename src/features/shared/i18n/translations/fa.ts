@@ -342,6 +342,7 @@ const fa: Translations = {
     addedToCart: 'به سبد خرید اضافه شد',
     under: 'زیر',
     above: 'بالای',
+    clearFilters: 'پاک کردن فیلترها',
   },
   products: {
     addProduct: 'افزودن محصول',
@@ -432,6 +433,7 @@ const fa: Translations = {
     createShop: 'ایجاد فروشگاه',
     backToDashboard: 'بازگشت به پنل کاربری',
     login: 'ورود',
+    home: 'خانه',
   },
   shop: {
     management: 'Management',

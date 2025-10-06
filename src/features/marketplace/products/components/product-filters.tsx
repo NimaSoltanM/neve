@@ -13,10 +13,12 @@ import {
   DrawerFooter,
 } from '@/components/ui/drawer'
 import { useI18n } from '@/features/shared/i18n'
+import { formatPrice } from '@/lib/utils'
 import { Filter, X, SlidersHorizontal } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { useMediaQuery } from '@/hooks/use-media-query'
+import { calculatePriceRanges } from '../utils/calculate-price-ranges'
 
 interface ProductFiltersProps {
   minPrice?: string
@@ -25,6 +27,12 @@ interface ProductFiltersProps {
   sortBy?: string
   inStock?: boolean
   endingSoon?: boolean
+  products?: Array<{
+    type: 'regular' | 'auction'
+    price?: string | null
+    currentBid?: string | null
+    startingPrice?: string | null
+  }>
 }
 
 export function ProductFilters(props: ProductFiltersProps) {
@@ -40,6 +48,17 @@ export function ProductFilters(props: ProductFiltersProps) {
   const [sortBy, setSortBy] = useState(props.sortBy || 'newest')
   const [inStock, setInStock] = useState(props.inStock || false)
   const [endingSoon, setEndingSoon] = useState(props.endingSoon || false)
+
+  // Calculate dynamic price ranges based on products
+  const priceRanges = useMemo(
+    () => calculatePriceRanges(props.products || []),
+    [props.products],
+  )
+
+  // Format price with locale
+  const formatLocalizedPrice = (price: number) => {
+    return formatPrice(price, { locale: locale as 'en' | 'fa' })
+  }
 
   const applyFilters = () => {
     // Validate price range
@@ -155,52 +174,27 @@ export function ProductFilters(props: ProductFiltersProps) {
             />
           </div>
         </div>
-        {/* Quick price presets */}
+
+        {/* Dynamic Quick Price Presets */}
         <div className="flex flex-wrap gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              setMinPrice('')
-              setMaxPrice('100')
-            }}
-            className="h-7 text-xs"
-          >
-            {t('marketplace.under')} 100
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              setMinPrice('100')
-              setMaxPrice('500')
-            }}
-            className="h-7 text-xs"
-          >
-            100-500
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              setMinPrice('500')
-              setMaxPrice('1000')
-            }}
-            className="h-7 text-xs"
-          >
-            500-1000
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              setMinPrice('1000')
-              setMaxPrice('')
-            }}
-            className="h-7 text-xs"
-          >
-            {t('marketplace.above')} 1000
-          </Button>
+          {priceRanges.map((range, idx) => (
+            <Button
+              key={idx}
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setMinPrice(range.min === 0 ? '' : range.min.toString())
+                setMaxPrice(range.max === Infinity ? '' : range.max.toString())
+              }}
+              className="h-7 text-xs"
+            >
+              {range.max === Infinity
+                ? `${t('marketplace.above')} ${formatLocalizedPrice(range.min)}`
+                : range.min === 0
+                  ? `${t('marketplace.under')} ${formatLocalizedPrice(range.max)}`
+                  : `${formatLocalizedPrice(range.min)} - ${formatLocalizedPrice(range.max)}`}
+            </Button>
+          ))}
         </div>
       </div>
 

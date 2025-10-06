@@ -346,6 +346,7 @@ const en: Translations = {
     addedToCart: 'Added to cart',
     under: 'Under',
     above: 'Above',
+    clearFilters: 'clear filters',
   },
   products: {
     addProduct: 'Add Product',
@@ -436,6 +437,7 @@ const en: Translations = {
     createShop: 'Create Shop',
     backToDashboard: 'Back to Dashboard',
     login: 'Login',
+    home: 'Home',
   },
   shop: {
     management: 'Management',

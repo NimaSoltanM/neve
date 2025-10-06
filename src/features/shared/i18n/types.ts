@@ -320,6 +320,8 @@ export type Translations = {
 
     under: string
     above: string
+
+    clearFilters: string
   }
   products: {
     // Product management
@@ -417,6 +419,7 @@ export type Translations = {
     createShop: string
     backToDashboard: string
     login: string
+    home: string
   }
   shop: {
     management: string

@@ -26,6 +26,7 @@ import { NotificationBell } from '@/features/notifications/components/notificati
 import { Skeleton } from '@/components/ui/skeleton'
 import { LogoIcon } from '@/components/logo-icon'
 import { Logo } from '@/components/logo'
+import { ModeToggle } from '../../theme'
 
 export function Header() {
   const { t, dir } = useI18n()
@@ -79,6 +80,8 @@ export function Header() {
 
           {/* Language always available */}
           <LanguageSwitcher />
+
+          <ModeToggle />
 
           {/* User Menu */}
           {isLoading ? (

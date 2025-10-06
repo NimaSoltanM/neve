@@ -14,6 +14,7 @@ import { useI18n } from '@/features/shared/i18n/context'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { AlertCircle, Home } from 'lucide-react'
+import { ThemeProvider } from '@/features/shared/theme'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -56,9 +57,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {children}
-        <Toaster richColors />
-        {/* <TanstackDevtools
+        <ThemeProvider>
+          {children}
+          <Toaster richColors />
+          {/* <TanstackDevtools
           config={{
             position: 'bottom-left',
           }}
@@ -70,6 +72,8 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             TanStackQueryDevtools,
           ]}
         /> */}
+        </ThemeProvider>
+
         <Scripts />
       </body>
     </html>

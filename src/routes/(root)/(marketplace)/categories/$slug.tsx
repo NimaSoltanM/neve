@@ -92,7 +92,17 @@ function CategoryPage() {
       <div className="mt-8 space-y-6 lg:space-y-0 lg:grid lg:grid-cols-4 lg:gap-6">
         {/* Filters */}
         <aside className="lg:col-span-1">
-          <ProductFilters {...search} />
+          <Await
+            promise={productsPromise}
+            fallback={<ProductFilters {...search} />}
+          >
+            {(result) => (
+              <ProductFilters
+                {...search}
+                products={result?.success ? result.data?.items : []}
+              />
+            )}
+          </Await>
         </aside>
 
         {/* Products */}
