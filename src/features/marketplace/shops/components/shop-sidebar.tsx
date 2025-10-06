@@ -48,10 +48,6 @@ export function ShopSidebar() {
               title: t('shop.addProduct'),
               href: '/shop/products/new',
             },
-            {
-              title: t('shop.categories'),
-              href: '/shop/products/categories',
-            },
           ],
         },
         {

@@ -23,7 +23,7 @@ export const Route = createFileRoute('/(dashboards)/shop')({
 
     if (!shop.data) {
       throw redirect({
-        to: '/',
+        to: '/dashboard/shop-setup',
       })
     }
   },

@@ -18,12 +18,15 @@ import { Route as rootmarketplaceRouteRouteImport } from './routes/(root)/(marke
 import { Route as dashboardsShopRouteRouteImport } from './routes/(dashboards)/shop/route'
 import { Route as dashboardsDashboardRouteRouteImport } from './routes/(dashboards)/dashboard/route'
 import { Route as dashboardsShopIndexRouteImport } from './routes/(dashboards)/shop/index'
+import { Route as dashboardsDashboardIndexRouteImport } from './routes/(dashboards)/dashboard/index'
 import { Route as rootmarketplaceMarketplaceIndexRouteImport } from './routes/(root)/(marketplace)/marketplace/index'
 import { Route as rootmarketplaceCategoriesIndexRouteImport } from './routes/(root)/(marketplace)/categories/index'
 import { Route as dashboardsShopSettingsIndexRouteImport } from './routes/(dashboards)/shop/settings/index'
 import { Route as dashboardsShopProductsIndexRouteImport } from './routes/(dashboards)/shop/products/index'
+import { Route as dashboardsShopOrdersIndexRouteImport } from './routes/(dashboards)/shop/orders/index'
 import { Route as dashboardsShopEditIndexRouteImport } from './routes/(dashboards)/shop/edit/index'
 import { Route as dashboardsShopAuctionsIndexRouteImport } from './routes/(dashboards)/shop/auctions/index'
+import { Route as dashboardsShopAnalyticsIndexRouteImport } from './routes/(dashboards)/shop/analytics/index'
 import { Route as dashboardsDashboardShopSetupIndexRouteImport } from './routes/(dashboards)/dashboard/shop-setup/index'
 import { Route as dashboardsDashboardOrdersIndexRouteImport } from './routes/(dashboards)/dashboard/orders/index'
 import { Route as dashboardsDashboardNotificationsIndexRouteImport } from './routes/(dashboards)/dashboard/notifications/index'
@@ -79,6 +82,12 @@ const dashboardsShopIndexRoute = dashboardsShopIndexRouteImport.update({
   path: '/',
   getParentRoute: () => dashboardsShopRouteRoute,
 } as any)
+const dashboardsDashboardIndexRoute =
+  dashboardsDashboardIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => dashboardsDashboardRouteRoute,
+  } as any)
 const rootmarketplaceMarketplaceIndexRoute =
   rootmarketplaceMarketplaceIndexRouteImport.update({
     id: '/marketplace/',
@@ -103,6 +112,12 @@ const dashboardsShopProductsIndexRoute =
     path: '/products/',
     getParentRoute: () => dashboardsShopRouteRoute,
   } as any)
+const dashboardsShopOrdersIndexRoute =
+  dashboardsShopOrdersIndexRouteImport.update({
+    id: '/orders/',
+    path: '/orders/',
+    getParentRoute: () => dashboardsShopRouteRoute,
+  } as any)
 const dashboardsShopEditIndexRoute = dashboardsShopEditIndexRouteImport.update({
   id: '/edit/',
   path: '/edit/',
@@ -112,6 +127,12 @@ const dashboardsShopAuctionsIndexRoute =
   dashboardsShopAuctionsIndexRouteImport.update({
     id: '/auctions/',
     path: '/auctions/',
+    getParentRoute: () => dashboardsShopRouteRoute,
+  } as any)
+const dashboardsShopAnalyticsIndexRoute =
+  dashboardsShopAnalyticsIndexRouteImport.update({
+    id: '/analytics/',
+    path: '/analytics/',
     getParentRoute: () => dashboardsShopRouteRoute,
   } as any)
 const dashboardsDashboardShopSetupIndexRoute =
@@ -182,6 +203,7 @@ export interface FileRoutesByFullPath {
   '/shop': typeof dashboardsShopRouteRouteWithChildren
   '/auth': typeof AuthIndexRoute
   '/checkout': typeof CheckoutIndexRoute
+  '/dashboard/': typeof dashboardsDashboardIndexRoute
   '/shop/': typeof dashboardsShopIndexRoute
   '/categories/$slug': typeof rootmarketplaceCategoriesSlugRoute
   '/shops/$slug': typeof rootmarketplaceShopsSlugRoute
@@ -189,8 +211,10 @@ export interface FileRoutesByFullPath {
   '/dashboard/notifications': typeof dashboardsDashboardNotificationsIndexRoute
   '/dashboard/orders': typeof dashboardsDashboardOrdersIndexRoute
   '/dashboard/shop-setup': typeof dashboardsDashboardShopSetupIndexRoute
+  '/shop/analytics': typeof dashboardsShopAnalyticsIndexRoute
   '/shop/auctions': typeof dashboardsShopAuctionsIndexRoute
   '/shop/edit': typeof dashboardsShopEditIndexRoute
+  '/shop/orders': typeof dashboardsShopOrdersIndexRoute
   '/shop/products': typeof dashboardsShopProductsIndexRoute
   '/shop/settings': typeof dashboardsShopSettingsIndexRoute
   '/categories': typeof rootmarketplaceCategoriesIndexRoute
@@ -202,10 +226,10 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/test-upload': typeof TestUploadRoute
-  '/dashboard': typeof dashboardsDashboardRouteRouteWithChildren
   '/': typeof rootIndexRoute
   '/auth': typeof AuthIndexRoute
   '/checkout': typeof CheckoutIndexRoute
+  '/dashboard': typeof dashboardsDashboardIndexRoute
   '/shop': typeof dashboardsShopIndexRoute
   '/categories/$slug': typeof rootmarketplaceCategoriesSlugRoute
   '/shops/$slug': typeof rootmarketplaceShopsSlugRoute
@@ -213,8 +237,10 @@ export interface FileRoutesByTo {
   '/dashboard/notifications': typeof dashboardsDashboardNotificationsIndexRoute
   '/dashboard/orders': typeof dashboardsDashboardOrdersIndexRoute
   '/dashboard/shop-setup': typeof dashboardsDashboardShopSetupIndexRoute
+  '/shop/analytics': typeof dashboardsShopAnalyticsIndexRoute
   '/shop/auctions': typeof dashboardsShopAuctionsIndexRoute
   '/shop/edit': typeof dashboardsShopEditIndexRoute
+  '/shop/orders': typeof dashboardsShopOrdersIndexRoute
   '/shop/products': typeof dashboardsShopProductsIndexRoute
   '/shop/settings': typeof dashboardsShopSettingsIndexRoute
   '/categories': typeof rootmarketplaceCategoriesIndexRoute
@@ -234,6 +260,7 @@ export interface FileRoutesById {
   '/(root)/': typeof rootIndexRoute
   '/auth/': typeof AuthIndexRoute
   '/checkout/': typeof CheckoutIndexRoute
+  '/(dashboards)/dashboard/': typeof dashboardsDashboardIndexRoute
   '/(dashboards)/shop/': typeof dashboardsShopIndexRoute
   '/(root)/(marketplace)/categories/$slug': typeof rootmarketplaceCategoriesSlugRoute
   '/(root)/(marketplace)/shops/$slug': typeof rootmarketplaceShopsSlugRoute
@@ -241,8 +268,10 @@ export interface FileRoutesById {
   '/(dashboards)/dashboard/notifications/': typeof dashboardsDashboardNotificationsIndexRoute
   '/(dashboards)/dashboard/orders/': typeof dashboardsDashboardOrdersIndexRoute
   '/(dashboards)/dashboard/shop-setup/': typeof dashboardsDashboardShopSetupIndexRoute
+  '/(dashboards)/shop/analytics/': typeof dashboardsShopAnalyticsIndexRoute
   '/(dashboards)/shop/auctions/': typeof dashboardsShopAuctionsIndexRoute
   '/(dashboards)/shop/edit/': typeof dashboardsShopEditIndexRoute
+  '/(dashboards)/shop/orders/': typeof dashboardsShopOrdersIndexRoute
   '/(dashboards)/shop/products/': typeof dashboardsShopProductsIndexRoute
   '/(dashboards)/shop/settings/': typeof dashboardsShopSettingsIndexRoute
   '/(root)/(marketplace)/categories/': typeof rootmarketplaceCategoriesIndexRoute
@@ -261,6 +290,7 @@ export interface FileRouteTypes {
     | '/shop'
     | '/auth'
     | '/checkout'
+    | '/dashboard/'
     | '/shop/'
     | '/categories/$slug'
     | '/shops/$slug'
@@ -268,8 +298,10 @@ export interface FileRouteTypes {
     | '/dashboard/notifications'
     | '/dashboard/orders'
     | '/dashboard/shop-setup'
+    | '/shop/analytics'
     | '/shop/auctions'
     | '/shop/edit'
+    | '/shop/orders'
     | '/shop/products'
     | '/shop/settings'
     | '/categories'
@@ -281,10 +313,10 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/test-upload'
-    | '/dashboard'
     | '/'
     | '/auth'
     | '/checkout'
+    | '/dashboard'
     | '/shop'
     | '/categories/$slug'
     | '/shops/$slug'
@@ -292,8 +324,10 @@ export interface FileRouteTypes {
     | '/dashboard/notifications'
     | '/dashboard/orders'
     | '/dashboard/shop-setup'
+    | '/shop/analytics'
     | '/shop/auctions'
     | '/shop/edit'
+    | '/shop/orders'
     | '/shop/products'
     | '/shop/settings'
     | '/categories'
@@ -312,6 +346,7 @@ export interface FileRouteTypes {
     | '/(root)/'
     | '/auth/'
     | '/checkout/'
+    | '/(dashboards)/dashboard/'
     | '/(dashboards)/shop/'
     | '/(root)/(marketplace)/categories/$slug'
     | '/(root)/(marketplace)/shops/$slug'
@@ -319,8 +354,10 @@ export interface FileRouteTypes {
     | '/(dashboards)/dashboard/notifications/'
     | '/(dashboards)/dashboard/orders/'
     | '/(dashboards)/dashboard/shop-setup/'
+    | '/(dashboards)/shop/analytics/'
     | '/(dashboards)/shop/auctions/'
     | '/(dashboards)/shop/edit/'
+    | '/(dashboards)/shop/orders/'
     | '/(dashboards)/shop/products/'
     | '/(dashboards)/shop/settings/'
     | '/(root)/(marketplace)/categories/'
@@ -405,6 +442,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof dashboardsShopIndexRouteImport
       parentRoute: typeof dashboardsShopRouteRoute
     }
+    '/(dashboards)/dashboard/': {
+      id: '/(dashboards)/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof dashboardsDashboardIndexRouteImport
+      parentRoute: typeof dashboardsDashboardRouteRoute
+    }
     '/(root)/(marketplace)/marketplace/': {
       id: '/(root)/(marketplace)/marketplace/'
       path: '/marketplace'
@@ -433,6 +477,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof dashboardsShopProductsIndexRouteImport
       parentRoute: typeof dashboardsShopRouteRoute
     }
+    '/(dashboards)/shop/orders/': {
+      id: '/(dashboards)/shop/orders/'
+      path: '/orders'
+      fullPath: '/shop/orders'
+      preLoaderRoute: typeof dashboardsShopOrdersIndexRouteImport
+      parentRoute: typeof dashboardsShopRouteRoute
+    }
     '/(dashboards)/shop/edit/': {
       id: '/(dashboards)/shop/edit/'
       path: '/edit'
@@ -445,6 +496,13 @@ declare module '@tanstack/react-router' {
       path: '/auctions'
       fullPath: '/shop/auctions'
       preLoaderRoute: typeof dashboardsShopAuctionsIndexRouteImport
+      parentRoute: typeof dashboardsShopRouteRoute
+    }
+    '/(dashboards)/shop/analytics/': {
+      id: '/(dashboards)/shop/analytics/'
+      path: '/analytics'
+      fullPath: '/shop/analytics'
+      preLoaderRoute: typeof dashboardsShopAnalyticsIndexRouteImport
       parentRoute: typeof dashboardsShopRouteRoute
     }
     '/(dashboards)/dashboard/shop-setup/': {
@@ -555,6 +613,7 @@ const rootRouteRouteWithChildren = rootRouteRoute._addFileChildren(
 )
 
 interface dashboardsDashboardRouteRouteChildren {
+  dashboardsDashboardIndexRoute: typeof dashboardsDashboardIndexRoute
   dashboardsDashboardBidsIndexRoute: typeof dashboardsDashboardBidsIndexRoute
   dashboardsDashboardNotificationsIndexRoute: typeof dashboardsDashboardNotificationsIndexRoute
   dashboardsDashboardOrdersIndexRoute: typeof dashboardsDashboardOrdersIndexRoute
@@ -565,6 +624,7 @@ interface dashboardsDashboardRouteRouteChildren {
 
 const dashboardsDashboardRouteRouteChildren: dashboardsDashboardRouteRouteChildren =
   {
+    dashboardsDashboardIndexRoute: dashboardsDashboardIndexRoute,
     dashboardsDashboardBidsIndexRoute: dashboardsDashboardBidsIndexRoute,
     dashboardsDashboardNotificationsIndexRoute:
       dashboardsDashboardNotificationsIndexRoute,
@@ -584,8 +644,10 @@ const dashboardsDashboardRouteRouteWithChildren =
 
 interface dashboardsShopRouteRouteChildren {
   dashboardsShopIndexRoute: typeof dashboardsShopIndexRoute
+  dashboardsShopAnalyticsIndexRoute: typeof dashboardsShopAnalyticsIndexRoute
   dashboardsShopAuctionsIndexRoute: typeof dashboardsShopAuctionsIndexRoute
   dashboardsShopEditIndexRoute: typeof dashboardsShopEditIndexRoute
+  dashboardsShopOrdersIndexRoute: typeof dashboardsShopOrdersIndexRoute
   dashboardsShopProductsIndexRoute: typeof dashboardsShopProductsIndexRoute
   dashboardsShopSettingsIndexRoute: typeof dashboardsShopSettingsIndexRoute
   dashboardsShopProductsNewIndexRoute: typeof dashboardsShopProductsNewIndexRoute
@@ -593,8 +655,10 @@ interface dashboardsShopRouteRouteChildren {
 
 const dashboardsShopRouteRouteChildren: dashboardsShopRouteRouteChildren = {
   dashboardsShopIndexRoute: dashboardsShopIndexRoute,
+  dashboardsShopAnalyticsIndexRoute: dashboardsShopAnalyticsIndexRoute,
   dashboardsShopAuctionsIndexRoute: dashboardsShopAuctionsIndexRoute,
   dashboardsShopEditIndexRoute: dashboardsShopEditIndexRoute,
+  dashboardsShopOrdersIndexRoute: dashboardsShopOrdersIndexRoute,
   dashboardsShopProductsIndexRoute: dashboardsShopProductsIndexRoute,
   dashboardsShopSettingsIndexRoute: dashboardsShopSettingsIndexRoute,
   dashboardsShopProductsNewIndexRoute: dashboardsShopProductsNewIndexRoute,

@@ -76,12 +76,12 @@ export type Translations = {
     tooManyOtpRequests: string
     otpStillValid: string
   }
-  dashboard: {
-    profileInfo: string
-    name: string
-    phoneNumber: string
-    memberSince: string
-  }
+  // dashboard: {
+  //   profileInfo: string
+  //   name: string
+  //   phoneNumber: string
+  //   memberSince: string
+  // }
   categories: {
     title: string
     subtitle: string
@@ -657,6 +657,50 @@ export type Translations = {
   notFoundErrors: {
     notFound: string
     notFoundDescription: string
+  }
+  dashboard: {
+    overview: {
+      welcome: string
+      quickStats: string
+      totalOrders: string
+      activeBids: string
+      pendingPayments: string
+      recentOrders: string
+      recentOrdersEmpty: string
+      activeBidsSection: string
+      activeBidsEmpty: string
+      endingSoon: string
+      quickActions: string
+      browseMarketplace: string
+      viewAllOrders: string
+      checkBids: string
+      viewAll: string
+    }
+  }
+
+  shopOverview: {
+    welcome: string
+    todaySales: string
+    thisWeek: string
+    thisMonth: string
+    totalRevenue: string
+    totalProducts: string
+    activeAuctions: string
+    pendingOrders: string
+    recentOrders: string
+    recentOrdersEmpty: string
+    topProducts: string
+    topProductsEmpty: string
+    lowStockAlerts: string
+    lowStockEmpty: string
+    quickActions: string
+    addProduct: string
+    createAuction: string
+    viewAnalytics: string
+    sales: string
+    views: string
+    inStock: string
+    outOfStock: string
   }
 }
 

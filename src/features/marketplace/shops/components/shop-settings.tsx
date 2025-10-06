@@ -1,3 +1,5 @@
+// features/shops/components/shop-settings.tsx
+
 import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -44,18 +46,16 @@ import {
   Loader2,
   ImageIcon,
   Rocket,
+  AlertCircle,
   CheckCircle2,
+  Store,
   Power,
   Sparkles,
   Info,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { getMyShop, updateShop, toggleShopActivation } from '../actions'
 import type { UploadedFile } from '@/features/shared/upload/types/upload.types'
-import {
-  getMyShop,
-  toggleShopActivation,
-  updateShop,
-} from '@/features/marketplace/shops/actions'
 
 const formSchema = z.object({
   descriptionEn: z.string().max(500).optional(),
@@ -226,15 +226,29 @@ export function ShopSettings() {
       </div>
 
       {/* Shop Status Card */}
-      <Card className={cn('border-2 transition-colors')}>
+      <Card
+        className={cn(
+          'border-2 transition-colors',
+          isActive
+            ? 'border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-950/20'
+            : 'border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/20',
+        )}
+      >
         <CardHeader>
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-center gap-3 flex-1">
-              <div className={cn('p-3 rounded-full shrink-0')}>
+              <div
+                className={cn(
+                  'p-3 rounded-full shrink-0',
+                  isActive
+                    ? 'bg-green-100 dark:bg-green-900/40'
+                    : 'bg-amber-100 dark:bg-amber-900/40',
+                )}
+              >
                 {isActive ? (
-                  <Rocket className="h-6 w-6" />
+                  <Rocket className="h-6 w-6 text-green-600 dark:text-green-400" />
                 ) : (
-                  <Power className="h-6 w-6" />
+                  <Power className="h-6 w-6 text-amber-600 dark:text-amber-400" />
                 )}
               </div>
               <div className="flex-1 min-w-0">
@@ -242,7 +256,11 @@ export function ShopSettings() {
                   {t('shops.shopStatus')}
                   <Badge
                     variant={isActive ? 'default' : 'secondary'}
-                    className={'shrink-0'}
+                    className={cn(
+                      'shrink-0',
+                      isActive &&
+                        'bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white',
+                    )}
                   >
                     {isActive ? t('shops.active') : t('shops.inactive')}
                   </Badge>
@@ -257,8 +275,22 @@ export function ShopSettings() {
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Alert className="border-2">
-            <Info className={'h-4 w-4'} />
+          <Alert
+            className={cn(
+              'border-2',
+              isActive
+                ? 'border-green-200 dark:border-green-800 bg-green-50/50 dark:bg-green-950/20'
+                : 'border-amber-200 dark:border-amber-800 bg-amber-50/50 dark:bg-amber-950/20',
+            )}
+          >
+            <Info
+              className={cn(
+                'h-4 w-4',
+                isActive
+                  ? 'text-green-600 dark:text-green-500'
+                  : 'text-amber-600 dark:text-amber-500',
+              )}
+            />
             <AlertTitle className="font-semibold">
               {isActive ? t('shops.whatsNext') : t('shops.readyToLaunch')}
             </AlertTitle>

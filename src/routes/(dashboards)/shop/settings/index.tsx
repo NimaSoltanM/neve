@@ -1,4 +1,4 @@
-import { ShopSettings } from '@/features/shops/components/shop-settings'
+import { ShopSettings } from '@/features/marketplace/shops/components/shop-settings'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/(dashboards)/shop/settings/')({
