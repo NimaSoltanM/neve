@@ -394,3 +394,22 @@ export const getUserProducts = createServerFn()
       data: allProducts,
     }
   })
+
+export const getProductForEdit = createServerFn()
+  .middleware([authMiddleware])
+  .validator((input: unknown) => z.number().parse(input))
+  .handler(async ({ data: productId, context }) => {
+    try {
+      const product = await verifyProductOwnership(productId, context.user.id)
+
+      return {
+        success: true,
+        data: product,
+      }
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Product not found',
+      }
+    }
+  })

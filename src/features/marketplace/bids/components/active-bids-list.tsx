@@ -35,7 +35,7 @@ export function ActiveBidsList({ bids }: ActiveBidsListProps) {
         <CardContent className="text-center py-8">
           <p className="text-muted-foreground">{t('bids.empty.active')}</p>
           <Button asChild className="mt-4">
-            <Link to="/marketplace" search={{ page: 1 }}>
+            <Link to="/marketplace" search={{ page: 1, type: 'auction' }}>
               {t('bids.browseAuctions')}
             </Link>
           </Button>

@@ -267,6 +267,22 @@ const en: Translations = {
     saving: 'Saving...',
     settings: 'Settings',
     settingsDesc: "You can configure your shop's settings here.",
+    allProducts: 'All Products',
+    productsSubtitle: 'Manage your shop products',
+    addNewProduct: 'Add New Product',
+    editProduct: 'Edit Product',
+    deleteProduct: 'Delete Product',
+    productDeleted: 'Product deleted successfully',
+    productUpdated: 'Product updated successfully',
+    confirmDelete: 'Delete this product?',
+    confirmDeleteDesc:
+      'This action cannot be undone. The product will be permanently deleted.',
+    noProductsDesc: 'Start by adding your first product to your shop.',
+    regularProduct: 'Regular',
+    auctionProduct: 'Auction',
+    type: 'Type',
+    category: 'Category',
+    viewProduct: 'View Product',
   },
   upload: {
     dragOrClick: 'Drag files here or click to browse',
@@ -403,6 +419,35 @@ const en: Translations = {
     productNotFound: 'Product not found',
     updateFailed: 'Failed to update product',
     deleteFailed: 'Failed to delete product',
+
+    // Product types
+    productType: 'Product Type',
+    selectProductType: 'Choose how you want to sell this product',
+    regularDesc: 'Set a fixed price and manage inventory',
+    auctionDesc: 'Let customers bid on your product',
+
+    // Basic info
+    basicInformation: 'Basic Information',
+    basicInformationDesc: 'Enter the core details about your product',
+    persianNameWarning: 'Persian characters in name',
+    slug: 'URL Slug',
+    slugDesc: 'Auto-generated from product name. Used in product URL.',
+
+    // Images
+    imagesDesc:
+      'Add up to 10 product images. First image will be the main image.',
+
+    // Pricing
+    pricingInventory: 'Pricing & Inventory',
+    pricingInventoryDesc: 'Set your product price and stock quantity',
+    stockDesc: 'Available quantity for sale',
+
+    // Auction
+    auctionPricing: 'Auction Settings',
+    auctionPricingDesc: 'Set up auction parameters and pricing',
+    bidIncrementDesc: 'Minimum amount to increase bid by',
+    auctionEndDateDesc: 'When should this auction end? (Max 90 days)',
+    pickDate: 'Pick a date',
   },
   validation: {
     required: 'This field is required',

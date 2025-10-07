@@ -267,6 +267,23 @@ const fa: Translations = {
     saving: 'در حال ذخیره...',
     settings: 'تنظیمات',
     settingsDesc: 'از اینجا میتوانید فروشگاه خود را ویرایش کنید.',
+
+    allProducts: 'همه محصولات',
+    productsSubtitle: 'مدیریت محصولات فروشگاه',
+    addNewProduct: 'افزودن محصول جدید',
+    editProduct: 'ویرایش محصول',
+    deleteProduct: 'حذف محصول',
+    productDeleted: 'محصول با موفقیت حذف شد',
+    productUpdated: 'محصول با موفقیت به‌روزرسانی شد',
+    confirmDelete: 'این محصول حذف شود؟',
+    confirmDeleteDesc:
+      'این عمل قابل بازگشت نیست. محصول به طور کامل حذف خواهد شد.',
+    noProductsDesc: 'با افزودن اولین محصول خود شروع کنید.',
+    regularProduct: 'عادی',
+    auctionProduct: 'حراجی',
+    type: 'نوع',
+    category: 'دسته‌بندی',
+    viewProduct: 'مشاهده محصول',
   },
   upload: {
     dragOrClick: 'فایل‌ها را اینجا بکشید یا کلیک کنید',
@@ -399,6 +416,36 @@ const fa: Translations = {
     productNotFound: 'محصول یافت نشد',
     updateFailed: 'خطا در بروزرسانی محصول',
     deleteFailed: 'خطا در حذف محصول',
+
+    // Product types
+    productType: 'نوع محصول',
+    selectProductType: 'نحوه فروش محصول خود را انتخاب کنید',
+    regularDesc: 'قیمت ثابت تعیین کنید و موجودی را مدیریت کنید',
+    auctionDesc: 'به مشتریان اجازه دهید روی محصول شما پیشنهاد قیمت بدهند',
+
+    // Basic info
+    basicInformation: 'اطلاعات پایه',
+    basicInformationDesc: 'جزئیات اصلی محصول خود را وارد کنید',
+    persianNameWarning: 'نام فارسی در عنوان',
+    slug: 'شناسه URL',
+    slugDesc:
+      'به صورت خودکار از نام محصول ساخته می‌شود. در آدرس محصول استفاده می‌شود.',
+
+    // Images
+    imagesDesc:
+      'تا ۱۰ تصویر برای محصول اضافه کنید. تصویر اول تصویر اصلی خواهد بود.',
+
+    // Pricing
+    pricingInventory: 'قیمت‌گذاری و موجودی',
+    pricingInventoryDesc: 'قیمت و تعداد موجودی محصول را تعیین کنید',
+    stockDesc: 'تعداد موجود برای فروش',
+
+    // Auction
+    auctionPricing: 'تنظیمات حراجی',
+    auctionPricingDesc: 'پارامترها و قیمت‌گذاری حراجی را تنظیم کنید',
+    bidIncrementDesc: 'حداقل مبلغ برای افزایش پیشنهاد',
+    auctionEndDateDesc: 'حراجی چه زمانی باید پایان یابد؟ (حداکثر ۹۰ روز)',
+    pickDate: 'انتخاب تاریخ',
   },
   validation: {
     required: 'این فیلد الزامی است',

@@ -240,6 +240,22 @@ export type Translations = {
     saving: string
     settings: string
     settingsDesc: string
+
+    allProducts: string
+    productsSubtitle: string
+    addNewProduct: string
+    editProduct: string
+    deleteProduct: string
+    productDeleted: string
+    productUpdated: string
+    confirmDelete: string
+    confirmDeleteDesc: string
+    noProductsDesc: string
+    regularProduct: string
+    auctionProduct: string
+    type: string
+    category: string
+    viewProduct: string
   }
   upload: {
     dragOrClick: string
@@ -385,6 +401,25 @@ export type Translations = {
     productNotFound: string
     updateFailed: string
     deleteFailed: string
+
+    productType: string
+    selectProductType: string
+    regularDesc: string
+    auctionDesc: string
+    basicInformation: string
+    basicInformationDesc: string
+    persianNameWarning: string
+    slug: string
+    slugDesc: string
+    imagesDesc: string
+    pricingInventory: string
+    pricingInventoryDesc: string
+    stockDesc: string
+    auctionPricing: string
+    auctionPricingDesc: string
+    bidIncrementDesc: string
+    auctionEndDateDesc: string
+    pickDate: string
   }
   validation: {
     required: string
@@ -677,7 +712,6 @@ export type Translations = {
       viewAll: string
     }
   }
-
   shopOverview: {
     welcome: string
     todaySales: string
