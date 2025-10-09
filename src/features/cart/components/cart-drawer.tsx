@@ -1,6 +1,5 @@
-// features/cart/components/cart-drawer.tsx (ENHANCED)
+// features/cart/components/cart-drawer.tsx
 
-import { useEffect, useState } from 'react'
 import {
   Sheet,
   SheetContent,
@@ -11,14 +10,25 @@ import {
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
+import { Badge } from '@/components/ui/badge'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import { useI18n } from '@/features/shared/i18n'
 import { useCart } from '../hooks/use-cart'
-import { ShoppingCart, ArrowRight } from 'lucide-react'
-import { Link, useLocation, useNavigate } from '@tanstack/react-router'
-import { formatPrice } from '@/lib/utils'
+import { ShoppingCart, ArrowRight, Package, Trash2 } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
+import { formatPrice, cn } from '@/lib/utils'
 import { CartItem } from './cart-item'
-import { useAtom } from 'jotai'
-import { highlightStateAtom } from '@/features/shared/highlight/atoms/highlight.atoms'
+import { useState } from 'react'
+import { toast } from 'sonner'
 
 interface CartDrawerProps {
   open: boolean
@@ -26,150 +36,186 @@ interface CartDrawerProps {
 }
 
 export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
-  const { t, dir } = useI18n()
+  const { t, dir, locale } = useI18n()
   const { cart, total, hasItems, clearCart, isLoading } = useCart()
-  const location = useLocation()
-  const navigate = useNavigate()
-  const [highlightState, setHighlightState] = useAtom(highlightStateAtom)
-  const [highlightedItemId, setHighlightedItemId] = useState<string | null>(
-    null,
-  )
+  const [showClearDialog, setShowClearDialog] = useState(false)
 
-  // Check URL params for cart highlight intent
-  useEffect(() => {
-    const params = new URLSearchParams(location.search as any)
-    const shouldOpenCart = params.get('cart') === 'open'
-    const itemToHighlight = params.get('highlightItem')
+  const itemCount = cart?.reduce((sum, item) => sum + item.quantity, 0) || 0
 
-    if (shouldOpenCart) {
-      onOpenChange(true)
+  const handleClearCart = () => {
+    clearCart()
+    setShowClearDialog(false)
+    toast.success(t('cart.cleared'))
+    onOpenChange(false)
+  }
 
-      if (itemToHighlight) {
-        setHighlightedItemId(itemToHighlight)
-
-        // Trigger highlight state machine if it's waiting
-        if (
-          highlightState.status === 'highlighting' &&
-          highlightState.intent.type === 'cart' &&
-          highlightState.intent.itemId === itemToHighlight
-        ) {
-          // State machine already set, just let it run
-        } else {
-          // Manual trigger for direct URL access
-          setHighlightState({
-            status: 'highlighting',
-            intent: { type: 'cart', itemId: itemToHighlight },
-            elementId: `cart-item-${itemToHighlight}`,
-          })
-        }
-
-        // Clean up URL after opening
-        setTimeout(() => {
-          params.delete('cart')
-          params.delete('highlightItem')
-          const newSearch = params.toString()
-          navigate({
-            to: '.',
-            search: newSearch ? Object.fromEntries(params) : undefined,
-            replace: true,
-          } as any)
-        }, 100)
-      }
+  const handleCheckout = () => {
+    if (cart?.some((item) => item.product.type === 'auction')) {
+      toast.error(t('cart.auctionItemsCannotCheckout'))
+      return
     }
-  }, [
-    location.search,
-    onOpenChange,
-    highlightState,
-    setHighlightState,
-    navigate,
-  ])
-
-  // Auto-scroll to highlighted item
-  useEffect(() => {
-    if (open && highlightedItemId) {
-      setTimeout(() => {
-        const element = document.getElementById(
-          `cart-item-${highlightedItemId}`,
-        )
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'center' })
-        }
-      }, 300) // Wait for drawer animation
-    }
-  }, [open, highlightedItemId])
+    onOpenChange(false)
+  }
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent
-        side={dir === 'rtl' ? 'left' : 'right'}
-        className="w-full sm:max-w-md"
-      >
-        <SheetHeader>
-          <SheetTitle className="flex items-center gap-2">
-            <ShoppingCart className="h-5 w-5" />
-            {t('cart.title')}
-          </SheetTitle>
-        </SheetHeader>
-
-        {!hasItems ? (
-          <div className="flex flex-col items-center justify-center h-[400px] text-center">
-            <ShoppingCart className="h-16 w-16 text-muted-foreground mb-4" />
-            <p className="text-muted-foreground mb-4">{t('cart.empty')}</p>
-            <Button asChild>
-              <Link to="/marketplace" search={{ page: 1 }}>
-                {t('cart.continueShopping')}
-              </Link>
-            </Button>
-          </div>
-        ) : (
-          <>
-            <ScrollArea className="flex-1 mt-4 pr-4 max-h-[calc(100vh-280px)]">
-              <div className="space-y-4">
-                {/* FIX: cart is already an array, not an object with items */}
-                {cart?.map((item) => (
-                  <CartItem
-                    key={item.id}
-                    item={item}
-                    isHighlighted={highlightedItemId === String(item.productId)}
-                    onHighlightEnd={() => {
-                      if (highlightedItemId === String(item.productId)) {
-                        setHighlightedItemId(null)
-                      }
-                    }}
-                  />
-                ))}
-              </div>
-            </ScrollArea>
-
-            <div className="mt-6 space-y-4">
-              <Separator />
-
-              <div className="space-y-2">
-                <div className="flex justify-between text-lg font-semibold">
-                  <span>{t('cart.total')}</span>
-                  <span>{formatPrice(total)}</span>
+    <>
+      <Sheet open={open} onOpenChange={onOpenChange}>
+        <SheetContent
+          side={dir === 'rtl' ? 'left' : 'right'}
+          className="w-full sm:max-w-lg flex flex-col p-0"
+        >
+          {/* Header - Fixed */}
+          <SheetHeader className="px-6 pt-6 pb-4 border-b">
+            <SheetTitle className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <ShoppingCart className="h-6 w-6" />
+                  {hasItems && (
+                    <Badge
+                      className="absolute -top-2 -end-2 h-5 min-w-5 flex items-center justify-center p-0 text-xs"
+                      variant="destructive"
+                    >
+                      {itemCount}
+                    </Badge>
+                  )}
+                </div>
+                <div>
+                  <div className="text-lg font-semibold">{t('cart.title')}</div>
+                  {hasItems && (
+                    <div className="text-sm font-normal text-muted-foreground">
+                      {t('cart.itemCount', { count: cart?.length || 0 })}
+                    </div>
+                  )}
                 </div>
               </div>
+            </SheetTitle>
+          </SheetHeader>
 
-              <SheetFooter className="gap-2 sm:gap-0">
-                <Button
-                  variant="outline"
-                  onClick={() => clearCart()}
-                  className="w-full sm:w-auto"
+          {/* Content - Scrollable */}
+          {!hasItems ? (
+            <div className="flex-1 flex flex-col items-center justify-center px-6 text-center">
+              <div className="relative mb-6">
+                <div className="absolute inset-0 bg-primary/10 blur-3xl rounded-full" />
+                <Package className="relative h-24 w-24 text-muted-foreground/40" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">
+                {t('cart.emptyTitle')}
+              </h3>
+              <p className="text-muted-foreground mb-6 max-w-sm">
+                {t('cart.emptyDescription')}
+              </p>
+              <Button asChild size="lg" className="min-w-[200px]">
+                <Link
+                  to="/marketplace"
+                  search={{ page: 1 }}
+                  onClick={() => onOpenChange(false)}
                 >
-                  {t('cart.clear')}
-                </Button>
-                <Button asChild className="w-full sm:w-auto">
-                  <Link to="/checkout">
-                    {t('cart.checkout')}
-                    <ArrowRight className="ms-2 h-4 w-4 rtl:rotate-180" />
-                  </Link>
-                </Button>
-              </SheetFooter>
+                  {t('cart.startShopping')}
+                  <ArrowRight
+                    className={cn(
+                      'h-4 w-4',
+                      dir === 'rtl' ? 'me-2 rotate-180' : 'ms-2',
+                    )}
+                  />
+                </Link>
+              </Button>
             </div>
-          </>
-        )}
-      </SheetContent>
-    </Sheet>
+          ) : (
+            <>
+              <ScrollArea className="flex-1 px-6 py-4">
+                <div className="space-y-3">
+                  {cart?.map((item, index) => (
+                    <div
+                      key={item.id}
+                      className="animate-in fade-in slide-in-from-top-2"
+                      style={{
+                        animationDelay: `${index * 50}ms`,
+                        animationFillMode: 'backwards',
+                      }}
+                    >
+                      <CartItem item={item} />
+                    </div>
+                  ))}
+                </div>
+              </ScrollArea>
+
+              {/* Footer - Fixed */}
+              <div className="border-t bg-background">
+                <div className="px-6 py-4 space-y-4">
+                  {/* Summary */}
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm text-muted-foreground">
+                      <span>{t('cart.subtotal')}</span>
+                      <span>{formatPrice(total)}</span>
+                    </div>
+                    <Separator />
+                    <div className="flex justify-between text-lg font-bold">
+                      <span>{t('cart.total')}</span>
+                      <span className="text-primary">{formatPrice(total)}</span>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex flex-col gap-2">
+                    <Button
+                      asChild
+                      size="lg"
+                      className="w-full"
+                      onClick={handleCheckout}
+                    >
+                      <Link to="/checkout">
+                        {t('cart.checkout')}
+                        <ArrowRight
+                          className={cn(
+                            'h-4 w-4',
+                            dir === 'rtl' ? 'me-2 rotate-180' : 'ms-2',
+                          )}
+                        />
+                      </Link>
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowClearDialog(true)}
+                      className="w-full text-destructive hover:text-destructive hover:bg-destructive/10"
+                      disabled={isLoading}
+                    >
+                      <Trash2 className="h-4 w-4 me-2" />
+                      {t('cart.clearAll')}
+                    </Button>
+                  </div>
+
+                  {/* Info note */}
+                  <p className="text-xs text-center text-muted-foreground">
+                    {t('cart.checkoutNote')}
+                  </p>
+                </div>
+              </div>
+            </>
+          )}
+        </SheetContent>
+      </Sheet>
+
+      {/* Clear Cart Confirmation */}
+      <AlertDialog open={showClearDialog} onOpenChange={setShowClearDialog}>
+        <AlertDialogContent dir={dir}>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('cart.clearConfirmTitle')}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t('cart.clearConfirmDescription')}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleClearCart}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {t('cart.clearAll')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   )
 }
