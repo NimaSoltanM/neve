@@ -81,108 +81,41 @@ type ProductFormValues = {
   auctionEndsAt?: Date
 }
 
-const formSchema = z
-  .object({
-    name: z
-      .string()
-      .min(3, 'Product name must be at least 3 characters')
-      .max(200),
-    slug: z
-      .string()
-      .min(3, 'Slug must be at least 3 characters')
-      .regex(
-        /^[a-z0-9-]+$/,
-        'Slug can only contain lowercase letters, numbers and hyphens',
-      ),
-    description: z.string().max(2000).optional(),
-    categoryId: z.string().min(1, 'Please select a category'),
-    shopId: z.string().min(1, 'Please select a shop'),
-    type: z.enum(['regular', 'auction']),
-    images: z
-      .array(z.any())
-      .min(1, 'At least one image is required')
-      .max(10, 'Maximum 10 images allowed'),
-    price: z.string().optional(),
-    stock: z.string().optional(),
-    startingPrice: z.string().optional(),
-    bidIncrement: z.string().default('1.00'),
-    buyNowPrice: z.string().optional(),
-    auctionEndsAt: z.date().optional(),
-  })
-  .refine(
-    (data) => {
-      if (data.type === 'regular') {
-        return (
-          data.price &&
-          parseFloat(data.price) > 0 &&
-          data.stock &&
-          parseInt(data.stock) >= 0
-        )
-      }
-      if (data.type === 'auction') {
-        return (
-          data.startingPrice &&
-          parseFloat(data.startingPrice) > 0 &&
-          data.auctionEndsAt &&
-          data.auctionEndsAt > new Date()
-        )
-      }
-      return true
-    },
-    {
-      message:
-        'Please fill in all required fields for the selected product type',
-    },
-  )
+const formSchema = z.object({
+  name: z.string().min(1, 'Product name is required'),
+  slug: z.string().min(1, 'Slug is required'),
+  description: z.string().optional(),
+  categoryId: z.string().min(1, 'Category is required'),
+  shopId: z.string().min(1, 'Shop is required'),
+  type: z.enum(['regular', 'auction']),
+  images: z.array(z.any()).min(1, 'At least one image is required'),
+  price: z.string().optional(),
+  stock: z.string().optional(),
+  startingPrice: z.string().optional(),
+  bidIncrement: z.string().default('1.00'),
+  buyNowPrice: z.string().optional(),
+  auctionEndsAt: z.date().optional(),
+})
 
-interface ProductFormProps {
+type ProductFormProps = {
   product?: any
   onSuccess?: () => void
 }
 
-// Helper to convert Toman to Dollar (100,000 Toman = 1 Dollar)
-const tomanToDollar = (toman: string): string => {
-  const cleaned = toman.replace(/[^\d.]/g, '')
-  const numeric = parseFloat(cleaned)
-  if (isNaN(numeric)) return '0'
-  return (numeric / 100000).toFixed(2)
-}
-
-// Helper to convert Dollar to Toman
-const dollarToToman = (dollar: string): string => {
-  const numeric = parseFloat(dollar)
-  if (isNaN(numeric)) return '0'
-  return Math.round(numeric * 100000).toString()
-}
-
-// Helper to format number with Persian digits
-const toPersianNumber = (num: string): string => {
-  const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹']
-  return num.replace(/\d/g, (digit) => persianDigits[parseInt(digit)])
-}
-
-// Helper to convert Persian digits to English
-const toEnglishNumber = (str: string): string => {
-  const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹']
-  const arabicDigits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
-
-  let result = str
-  persianDigits.forEach((persian, index) => {
-    result = result.replace(new RegExp(persian, 'g'), index.toString())
-  })
-  arabicDigits.forEach((arabic, index) => {
-    result = result.replace(new RegExp(arabic, 'g'), index.toString())
-  })
-  return result
-}
-
 export function ProductForm({ product, onSuccess }: ProductFormProps) {
-  console.log('Product in form:', product) // Add this line
   const { t, locale, dir } = useI18n()
   const [isSlugManual, setIsSlugManual] = useState(false)
   const [productType, setProductType] = useState<'regular' | 'auction'>(
     product?.type || 'regular',
   )
+
+  // Display states for price fields
+  const [priceDisplay, setPriceDisplay] = useState('')
+  const [startingPriceDisplay, setStartingPriceDisplay] = useState('')
+  const [bidIncrementDisplay, setBidIncrementDisplay] = useState('')
+  const [buyNowPriceDisplay, setBuyNowPriceDisplay] = useState('')
+
+  const isPersian = locale === 'fa'
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(formSchema) as any,
@@ -198,7 +131,6 @@ export function ProductForm({ product, onSuccess }: ProductFormProps) {
             const fileName = url.split('/').pop() || ''
             const extension = fileName.split('.').pop()?.toLowerCase() || ''
 
-            // Determine MIME type from extension
             let mimeType = 'image/jpeg'
             if (extension === 'png') mimeType = 'image/png'
             if (extension === 'gif') mimeType = 'image/gif'
@@ -224,60 +156,99 @@ export function ProductForm({ product, onSuccess }: ProductFormProps) {
     },
   })
 
-  const nameValue = form.watch('name')
-  const typeValue = form.watch('type')
+  // Initialize display values when product or locale changes
+  useEffect(() => {
+    if (product?.price) {
+      const dollarValue = parseFloat(product.price)
+      setPriceDisplay(
+        isPersian
+          ? Math.round(dollarValue * 100000).toString()
+          : dollarValue.toFixed(2),
+      )
+    }
+    if (product?.startingPrice) {
+      const dollarValue = parseFloat(product.startingPrice)
+      setStartingPriceDisplay(
+        isPersian
+          ? Math.round(dollarValue * 100000).toString()
+          : dollarValue.toFixed(2),
+      )
+    }
+    if (product?.bidIncrement) {
+      const dollarValue = parseFloat(product.bidIncrement)
+      setBidIncrementDisplay(
+        isPersian
+          ? Math.round(dollarValue * 100000).toString()
+          : dollarValue.toFixed(2),
+      )
+    }
+    if (product?.buyNowPrice) {
+      const dollarValue = parseFloat(product.buyNowPrice)
+      setBuyNowPriceDisplay(
+        isPersian
+          ? Math.round(dollarValue * 100000).toString()
+          : dollarValue.toFixed(2),
+      )
+    }
+  }, [product, isPersian])
 
-  // Auto-generate slug from name
+  const nameValue = form.watch('name')
+
   useEffect(() => {
     if (!isSlugManual && nameValue) {
-      const newSlug = generateSlug(nameValue)
-      form.setValue('slug', newSlug)
+      form.setValue('slug', generateSlug(nameValue))
     }
   }, [nameValue, isSlugManual, form])
 
-  // Update product type state
-  useEffect(() => {
-    setProductType(typeValue)
-  }, [typeValue])
-
-  // Fetch user shops
-  const { data: shopsData, isLoading: shopsLoading } = useQuery({
-    queryKey: ['user-shops'],
-    queryFn: () => getUserShops(),
-  })
-
-  // Fetch categories
-  const { data: categoriesData, isLoading: categoriesLoading } = useQuery({
+  const { data: categories, isLoading: categoriesLoading } = useQuery({
     queryKey: ['categories'],
-    queryFn: () => getCategories(),
+    queryFn: getCategories,
   })
+
+  const { data: shopsResponse, isLoading: shopsLoading } = useQuery({
+    queryKey: ['user-shops'],
+    queryFn: getUserShops,
+  })
+
+  const shops = shopsResponse?.data || []
 
   const mutation = useMutation({
     mutationFn: async (values: ProductFormValues) => {
       const data = {
-        ...values,
-        shopId: parseInt(values.shopId),
+        name: values.name,
+        slug: values.slug,
+        description: values.description,
         categoryId: parseInt(values.categoryId),
+        shopId: parseInt(values.shopId),
+        type: values.type,
         images: values.images.map((img: UploadedFile) => img.url),
-        stock: values.stock ? parseInt(values.stock) : undefined,
-        auctionEndsAt: values.auctionEndsAt?.toISOString(),
-        price: values.price && values.price !== '' ? values.price : undefined,
+        price:
+          values.type === 'regular' && values.price
+            ? values.price // <-- Remove parseFloat(), keep as string
+            : undefined,
+        stock:
+          values.type === 'regular' && values.stock
+            ? parseInt(values.stock)
+            : undefined,
         startingPrice:
-          values.startingPrice && values.startingPrice !== ''
-            ? values.startingPrice
+          values.type === 'auction' && values.startingPrice
+            ? values.startingPrice // <-- Remove parseFloat(), keep as string
             : undefined,
         bidIncrement:
-          values.bidIncrement && values.bidIncrement !== ''
-            ? values.bidIncrement
-            : '1.00',
+          values.type === 'auction'
+            ? values.bidIncrement || '1.00' // <-- Remove parseFloat(), keep as string
+            : undefined,
         buyNowPrice:
-          values.buyNowPrice && values.buyNowPrice !== ''
-            ? values.buyNowPrice
+          values.type === 'auction' && values.buyNowPrice
+            ? values.buyNowPrice // <-- Remove parseFloat(), keep as string
+            : undefined,
+        auctionEndsAt:
+          values.type === 'auction' && values.auctionEndsAt
+            ? values.auctionEndsAt
             : undefined,
       }
 
       if (product?.id) {
-        console.log('Updating product with id:', product.id, 'data:', data)
         return await updateProductManagement({
           data: { ...data, id: product.id },
         })
@@ -292,6 +263,10 @@ export function ProductForm({ product, onSuccess }: ProductFormProps) {
         onSuccess?.()
         if (!product) {
           form.reset()
+          setPriceDisplay('')
+          setStartingPriceDisplay('')
+          setBidIncrementDisplay('')
+          setBuyNowPriceDisplay('')
         }
       } else {
         toast.error(result.error || t('common.error'))
@@ -303,7 +278,6 @@ export function ProductForm({ product, onSuccess }: ProductFormProps) {
   })
 
   const onSubmit = (values: ProductFormValues) => {
-    // Additional validation for auction buy now price
     if (values.type === 'auction' && values.buyNowPrice) {
       const buyNow = parseFloat(values.buyNowPrice)
       const starting = parseFloat(values.startingPrice || '0')
@@ -320,316 +294,93 @@ export function ProductForm({ product, onSuccess }: ProductFormProps) {
       nameValue || '',
     )
   const isLoading = shopsLoading || categoriesLoading
-  const isPersian = locale === 'fa'
-
-  // Price conversion helpers
-  const handlePriceInput = (value: string, onChange: (val: string) => void) => {
-    const cleanValue = toEnglishNumber(value.replace(/[^\d.]/g, ''))
-
-    if (isPersian) {
-      // Convert Toman to Dollar for storage
-      const dollarValue = tomanToDollar(cleanValue)
-      onChange(dollarValue)
-    } else {
-      onChange(cleanValue)
-    }
-  }
-
-  const displayPrice = (dollarValue: string): string => {
-    if (!dollarValue) return ''
-
-    if (isPersian) {
-      const tomanValue = dollarToToman(dollarValue)
-      return toPersianNumber(
-        new Intl.NumberFormat('fa-IR').format(parseInt(tomanValue)),
-      )
-    }
-    return dollarValue
-  }
-
-  if (isLoading) {
-    return (
-      <div className="space-y-6">
-        <Skeleton className="h-48 w-full" />
-        <Skeleton className="h-48 w-full" />
-        <Skeleton className="h-48 w-full" />
-      </div>
-    )
-  }
-
-  // Check if user has shops
-  if (!shopsData?.data || shopsData.data.length === 0) {
-    return (
-      <Alert>
-        <Store className="h-4 w-4" />
-        <AlertTitle>{t('shops.noShopsFound')}</AlertTitle>
-        <AlertDescription>{t('shops.createShopToday')}</AlertDescription>
-      </Alert>
-    )
-  }
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
-      <Form {...form}>
-        <div className="mb-6 flex items-center justify-between">
-          <LanguageSwitcher />
+    <div className="space-y-6" dir={dir}>
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight">
+            {product ? t('products.editProduct') : t('products.addProduct')}
+          </h2>
+          <p className="text-muted-foreground">
+            {product
+              ? t('products.editProductDesc')
+              : t('products.addProductDesc')}
+          </p>
         </div>
+        <LanguageSwitcher />
+      </div>
 
-        <form
-          onSubmit={form.handleSubmit(onSubmit) as any}
-          className="space-y-6"
-          dir={dir}
-        >
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           {/* Product Type Selection */}
-          {!product && (
-            <Card>
-              <CardHeader>
-                <div className="flex items-center gap-2">
-                  <Package className="h-5 w-5" />
-                  <CardTitle>{t('products.productType')}</CardTitle>
-                </div>
-                <CardDescription>
-                  {t('products.selectProductType')}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <FormField
-                  control={form.control as any}
-                  name="type"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          className="grid grid-cols-1 md:grid-cols-2 gap-4"
-                        >
-                          <div
-                            className={cn(
-                              'flex items-start space-x-3 space-y-0 rounded-lg border-2 p-4 cursor-pointer transition-colors',
-                              field.value === 'regular'
-                                ? 'border-primary bg-primary/5'
-                                : 'border-border hover:border-primary/50',
-                              isPersian && 'space-x-reverse',
-                            )}
-                          >
-                            <RadioGroupItem value="regular" id="regular" />
-                            <label
-                              htmlFor="regular"
-                              className="flex-1 cursor-pointer"
-                            >
-                              <div className="flex items-center gap-2 font-semibold">
-                                <DollarSign className="h-4 w-4" />
-                                {t('shops.regularProduct')}
-                              </div>
-                              <p className="text-sm text-muted-foreground mt-1">
-                                {t('products.regularDesc')}
-                              </p>
-                            </label>
-                          </div>
-                          <div
-                            className={cn(
-                              'flex items-start space-x-3 space-y-0 rounded-lg border-2 p-4 cursor-pointer transition-colors',
-                              field.value === 'auction'
-                                ? 'border-primary bg-primary/5'
-                                : 'border-border hover:border-primary/50',
-                              isPersian && 'space-x-reverse',
-                            )}
-                          >
-                            <RadioGroupItem value="auction" id="auction" />
-                            <label
-                              htmlFor="auction"
-                              className="flex-1 cursor-pointer"
-                            >
-                              <div className="flex items-center gap-2 font-semibold">
-                                <Gavel className="h-4 w-4" />
-                                {t('shops.auctionProduct')}
-                              </div>
-                              <p className="text-sm text-muted-foreground mt-1">
-                                {t('products.auctionDesc')}
-                              </p>
-                            </label>
-                          </div>
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Basic Information */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Info className="h-5 w-5" />
-                {t('products.basicInformation')}
+                <Tag className="h-5 w-5" />
+                {t('products.productType')}
               </CardTitle>
-              <CardDescription>
-                {t('products.basicInformationDesc')}
-              </CardDescription>
+              <CardDescription>{t('products.productTypeDesc')}</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid gap-6 md:grid-cols-2">
-                {/* Shop Selection */}
-                <FormField
-                  control={form.control as any}
-                  name="shopId"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="flex items-center gap-1">
-                        <Store className="h-4 w-4" />
-                        {t('products.selectShop')}
-                        <span className="text-destructive">*</span>
-                      </FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        disabled={!!product}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue
-                              placeholder={t('products.selectShop')}
-                            />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {shopsData?.data?.map((shop: any) => (
-                            <SelectItem
-                              key={shop.id}
-                              value={shop.id.toString()}
-                            >
-                              {shop.name}
-                              {!shop.isActive && (
-                                <Badge variant="secondary" className="ms-2">
-                                  Inactive
-                                </Badge>
-                              )}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* Category Selection */}
-                <FormField
-                  control={form.control as any}
-                  name="categoryId"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="flex items-center gap-1">
-                        <Tag className="h-4 w-4" />
-                        {t('products.selectCategory')}
-                        <span className="text-destructive">*</span>
-                      </FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue
-                              placeholder={t('products.selectCategory')}
-                            />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {categoriesData?.map((cat: any) => (
-                            <SelectItem key={cat.id} value={cat.id.toString()}>
-                              {cat.name[locale as 'en' | 'fa'] || cat.name.en}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              {/* Product Name */}
+            <CardContent>
               <FormField
                 control={form.control as any}
-                name="name"
+                name="type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="flex items-center justify-between">
-                      <span className="flex items-center gap-1">
-                        {t('products.productName')}
-                        <span className="text-destructive">*</span>
-                      </span>
-                      {hasPersianInName && (
-                        <Badge variant="outline" className="text-xs">
-                          <Info className="h-3 w-3 me-1" />
-                          {t('products.persianNameWarning')}
-                        </Badge>
-                      )}
-                    </FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder={t('products.productNamePlaceholder')}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      {field.value?.length || 0}/200 {t('common.characters')}
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Slug */}
-              <FormField
-                control={form.control as any}
-                name="slug"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('products.slug')}</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="product-slug"
-                        {...field}
-                        onChange={(e) => {
-                          setIsSlugManual(true)
-                          field.onChange(e)
+                      <RadioGroup
+                        onValueChange={(value) => {
+                          field.onChange(value)
+                          setProductType(value as 'regular' | 'auction')
                         }}
-                      />
+                        value={field.value}
+                        className="grid gap-4 md:grid-cols-2"
+                      >
+                        <label
+                          htmlFor="regular"
+                          className={cn(
+                            'flex cursor-pointer items-start gap-4 rounded-lg border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground',
+                            field.value === 'regular' &&
+                              'border-primary bg-accent',
+                          )}
+                        >
+                          <RadioGroupItem value="regular" id="regular" />
+                          <div className="flex-1 space-y-1">
+                            <div className="flex items-center gap-2">
+                              <Package className="h-5 w-5" />
+                              <p className="font-semibold leading-none">
+                                {t('products.regularProduct')}
+                              </p>
+                            </div>
+                            <p className="text-sm text-muted-foreground">
+                              {t('products.regularProductDesc')}
+                            </p>
+                          </div>
+                        </label>
+                        <label
+                          htmlFor="auction"
+                          className={cn(
+                            'flex cursor-pointer items-start gap-4 rounded-lg border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground',
+                            field.value === 'auction' &&
+                              'border-primary bg-accent',
+                          )}
+                        >
+                          <RadioGroupItem value="auction" id="auction" />
+                          <div className="flex-1 space-y-1">
+                            <div className="flex items-center gap-2">
+                              <Gavel className="h-5 w-5" />
+                              <p className="font-semibold leading-none">
+                                {t('products.auctionProduct')}
+                              </p>
+                            </div>
+                            <p className="text-sm text-muted-foreground">
+                              {t('products.auctionProductDesc')}
+                            </p>
+                          </div>
+                        </label>
+                      </RadioGroup>
                     </FormControl>
-                    <FormDescription>{t('products.slugDesc')}</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <Separator />
-
-              {/* Description */}
-              <FormField
-                control={form.control as any}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('products.productDescription')}</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder={t(
-                          'products.productDescriptionPlaceholder',
-                        )}
-                        {...field}
-                        rows={5}
-                        className="resize-none"
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      {field.value?.length || 0}/2000 {t('common.characters')}
-                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -637,13 +388,210 @@ export function ProductForm({ product, onSuccess }: ProductFormProps) {
             </CardContent>
           </Card>
 
+          {/* Basic Information */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Info className="h-5 w-5" />
+                {t('products.basicInfo')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid gap-6 md:grid-cols-2">
+                <FormField
+                  control={form.control as any}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-1">
+                        {t('products.productName')}
+                        <span className="text-destructive">*</span>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder={t('products.productNamePlaceholder')}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        {t('products.productNameDesc')}
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control as any}
+                  name="slug"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-1">
+                        {t('products.slug')}
+                        <span className="text-destructive">*</span>
+                      </FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            placeholder={t('products.slugPlaceholder')}
+                            {...field}
+                            disabled={!isSlugManual && !hasPersianInName}
+                            onChange={(e) => {
+                              setIsSlugManual(true)
+                              field.onChange(e)
+                            }}
+                            className={cn(
+                              !isSlugManual &&
+                                !hasPersianInName &&
+                                'bg-muted cursor-not-allowed',
+                            )}
+                          />
+                          {hasPersianInName && (
+                            <Badge
+                              variant="secondary"
+                              className="absolute end-2 top-1/2 -translate-y-1/2"
+                            >
+                              {t('products.manualSlug')}
+                            </Badge>
+                          )}
+                        </div>
+                      </FormControl>
+                      <FormDescription>
+                        {hasPersianInName
+                          ? t('products.slugDescPersian')
+                          : t('products.slugDesc')}
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <FormField
+                control={form.control as any}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('products.description')}</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder={t('products.descriptionPlaceholder')}
+                        className="min-h-32 resize-none"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      {t('products.descriptionDesc')}
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="grid gap-6 md:grid-cols-2">
+                <FormField
+                  control={form.control as any}
+                  name="shopId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-1">
+                        <Store className="h-4 w-4" />
+                        {t('products.shop')}
+                        <span className="text-destructive">*</span>
+                      </FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                        disabled={isLoading}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue
+                              placeholder={
+                                isLoading
+                                  ? t('common.loading')
+                                  : t('products.selectShop')
+                              }
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {shops?.map((shop: any) => (
+                            <SelectItem
+                              key={shop.id}
+                              value={shop.id.toString()}
+                            >
+                              {typeof shop.name === 'object'
+                                ? shop.name[locale] || shop.name.en
+                                : shop.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormDescription>
+                        {t('products.shopDesc')}
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control as any}
+                  name="categoryId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-1">
+                        {t('products.category')}
+                        <span className="text-destructive">*</span>
+                      </FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                        disabled={isLoading}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue
+                              placeholder={
+                                isLoading
+                                  ? t('common.loading')
+                                  : t('products.selectCategory')
+                              }
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {categories?.map((category: any) => (
+                            <SelectItem
+                              key={category.id}
+                              value={category.id.toString()}
+                            >
+                              {typeof category.name === 'object'
+                                ? category.name[locale] || category.name.en
+                                : category.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormDescription>
+                        {t('products.categoryDesc')}
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Images */}
           <Card>
             <CardHeader>
-              <div className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2">
                 <ImageIcon className="h-5 w-5" />
-                <CardTitle>{t('common.images')}</CardTitle>
-              </div>
+                {t('products.images')}
+              </CardTitle>
               <CardDescription>{t('products.imagesDesc')}</CardDescription>
             </CardHeader>
             <CardContent>
@@ -654,16 +602,12 @@ export function ProductForm({ product, onSuccess }: ProductFormProps) {
                   <FormItem>
                     <FormControl>
                       <FileUpload
-                        multiple
-                        accept="image/*"
                         value={field.value}
                         onChange={field.onChange}
-                        category="products"
+                        accept="image/*"
+                        multiple
                       />
                     </FormControl>
-                    <FormDescription>
-                      {field.value?.length || 0}/10 {t('common.images')}
-                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -671,38 +615,31 @@ export function ProductForm({ product, onSuccess }: ProductFormProps) {
             </CardContent>
           </Card>
 
-          {/* Pricing */}
+          {/* Pricing & Inventory */}
           <Card>
             <CardHeader>
-              <div className="flex items-center gap-2">
-                {productType === 'auction' ? (
-                  <Gavel className="h-5 w-5" />
-                ) : (
-                  <Coins className="h-5 w-5" />
-                )}
-                <CardTitle>
-                  {productType === 'auction'
-                    ? t('products.auctionPricing')
-                    : t('products.pricingInventory')}
-                </CardTitle>
-              </div>
+              <CardTitle className="flex items-center gap-2">
+                <DollarSign className="h-5 w-5" />
+                {productType === 'regular'
+                  ? t('products.pricingInventory')
+                  : t('products.auctionDetails')}
+              </CardTitle>
               <CardDescription>
-                {productType === 'auction'
-                  ? t('products.auctionPricingDesc')
-                  : t('products.pricingInventoryDesc')}
+                {productType === 'regular'
+                  ? t('products.pricingInventoryDesc')
+                  : t('products.auctionDetailsDesc')}
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent>
               {productType === 'regular' ? (
                 <div className="grid gap-6 md:grid-cols-2">
-                  {/* Regular Price */}
                   <FormField
                     control={form.control as any}
                     name="price"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="flex items-center gap-1">
-                          {t('products.regularPrice')}
+                          {t('products.price')}
                           <span className="text-destructive">*</span>
                         </FormLabel>
                         <FormControl>
@@ -712,15 +649,29 @@ export function ProductForm({ product, onSuccess }: ProductFormProps) {
                             </span>
                             <Input
                               type="text"
-                              placeholder={isPersian ? '۱۰۰,۰۰۰' : '0.00'}
+                              placeholder={isPersian ? '۱۰۰۰۰۰' : '1.00'}
                               className={cn(
                                 'ps-8',
                                 isPersian ? 'pe-16' : 'pe-4',
                               )}
-                              value={displayPrice(field.value || '')}
-                              onChange={(e) =>
-                                handlePriceInput(e.target.value, field.onChange)
-                              }
+                              value={priceDisplay}
+                              onChange={(e) => {
+                                const cleaned = e.target.value.replace(
+                                  /[^\d.]/g,
+                                  '',
+                                )
+                                setPriceDisplay(cleaned)
+
+                                if (isPersian) {
+                                  const tomanValue = parseFloat(cleaned || '0')
+                                  const dollarValue = (
+                                    tomanValue / 100000
+                                  ).toFixed(2)
+                                  field.onChange(dollarValue)
+                                } else {
+                                  field.onChange(cleaned)
+                                }
+                              }}
                             />
                             {isPersian && (
                               <span className="absolute end-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
@@ -730,8 +681,8 @@ export function ProductForm({ product, onSuccess }: ProductFormProps) {
                           </div>
                         </FormControl>
                         {isPersian && field.value && (
-                          <FormDescription>
-                            ≈ {formatPrice(field.value, { locale: 'en' })}
+                          <FormDescription className="text-xs">
+                            ≈ ${parseFloat(field.value).toFixed(2)} USD
                           </FormDescription>
                         )}
                         <FormMessage />
@@ -739,33 +690,21 @@ export function ProductForm({ product, onSuccess }: ProductFormProps) {
                     )}
                   />
 
-                  {/* Stock */}
                   <FormField
                     control={form.control as any}
                     name="stock"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="flex items-center gap-1">
-                          {t('common.stock')}
+                          {t('products.stock')}
                           <span className="text-destructive">*</span>
                         </FormLabel>
                         <FormControl>
                           <Input
                             type="number"
-                            min="0"
                             placeholder="0"
+                            min="0"
                             {...field}
-                            value={
-                              isPersian && field.value
-                                ? toPersianNumber(field.value)
-                                : field.value
-                            }
-                            onChange={(e) => {
-                              const englishValue = toEnglishNumber(
-                                e.target.value,
-                              )
-                              field.onChange(englishValue)
-                            }}
                           />
                         </FormControl>
                         <FormDescription>
@@ -800,18 +739,31 @@ export function ProductForm({ product, onSuccess }: ProductFormProps) {
                               </span>
                               <Input
                                 type="text"
-                                placeholder={isPersian ? '۱۰۰,۰۰۰' : '0.00'}
+                                placeholder={isPersian ? '۱۰۰۰۰۰' : '0.00'}
                                 className={cn(
                                   'ps-8',
                                   isPersian ? 'pe-16' : 'pe-4',
                                 )}
-                                value={displayPrice(field.value || '')}
-                                onChange={(e) =>
-                                  handlePriceInput(
-                                    e.target.value,
-                                    field.onChange,
+                                value={startingPriceDisplay}
+                                onChange={(e) => {
+                                  const cleaned = e.target.value.replace(
+                                    /[^\d.]/g,
+                                    '',
                                   )
-                                }
+                                  setStartingPriceDisplay(cleaned)
+
+                                  if (isPersian) {
+                                    const tomanValue = parseFloat(
+                                      cleaned || '0',
+                                    )
+                                    const dollarValue = (
+                                      tomanValue / 100000
+                                    ).toFixed(2)
+                                    field.onChange(dollarValue)
+                                  } else {
+                                    field.onChange(cleaned)
+                                  }
+                                }}
                               />
                               {isPersian && (
                                 <span className="absolute end-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
@@ -821,8 +773,8 @@ export function ProductForm({ product, onSuccess }: ProductFormProps) {
                             </div>
                           </FormControl>
                           {isPersian && field.value && (
-                            <FormDescription>
-                              ≈ {formatPrice(field.value, { locale: 'en' })}
+                            <FormDescription className="text-xs">
+                              ≈ ${parseFloat(field.value).toFixed(2)} USD
                             </FormDescription>
                           )}
                           <FormMessage />
@@ -830,6 +782,62 @@ export function ProductForm({ product, onSuccess }: ProductFormProps) {
                       )}
                     />
 
+                    {/* Auction End Date */}
+                    <FormField
+                      control={form.control as any}
+                      name="auctionEndsAt"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="flex items-center gap-1">
+                            {t('products.auctionEndDate')}
+                            <span className="text-destructive">*</span>
+                          </FormLabel>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant="outline"
+                                  className={cn(
+                                    'w-full justify-start text-start font-normal',
+                                    !field.value && 'text-muted-foreground',
+                                  )}
+                                >
+                                  <CalendarIcon className="me-2 h-4 w-4" />
+                                  {field.value ? (
+                                    format(field.value, 'PPP')
+                                  ) : (
+                                    <span>{t('products.pickDate')}</span>
+                                  )}
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent
+                              className="w-auto p-0"
+                              align="start"
+                            >
+                              <Calendar
+                                mode="single"
+                                selected={field.value}
+                                onSelect={field.onChange}
+                                disabled={(date) =>
+                                  date < addDays(new Date(), 1)
+                                }
+                                initialFocus
+                              />
+                            </PopoverContent>
+                          </Popover>
+                          <FormDescription>
+                            {t('products.auctionEndDateDesc')}
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <Separator />
+
+                  <div className="grid gap-6 md:grid-cols-2">
                     {/* Bid Increment */}
                     <FormField
                       control={form.control as any}
@@ -848,18 +856,31 @@ export function ProductForm({ product, onSuccess }: ProductFormProps) {
                               </span>
                               <Input
                                 type="text"
-                                placeholder={isPersian ? '۱۰,۰۰۰' : '1.00'}
+                                placeholder={isPersian ? '۱۰۰۰۰' : '1.00'}
                                 className={cn(
                                   'ps-8',
                                   isPersian ? 'pe-16' : 'pe-4',
                                 )}
-                                value={displayPrice(field.value || '1.00')}
-                                onChange={(e) =>
-                                  handlePriceInput(
-                                    e.target.value,
-                                    field.onChange,
+                                value={bidIncrementDisplay}
+                                onChange={(e) => {
+                                  const cleaned = e.target.value.replace(
+                                    /[^\d.]/g,
+                                    '',
                                   )
-                                }
+                                  setBidIncrementDisplay(cleaned)
+
+                                  if (isPersian) {
+                                    const tomanValue = parseFloat(
+                                      cleaned || '0',
+                                    )
+                                    const dollarValue = (
+                                      tomanValue / 100000
+                                    ).toFixed(2)
+                                    field.onChange(dollarValue)
+                                  } else {
+                                    field.onChange(cleaned)
+                                  }
+                                }}
                               />
                               {isPersian && (
                                 <span className="absolute end-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
@@ -875,126 +896,102 @@ export function ProductForm({ product, onSuccess }: ProductFormProps) {
                         </FormItem>
                       )}
                     />
+
+                    {/* Buy Now Price (Optional) */}
+                    <FormField
+                      control={form.control as any}
+                      name="buyNowPrice"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>
+                            {t('products.buyNowPrice')}{' '}
+                            <span className="text-muted-foreground text-sm">
+                              ({t('common.optional')})
+                            </span>
+                          </FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <span className="absolute start-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                                {isPersian ? (
+                                  <Coins className="h-4 w-4" />
+                                ) : (
+                                  '$'
+                                )}
+                              </span>
+                              <Input
+                                type="text"
+                                placeholder={isPersian ? '۵۰۰۰۰۰' : '0.00'}
+                                className={cn(
+                                  'ps-8',
+                                  isPersian ? 'pe-16' : 'pe-4',
+                                )}
+                                value={buyNowPriceDisplay}
+                                onChange={(e) => {
+                                  const cleaned = e.target.value.replace(
+                                    /[^\d.]/g,
+                                    '',
+                                  )
+                                  setBuyNowPriceDisplay(cleaned)
+
+                                  if (isPersian) {
+                                    const tomanValue = parseFloat(
+                                      cleaned || '0',
+                                    )
+                                    const dollarValue = (
+                                      tomanValue / 100000
+                                    ).toFixed(2)
+                                    field.onChange(dollarValue)
+                                  } else {
+                                    field.onChange(cleaned)
+                                  }
+                                }}
+                              />
+                              {isPersian && (
+                                <span className="absolute end-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
+                                  تومان
+                                </span>
+                              )}
+                            </div>
+                          </FormControl>
+                          {isPersian && field.value && (
+                            <FormDescription className="text-xs">
+                              ≈ ${parseFloat(field.value).toFixed(2)} USD
+                            </FormDescription>
+                          )}
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </div>
 
-                  {/* Buy Now Price (Optional) */}
-                  <FormField
-                    control={form.control as any}
-                    name="buyNowPrice"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          {t('products.buyNowPrice')}{' '}
-                          <span className="text-muted-foreground text-sm">
-                            ({t('common.optional')})
-                          </span>
-                        </FormLabel>
-                        <FormControl>
-                          <div className="relative">
-                            <span className="absolute start-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                              {isPersian ? <Coins className="h-4 w-4" /> : '$'}
-                            </span>
-                            <Input
-                              type="text"
-                              placeholder={isPersian ? '۵۰۰,۰۰۰' : '0.00'}
-                              className={cn(
-                                'ps-8',
-                                isPersian ? 'pe-16' : 'pe-4',
-                              )}
-                              value={displayPrice(field.value || '')}
-                              onChange={(e) =>
-                                handlePriceInput(e.target.value, field.onChange)
-                              }
-                            />
-                            {isPersian && (
-                              <span className="absolute end-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
-                                تومان
-                              </span>
-                            )}
-                          </div>
-                        </FormControl>
-                        {isPersian && field.value && (
-                          <FormDescription>
-                            ≈ {formatPrice(field.value, { locale: 'en' })}
-                          </FormDescription>
-                        )}
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  {/* Auction End Date */}
-                  <FormField
-                    control={form.control as any}
-                    name="auctionEndsAt"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-col">
-                        <FormLabel className="flex items-center gap-1">
-                          {t('products.auctionEndDate')}
-                          <span className="text-destructive">*</span>
-                        </FormLabel>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant="outline"
-                                className={cn(
-                                  'w-full ps-3 text-start font-normal',
-                                  !field.value && 'text-muted-foreground',
-                                )}
-                              >
-                                {field.value ? (
-                                  format(field.value, 'PPP')
-                                ) : (
-                                  <span>{t('products.pickDate')}</span>
-                                )}
-                                <CalendarIcon
-                                  className={cn(
-                                    'ms-auto h-4 w-4 opacity-50',
-                                    isPersian && 'me-auto ms-0',
-                                  )}
-                                />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar
-                              mode="single"
-                              selected={field.value}
-                              onSelect={field.onChange}
-                              disabled={(date) =>
-                                date < new Date() ||
-                                date > addDays(new Date(), 90)
-                              }
-                              initialFocus
-                            />
-                          </PopoverContent>
-                        </Popover>
-                        <FormDescription>
-                          {t('products.auctionEndDateDesc')}
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <Alert>
+                    <Info className="h-4 w-4" />
+                    <AlertTitle>{t('products.auctionNotice')}</AlertTitle>
+                    <AlertDescription>
+                      {t('products.auctionNoticeDesc')}
+                    </AlertDescription>
+                  </Alert>
                 </div>
               )}
             </CardContent>
           </Card>
 
           {/* Submit Button */}
-          <div className="flex gap-4 justify-end">
+          <div className="flex items-center justify-end gap-4">
             <Button
-              type="submit"
+              type="button"
+              variant="outline"
+              onClick={() => form.reset()}
               disabled={mutation.isPending}
-              size="lg"
-              className="min-w-32"
             >
+              {t('common.reset')}
+            </Button>
+            <Button type="submit" disabled={mutation.isPending}>
               {mutation.isPending
-                ? t('common.loading')
+                ? t('common.saving')
                 : product
-                  ? t('common.save')
-                  : t('products.addProduct')}
+                  ? t('common.update')
+                  : t('common.create')}
             </Button>
           </div>
         </form>

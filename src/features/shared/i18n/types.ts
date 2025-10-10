@@ -76,12 +76,6 @@ export type Translations = {
     tooManyOtpRequests: string
     otpStillValid: string
   }
-  // dashboard: {
-  //   profileInfo: string
-  //   name: string
-  //   phoneNumber: string
-  //   memberSince: string
-  // }
   categories: {
     title: string
     subtitle: string
@@ -130,7 +124,6 @@ export type Translations = {
     tryDifferentSearch: string
     noShopsFoundDescription: string
     createFirstShop: string
-    showingResults: string
     products: string
     rating: string
     totalSales: string
@@ -256,6 +249,10 @@ export type Translations = {
     type: string
     category: string
     viewProduct: string
+
+    shopInactiveAlertDesc: string
+    goToSettings: string
+    showingResults: string
   }
   upload: {
     dragOrClick: string
@@ -420,6 +417,32 @@ export type Translations = {
     bidIncrementDesc: string
     auctionEndDateDesc: string
     pickDate: string
+
+    productTypeDesc: string
+    productNameDesc: string
+    slugPlaceholder: string
+    manualSlug: string
+    descriptionPlaceholder: string
+    descriptionDesc: string
+    shop: string
+    shopDesc: string
+    category: string
+    categoryDesc: string
+    images: string
+    price: string
+    auctionNotice: string
+    auctionNoticeDesc: string
+    auctionDetails: string
+    auctionDetailsDesc: string
+    regularProductDesc: string
+    auctionProductDesc: string
+    basicInfo: string
+    editProductDesc: string
+    addProductDesc: string
+    reset: string
+    create: string
+    update: string
+    saving: string
   }
   validation: {
     required: string
@@ -692,6 +715,15 @@ export type Translations = {
   notFoundErrors: {
     notFound: string
     notFoundDescription: string
+    shopNotFound: string
+    shopNotFoundDesc: string
+    shopMightBe: string
+    shopInactive: string
+    shopDeleted: string
+    shopUrlChanged: string
+    goBack: string
+    browseShops: string
+    searchShops: string
   }
   dashboard: {
     overview: {

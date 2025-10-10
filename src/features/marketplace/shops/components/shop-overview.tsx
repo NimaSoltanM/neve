@@ -55,6 +55,27 @@ export function ShopOverview() {
         </p>
       </div>
 
+      {!shop?.isActive && (
+        <Alert
+          variant="destructive"
+          className="border-amber-500 bg-amber-50 dark:bg-amber-950/20"
+        >
+          <AlertTriangle className="h-4 w-4" />
+          <AlertDescription className="flex items-center justify-between gap-4">
+            <div>
+              <p className="font-semibold">{t('shops.shopInactiveWarning')}</p>
+              <p className="text-sm mt-1">{t('shops.shopInactiveAlertDesc')}</p>
+            </div>
+            <Button asChild variant="default" size="sm" className="shrink-0">
+              <Link to="/shop/settings">
+                {t('shops.goToSettings')}
+                <ArrowRight className="ms-2 h-4 w-4 rtl:rotate-180" />
+              </Link>
+            </Button>
+          </AlertDescription>
+        </Alert>
+      )}
+
       {/* Revenue Stats Cards */}
       <div className="grid gap-4 md:grid-cols-4">
         <Card>

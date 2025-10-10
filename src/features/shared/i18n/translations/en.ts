@@ -81,12 +81,6 @@ const en: Translations = {
     otpStillValid:
       'A verification code was already sent. Please check your messages or wait 2 minutes',
   },
-  // dashboard: {
-  //   profileInfo: 'Profile Information',
-  //   name: 'Name',
-  //   phoneNumber: 'Phone Number',
-  //   memberSince: 'Member Since',
-  // },
   categories: {
     title: 'Browse Categories',
     subtitle: 'Find products by category',
@@ -106,6 +100,7 @@ const en: Translations = {
     createShopDescription: 'Fill out the information below to create your shop',
     creatingShop: 'Creating Shop...',
     shopCreatedSuccessfully: 'Shop created successfully!',
+    showingResults: 'Showing {{count}} of {{total}} shops',
 
     // Form fields
     basicInformation: 'Basic Information',
@@ -142,7 +137,6 @@ const en: Translations = {
     tryDifferentSearch: 'Try adjusting your search terms',
     noShopsFoundDescription: 'Be the first to create a shop on our platform',
     createFirstShop: 'Create First Shop',
-    showingResults: 'Showing {count} of {total} shops',
 
     // Shop details
     products: 'Products',
@@ -283,6 +277,9 @@ const en: Translations = {
     type: 'Type',
     category: 'Category',
     viewProduct: 'View Product',
+    shopInactiveAlertDesc:
+      'Your shop is hidden from customers. Activate it in settings to start receiving orders.',
+    goToSettings: 'Go to Settings',
   },
   upload: {
     dragOrClick: 'Drag files here or click to browse',
@@ -448,6 +445,31 @@ const en: Translations = {
     bidIncrementDesc: 'Minimum amount to increase bid by',
     auctionEndDateDesc: 'When should this auction end? (Max 90 days)',
     pickDate: 'Pick a date',
+    productTypeDesc: 'Choose how you want to sell this product',
+    productNameDesc: 'Enter a clear, descriptive name for your product',
+    slugPlaceholder: 'product-url-slug',
+    manualSlug: 'Manual',
+    descriptionPlaceholder: 'Describe your product in detail...',
+    descriptionDesc: 'Provide detailed information about your product',
+    shop: 'Shop',
+    shopDesc: 'Select the shop where this product will be listed',
+    category: 'Category',
+    categoryDesc: 'Choose the most relevant category for your product',
+    images: 'Product Images',
+    price: 'Price',
+    auctionNotice: 'Important Notice',
+    auctionNoticeDesc: 'Auction settings cannot be changed once bidding starts',
+    auctionDetails: 'Auction Details',
+    auctionDetailsDesc: 'Configure your auction settings',
+    regularProductDesc: 'Set a fixed price and manage inventory',
+    auctionProductDesc: 'Let customers bid on your product',
+    basicInfo: 'Basic Information',
+    editProductDesc: 'Update your product information',
+    addProductDesc: 'Add a new product to your shop',
+    reset: 'Reset',
+    create: 'Create Product',
+    update: 'Update Product',
+    saving: 'Saving...',
   },
   validation: {
     required: 'This field is required',
@@ -730,6 +752,15 @@ const en: Translations = {
     notFound: 'Page Not Found',
     notFoundDescription:
       'The page you are looking for does not exist or has been moved.',
+    shopNotFound: 'Shop Not Found',
+    shopNotFoundDesc: "We couldn't find the shop you're looking for.",
+    shopMightBe: 'This shop might be:',
+    shopInactive: 'Temporarily inactive',
+    shopDeleted: 'Permanently closed',
+    shopUrlChanged: 'Moved to a new URL',
+    goBack: 'Go Back',
+    browseShops: 'Browse All Shops',
+    searchShops: 'Search for Shops',
   },
   dashboard: {
     overview: {

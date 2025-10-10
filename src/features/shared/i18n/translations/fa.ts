@@ -79,12 +79,6 @@ const fa: Translations = {
     otpStillValid:
       'کد تأیید قبلاً ارسال شده. لطفاً پیام‌های خود را بررسی کنید یا ۲ دقیقه صبر کنید',
   },
-  // dashboard: {
-  //   profileInfo: 'اطلاعات پروفایل',
-  //   name: 'نام',
-  //   phoneNumber: 'شماره موبایل',
-  //   memberSince: 'عضو از تاریخ',
-  // },
   categories: {
     title: 'مرور دسته‌بندی‌ها',
     subtitle: 'محصولات را بر اساس دسته‌بندی پیدا کنید',
@@ -104,7 +98,7 @@ const fa: Translations = {
     createShopDescription: 'اطلاعات زیر را برای ایجاد فروشگاه تکمیل کنید',
     creatingShop: 'در حال ایجاد فروشگاه...',
     shopCreatedSuccessfully: 'فروشگاه با موفقیت ایجاد شد!',
-
+    showingResults: 'نمایش {{count}} از {{total}} فروشگاه',
     // Form fields
     basicInformation: 'اطلاعات پایه',
     contactInformation: 'اطلاعات تماس',
@@ -141,7 +135,6 @@ const fa: Translations = {
     noShopsFoundDescription:
       'اولین نفری باشید که فروشگاه در پلتفرم ما ایجاد می‌کند',
     createFirstShop: 'ایجاد اولین فروشگاه',
-    showingResults: 'نمایش {count} از {total} فروشگاه',
 
     // Shop details
     products: 'محصولات',
@@ -284,6 +277,9 @@ const fa: Translations = {
     type: 'نوع',
     category: 'دسته‌بندی',
     viewProduct: 'مشاهده محصول',
+    shopInactiveAlertDesc:
+      'فروشگاه شما برای مشتریان مخفی است. برای دریافت سفارش، آن را در تنظیمات فعال کنید.',
+    goToSettings: 'رفتن به تنظیمات',
   },
   upload: {
     dragOrClick: 'فایل‌ها را اینجا بکشید یا کلیک کنید',
@@ -446,6 +442,32 @@ const fa: Translations = {
     bidIncrementDesc: 'حداقل مبلغ برای افزایش پیشنهاد',
     auctionEndDateDesc: 'حراجی چه زمانی باید پایان یابد؟ (حداکثر ۹۰ روز)',
     pickDate: 'انتخاب تاریخ',
+    productTypeDesc: 'نحوه فروش محصول خود را انتخاب کنید',
+    productNameDesc: 'یک نام واضح و توصیفی برای محصول خود وارد کنید',
+    slugPlaceholder: 'شناسه-url-محصول',
+    manualSlug: 'دستی',
+    descriptionPlaceholder: 'محصول خود را به تفصیل توضیح دهید...',
+    descriptionDesc: 'اطلاعات کامل درباره محصول خود ارائه دهید',
+    shop: 'فروشگاه',
+    shopDesc: 'فروشگاهی که این محصول در آن فهرست می‌شود را انتخاب کنید',
+    category: 'دسته‌بندی',
+    categoryDesc: 'مرتبط‌ترین دسته‌بندی برای محصول خود را انتخاب کنید',
+    images: 'تصاویر محصول',
+    price: 'قیمت',
+    auctionNotice: 'اطلاعیه مهم',
+    auctionNoticeDesc: 'تنظیمات حراجی پس از شروع پیشنهاد قابل تغییر نیستند',
+    auctionDetails: 'جزئیات حراجی',
+    auctionDetailsDesc: 'تنظیمات حراجی خود را پیکربندی کنید',
+    regularProductDesc: 'قیمت ثابت تعیین کنید و موجودی را مدیریت کنید',
+    auctionProductDesc:
+      'به مشتریان اجازه دهید روی محصول شما پیشنهاد قیمت بدهند',
+    basicInfo: 'اطلاعات پایه',
+    editProductDesc: 'اطلاعات محصول خود را بروزرسانی کنید',
+    addProductDesc: 'محصول جدید به فروشگاه خود اضافه کنید',
+    reset: 'بازنشانی',
+    create: 'ایجاد محصول',
+    update: 'بروزرسانی محصول',
+    saving: 'در حال ذخیره...',
   },
   validation: {
     required: 'این فیلد الزامی است',
@@ -728,6 +750,15 @@ const fa: Translations = {
     notFound: 'صفحه یافت نشد',
     notFoundDescription:
       'صفحه‌ای که به دنبال آن هستید وجود ندارد یا منتقل شده است.',
+    shopNotFound: 'فروشگاه یافت نشد',
+    shopNotFoundDesc: 'فروشگاه مورد نظر شما پیدا نشد.',
+    shopMightBe: 'این فروشگاه ممکن است:',
+    shopInactive: 'موقتاً غیرفعال باشد',
+    shopDeleted: 'برای همیشه بسته شده باشد',
+    shopUrlChanged: 'به آدرس جدیدی منتقل شده باشد',
+    goBack: 'بازگشت',
+    browseShops: 'مشاهده همه فروشگاه‌ها',
+    searchShops: 'جستجوی فروشگاه‌ها',
   },
 
   dashboard: {

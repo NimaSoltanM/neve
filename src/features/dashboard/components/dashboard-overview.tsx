@@ -16,6 +16,7 @@ import { useQuery } from '@tanstack/react-query'
 import { getDashboardStats } from '../actions/get-dashboard-stats.action'
 import { formatDistanceToNow } from 'date-fns'
 import { enUS, faIR } from 'date-fns/locale'
+import { getCurrentUser } from '@/features/auth/actions/get-current-user.action'
 
 export function DashboardOverview() {
   const { t, locale, dir } = useI18n()
@@ -25,6 +26,13 @@ export function DashboardOverview() {
     queryKey: ['dashboard-stats'],
     queryFn: async () => {
       return getDashboardStats()
+    },
+  })
+
+  const { data: user } = useQuery({
+    queryKey: ['user'],
+    queryFn: async () => {
+      return getCurrentUser()
     },
   })
 
@@ -41,7 +49,7 @@ export function DashboardOverview() {
       {/* Welcome Header */}
       <div>
         <h1 className="text-3xl font-bold">
-          {t('dashboard.overview.welcome', { name: '' })}
+          {t('dashboard.overview.welcome', { name: user?.user?.firstName! })}
         </h1>
         <p className="text-muted-foreground mt-2">
           {t('dashboard.overview.quickStats')}

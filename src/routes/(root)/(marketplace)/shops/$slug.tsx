@@ -9,6 +9,7 @@ import { useI18n } from '@/features/shared/i18n'
 import { notFound } from '@tanstack/react-router'
 import { z } from 'zod'
 import { ShopHeader } from '@/features/marketplace/shops/components/shop-header'
+import { ShopNotFound } from '@/features/marketplace/shops/components/shop-not-found'
 
 const searchSchema = z.object({
   page: z.number().default(1),
@@ -20,11 +21,10 @@ export const Route = createFileRoute('/(root)/(marketplace)/shops/$slug')({
   loader: async ({ params, deps: { search } }) => {
     const shopResult = await getShopBySlug({ data: params.slug })
 
-    if (!shopResult.success || !shopResult.data) {
+    if (!shopResult?.data) {
       throw notFound()
     }
 
-    // Get shop products (deferred)
     const productsPromise = getShopProducts({
       data: {
         shopId: shopResult.data.id,
@@ -38,7 +38,9 @@ export const Route = createFileRoute('/(root)/(marketplace)/shops/$slug')({
       productsPromise,
     }
   },
+
   component: ShopPage,
+  notFoundComponent: ShopNotFound,
 })
 
 function ShopPage() {

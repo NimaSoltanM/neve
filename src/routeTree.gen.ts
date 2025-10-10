@@ -19,6 +19,7 @@ import { Route as dashboardsShopRouteRouteImport } from './routes/(dashboards)/s
 import { Route as dashboardsDashboardRouteRouteImport } from './routes/(dashboards)/dashboard/route'
 import { Route as dashboardsShopIndexRouteImport } from './routes/(dashboards)/shop/index'
 import { Route as dashboardsDashboardIndexRouteImport } from './routes/(dashboards)/dashboard/index'
+import { Route as rootmarketplaceShopsIndexRouteImport } from './routes/(root)/(marketplace)/shops/index'
 import { Route as rootmarketplaceMarketplaceIndexRouteImport } from './routes/(root)/(marketplace)/marketplace/index'
 import { Route as rootmarketplaceCategoriesIndexRouteImport } from './routes/(root)/(marketplace)/categories/index'
 import { Route as dashboardsShopSettingsIndexRouteImport } from './routes/(dashboards)/shop/settings/index'
@@ -88,6 +89,12 @@ const dashboardsDashboardIndexRoute =
     id: '/',
     path: '/',
     getParentRoute: () => dashboardsDashboardRouteRoute,
+  } as any)
+const rootmarketplaceShopsIndexRoute =
+  rootmarketplaceShopsIndexRouteImport.update({
+    id: '/shops/',
+    path: '/shops/',
+    getParentRoute: () => rootmarketplaceRouteRoute,
   } as any)
 const rootmarketplaceMarketplaceIndexRoute =
   rootmarketplaceMarketplaceIndexRouteImport.update({
@@ -226,6 +233,7 @@ export interface FileRoutesByFullPath {
   '/shop/settings': typeof dashboardsShopSettingsIndexRoute
   '/categories': typeof rootmarketplaceCategoriesIndexRoute
   '/marketplace': typeof rootmarketplaceMarketplaceIndexRoute
+  '/shops': typeof rootmarketplaceShopsIndexRoute
   '/dashboard/orders/$orderId/success': typeof dashboardsDashboardOrdersOrderIdSuccessRoute
   '/shop/products/$productId/edit': typeof dashboardsShopProductsProductIdEditRoute
   '/dashboard/orders/$orderId': typeof dashboardsDashboardOrdersOrderIdIndexRoute
@@ -253,6 +261,7 @@ export interface FileRoutesByTo {
   '/shop/settings': typeof dashboardsShopSettingsIndexRoute
   '/categories': typeof rootmarketplaceCategoriesIndexRoute
   '/marketplace': typeof rootmarketplaceMarketplaceIndexRoute
+  '/shops': typeof rootmarketplaceShopsIndexRoute
   '/dashboard/orders/$orderId/success': typeof dashboardsDashboardOrdersOrderIdSuccessRoute
   '/shop/products/$productId/edit': typeof dashboardsShopProductsProductIdEditRoute
   '/dashboard/orders/$orderId': typeof dashboardsDashboardOrdersOrderIdIndexRoute
@@ -285,6 +294,7 @@ export interface FileRoutesById {
   '/(dashboards)/shop/settings/': typeof dashboardsShopSettingsIndexRoute
   '/(root)/(marketplace)/categories/': typeof rootmarketplaceCategoriesIndexRoute
   '/(root)/(marketplace)/marketplace/': typeof rootmarketplaceMarketplaceIndexRoute
+  '/(root)/(marketplace)/shops/': typeof rootmarketplaceShopsIndexRoute
   '/(dashboards)/dashboard/orders/$orderId/success': typeof dashboardsDashboardOrdersOrderIdSuccessRoute
   '/(dashboards)/shop/products/$productId/edit': typeof dashboardsShopProductsProductIdEditRoute
   '/(dashboards)/dashboard/orders/$orderId/': typeof dashboardsDashboardOrdersOrderIdIndexRoute
@@ -316,6 +326,7 @@ export interface FileRouteTypes {
     | '/shop/settings'
     | '/categories'
     | '/marketplace'
+    | '/shops'
     | '/dashboard/orders/$orderId/success'
     | '/shop/products/$productId/edit'
     | '/dashboard/orders/$orderId'
@@ -343,6 +354,7 @@ export interface FileRouteTypes {
     | '/shop/settings'
     | '/categories'
     | '/marketplace'
+    | '/shops'
     | '/dashboard/orders/$orderId/success'
     | '/shop/products/$productId/edit'
     | '/dashboard/orders/$orderId'
@@ -374,6 +386,7 @@ export interface FileRouteTypes {
     | '/(dashboards)/shop/settings/'
     | '/(root)/(marketplace)/categories/'
     | '/(root)/(marketplace)/marketplace/'
+    | '/(root)/(marketplace)/shops/'
     | '/(dashboards)/dashboard/orders/$orderId/success'
     | '/(dashboards)/shop/products/$productId/edit'
     | '/(dashboards)/dashboard/orders/$orderId/'
@@ -461,6 +474,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/'
       preLoaderRoute: typeof dashboardsDashboardIndexRouteImport
       parentRoute: typeof dashboardsDashboardRouteRoute
+    }
+    '/(root)/(marketplace)/shops/': {
+      id: '/(root)/(marketplace)/shops/'
+      path: '/shops'
+      fullPath: '/shops'
+      preLoaderRoute: typeof rootmarketplaceShopsIndexRouteImport
+      parentRoute: typeof rootmarketplaceRouteRoute
     }
     '/(root)/(marketplace)/marketplace/': {
       id: '/(root)/(marketplace)/marketplace/'
@@ -603,6 +623,7 @@ interface rootmarketplaceRouteRouteChildren {
   rootmarketplaceShopsSlugRoute: typeof rootmarketplaceShopsSlugRoute
   rootmarketplaceCategoriesIndexRoute: typeof rootmarketplaceCategoriesIndexRoute
   rootmarketplaceMarketplaceIndexRoute: typeof rootmarketplaceMarketplaceIndexRoute
+  rootmarketplaceShopsIndexRoute: typeof rootmarketplaceShopsIndexRoute
   rootmarketplaceProductsProductSlugIndexRoute: typeof rootmarketplaceProductsProductSlugIndexRoute
 }
 
@@ -611,6 +632,7 @@ const rootmarketplaceRouteRouteChildren: rootmarketplaceRouteRouteChildren = {
   rootmarketplaceShopsSlugRoute: rootmarketplaceShopsSlugRoute,
   rootmarketplaceCategoriesIndexRoute: rootmarketplaceCategoriesIndexRoute,
   rootmarketplaceMarketplaceIndexRoute: rootmarketplaceMarketplaceIndexRoute,
+  rootmarketplaceShopsIndexRoute: rootmarketplaceShopsIndexRoute,
   rootmarketplaceProductsProductSlugIndexRoute:
     rootmarketplaceProductsProductSlugIndexRoute,
 }
