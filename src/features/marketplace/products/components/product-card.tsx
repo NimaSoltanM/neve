@@ -181,7 +181,6 @@ export function ProductCard({
       return
     }
     onAddToCart?.(product.id)
-    toast.success(t('marketplace.addedToCart'))
   }
 
   return (

@@ -768,6 +768,29 @@ export type Translations = {
     inStock: string
     outOfStock: string
   }
+  shopOrders: {
+    manageDescription: string
+    allOrders: string
+    orderId: string
+    customer: string
+    items: string
+    item: string
+    itemsPlural: string
+    total: string
+    status: string
+    date: string
+    actions: string
+    noOrders: string
+    noOrdersYet: string
+    noOrdersWithFilter: string
+    pending: string
+    paid: string
+    completed: string
+    cancelled: string
+    pageInfo: string
+    updateSuccess: string
+    updateError: string
+  }
 }
 
 export type TranslationParams = Record<string, string | number>
