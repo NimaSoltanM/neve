@@ -791,6 +791,43 @@ export type Translations = {
     updateSuccess: string
     updateError: string
   }
+  analytics: {
+    title: string
+    overview: string
+    revenue: string
+    orders: string
+    totalRevenue: string
+    totalOrders: string
+    averageOrderValue: string
+    conversionRate: string
+    vsPreviousPeriod: string
+    revenueOverTime: string
+    topProducts: string
+    product: string
+    unitsSold: string
+    noProducts: string
+    noData: string
+    period7d: string
+    period30d: string
+    period90d: string
+    period1y: string
+    customRange: string
+    demoMode: string
+    realMode: string
+    viewRawData: string
+    demoDataNotice: string
+    selectPeriod: string
+    demoModeTitle: string
+    realModeTitle: string
+    demoModeDescription: string
+    realModeDescription: string
+    demoModeFeature1: string
+    demoModeFeature2: string
+    demoModeFeature3: string
+    howItWorks: string
+    demoExplainer: string
+    realExplainer: string
+  }
 }
 
 export type TranslationParams = Record<string, string | number>

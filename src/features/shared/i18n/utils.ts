@@ -34,10 +34,11 @@ export function getNestedTranslation(
   return typeof current === 'string' ? current : undefined
 }
 
+// src/features/shared/i18n/utils.ts
 export function interpolate(text: string, params?: any): string {
   if (!params) return text
 
   return text.replace(/\{\{(\w+)\}\}/g, (match, key) => {
-    return params[key]?.toString() || match
+    return key in params ? (params[key]?.toString() ?? match) : match
   })
 }

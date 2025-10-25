@@ -828,6 +828,47 @@ const en: Translations = {
     updateSuccess: 'Order status updated successfully',
     updateError: 'Failed to update order status',
   },
+  analytics: {
+    title: 'Analytics',
+    overview: 'Overview',
+    revenue: 'Revenue',
+    orders: 'Orders',
+    totalRevenue: 'Total Revenue',
+    totalOrders: 'Total Orders',
+    averageOrderValue: 'Average Order Value',
+    conversionRate: 'Conversion Rate',
+    vsPreviousPeriod: 'vs previous period',
+    revenueOverTime: 'Revenue Over Time',
+    topProducts: 'Top Products',
+    product: 'Product',
+    unitsSold: 'Units Sold',
+    noProducts: 'No products sold in this period',
+    noData: 'No data available for this period',
+    period7d: 'Last 7 Days',
+    period30d: 'Last 30 Days',
+    period90d: 'Last 90 Days',
+    period1y: 'Last Year',
+    customRange: 'Custom Range',
+    demoMode: 'Demo Mode',
+    realMode: 'Real Data',
+    viewRawData: 'View Raw Data',
+    demoDataNotice: 'Showing demo data for preview',
+    selectPeriod: 'Select Period',
+    demoModeTitle: 'Demo Mode - Preview Analytics',
+    realModeTitle: 'Real Data - Your Actual Shop Analytics',
+    demoModeDescription:
+      'This is a demonstration with realistic sample data to showcase the analytics features. Perfect for exploring the dashboard capabilities before you have actual sales.',
+    realModeDescription:
+      'This shows your actual shop performance based on paid and completed orders. Data updates in real-time as customers make purchases.',
+    demoModeFeature1: 'Realistic revenue trends and growth patterns',
+    demoModeFeature2: 'Sample top-selling products with images',
+    demoModeFeature3: 'Period comparisons to demonstrate analytics features',
+    howItWorks: 'How it works',
+    demoExplainer:
+      'Demo mode generates realistic data for the selected period to help you understand how the analytics will look when you have sales.',
+    realExplainer:
+      'Real mode displays analytics from your paid and completed orders only. Pending or cancelled orders are not included.',
+  },
 }
 
 export default en
