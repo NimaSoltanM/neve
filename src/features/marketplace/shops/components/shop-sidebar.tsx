@@ -71,11 +71,6 @@ export function ShopSidebar() {
           href: '/shop/analytics',
           icon: BarChart3,
         },
-        {
-          title: t('shop.revenue'),
-          href: '/shop/revenue',
-          icon: DollarSign,
-        },
       ],
     },
     {

@@ -53,13 +53,6 @@ export function Header() {
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link to="/categories">
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  {t('nav.categories')}
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
 

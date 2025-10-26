@@ -761,12 +761,20 @@ export type Translations = {
     lowStockEmpty: string
     quickActions: string
     addProduct: string
-    createAuction: string
+    manageAuctions: string
     viewAnalytics: string
-    sales: string
-    views: string
-    inStock: string
+    salesCount: string
+    stockCount: string
     outOfStock: string
+    items: string
+    viewAll: string
+    edit: string
+    orderStatus: {
+      pending: string
+      paid: string
+      completed: string
+      cancelled: string
+    }
   }
   shopOrders: {
     manageDescription: string

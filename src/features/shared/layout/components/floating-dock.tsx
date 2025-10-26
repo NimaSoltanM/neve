@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { useI18n } from '@/features/shared/i18n'
-import { Home, Grid3x3, Store } from 'lucide-react'
+import { Home, Store } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 export function FloatingDock() {
@@ -11,11 +11,6 @@ export function FloatingDock() {
       to: '/',
       icon: Home,
       label: t('nav.home'),
-    },
-    {
-      to: '/categories',
-      icon: Grid3x3,
-      label: t('nav.categories'),
     },
     {
       to: '/marketplace',
