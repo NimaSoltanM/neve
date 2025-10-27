@@ -877,6 +877,29 @@ const en: Translations = {
     realExplainer:
       'Real mode displays analytics from your paid and completed orders only. Pending or cancelled orders are not included.',
   },
+  preview: {
+    title: 'Explore Full Features',
+    subtitle: 'This portfolio showcases a complete e-commerce platform',
+    dismiss: 'Dismiss',
+    tryIt: 'Try now',
+    explored: 'Visited',
+    buy: {
+      title: 'Shop & Checkout',
+      desc: 'Browse products, add to cart, complete purchase',
+    },
+    vendor: {
+      title: 'Become a Seller',
+      desc: 'Create your own shop & list products',
+    },
+    auction: {
+      title: 'Join Live Auctions',
+      desc: 'Bid on items in real-time',
+    },
+    rtl: {
+      title: 'Persian/English',
+      desc: 'Full RTL support',
+    },
+  },
 }
 
 export default en

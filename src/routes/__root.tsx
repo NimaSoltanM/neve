@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { AlertCircle, Home } from 'lucide-react'
 import { ThemeProvider } from '@/features/shared/theme'
+import { PreviewPanel, PreviewTrigger } from '@/features/preview-mode'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -73,6 +74,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           ]}
         /> */}
         </ThemeProvider>
+
+        <PreviewPanel />
+        <PreviewTrigger />
 
         <Scripts />
       </body>

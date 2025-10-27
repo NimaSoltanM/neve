@@ -836,6 +836,29 @@ export type Translations = {
     demoExplainer: string
     realExplainer: string
   }
+  preview: {
+    title: string
+    subtitle: string
+    dismiss: string
+    tryIt: string
+    explored: string
+    buy: {
+      title: string
+      desc: string
+    }
+    vendor: {
+      title: string
+      desc: string
+    }
+    auction: {
+      title: string
+      desc: string
+    }
+    rtl: {
+      title: string
+      desc: string
+    }
+  }
 }
 
 export type TranslationParams = Record<string, string | number>
