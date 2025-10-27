@@ -900,6 +900,22 @@ const en: Translations = {
       desc: 'Full RTL support',
     },
   },
+  profile: {
+    title: 'Profile',
+    editProfile: 'Edit Profile',
+    personalInfo: 'Personal Information',
+    accountInfo: 'Account Information',
+    firstName: 'First Name',
+    lastName: 'Last Name',
+    phoneNumber: 'Phone Number',
+    memberSince: 'Member Since',
+    uploadAvatar: 'Upload Avatar',
+    removeAvatar: 'Remove Avatar',
+    saveChanges: 'Save Changes',
+    saving: 'Saving...',
+    updateSuccess: 'Profile updated successfully',
+    updateError: 'Failed to update profile',
+  },
 }
 
 export default en

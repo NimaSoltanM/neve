@@ -859,6 +859,22 @@ export type Translations = {
       desc: string
     }
   }
+  profile: {
+    title: string
+    editProfile: string
+    personalInfo: string
+    accountInfo: string
+    firstName: string
+    lastName: string
+    phoneNumber: string
+    memberSince: string
+    uploadAvatar: string
+    removeAvatar: string
+    saveChanges: string
+    saving: string
+    updateSuccess: string
+    updateError: string
+  }
 }
 
 export type TranslationParams = Record<string, string | number>

@@ -21,8 +21,11 @@ import {
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { ChevronRight } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
+import { getCurrentUser } from '@/features/auth/actions/get-current-user.action'
 
 export interface SidebarNavItem {
   title: string
@@ -47,6 +50,18 @@ export function AppSidebar({ items, footer }: AppSidebarProps) {
   const location = useLocation()
   const { t, dir } = useI18n()
 
+  // Get current user for avatar
+  const { data: userData } = useQuery({
+    queryKey: ['user'],
+    queryFn: getCurrentUser,
+  })
+
+  const user = userData?.user
+  const initials =
+    user?.firstName && user?.lastName
+      ? `${user.firstName[0]}${user.lastName[0]}`.toUpperCase()
+      : user?.firstName?.[0]?.toUpperCase() || 'U'
+
   const isActive = (href?: string) => {
     if (!href) return false
     return (
@@ -61,14 +76,17 @@ export function AppSidebar({ items, footer }: AppSidebarProps) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <Link to="/marketplace" search={{ search: '', page: 1 }}>
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                  <span className="text-lg font-semibold">M</span>
-                </div>
+              <Link to="/dashboard/profile">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={user?.avatar || undefined} />
+                  <AvatarFallback>{initials}</AvatarFallback>
+                </Avatar>
                 <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-semibold">{t('common.siteName')}</span>
+                  <span className="font-semibold">
+                    {user?.firstName || user?.phoneNumber || t('nav.profile')}
+                  </span>
                   <span className="text-xs text-muted-foreground">
-                    {t('common.siteTagline')}
+                    {t('nav.profile')}
                   </span>
                 </div>
               </Link>
@@ -77,7 +95,6 @@ export function AppSidebar({ items, footer }: AppSidebarProps) {
         </SidebarMenu>
       </SidebarHeader>
 
-      {/* ===== Content ===== */}
       <SidebarContent>
         {items.map((group) => (
           <SidebarGroup key={group.title}>
@@ -85,7 +102,7 @@ export function AppSidebar({ items, footer }: AppSidebarProps) {
             <SidebarGroupContent>
               <SidebarMenu>
                 {group.items.map((item) => {
-                  if (item.hide) return null // 🔹 Skip hidden items
+                  if (item.hide) return null
 
                   const Icon = item.icon
                   const active = isActive(item.href)
@@ -119,7 +136,7 @@ export function AppSidebar({ items, footer }: AppSidebarProps) {
                             <SidebarMenuButton>
                               {Icon && <Icon className="h-4 w-4" />}
                               <span>{item.title}</span>
-                              <ChevronRight className="ms-auto h-4 w-4 transition-transform group-data-[state=open]:rotate-90" />
+                              <ChevronRight className="ms-auto h-4 w-4 transition-transform group-data-[state=open]:rotate-90 rtl:rotate-180" />
                             </SidebarMenuButton>
                           </CollapsibleTrigger>
                           <CollapsibleContent>

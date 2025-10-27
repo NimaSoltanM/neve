@@ -29,6 +29,7 @@ import { Route as dashboardsShopEditIndexRouteImport } from './routes/(dashboard
 import { Route as dashboardsShopAuctionsIndexRouteImport } from './routes/(dashboards)/shop/auctions/index'
 import { Route as dashboardsShopAnalyticsIndexRouteImport } from './routes/(dashboards)/shop/analytics/index'
 import { Route as dashboardsDashboardShopSetupIndexRouteImport } from './routes/(dashboards)/dashboard/shop-setup/index'
+import { Route as dashboardsDashboardProfileIndexRouteImport } from './routes/(dashboards)/dashboard/profile/index'
 import { Route as dashboardsDashboardOrdersIndexRouteImport } from './routes/(dashboards)/dashboard/orders/index'
 import { Route as dashboardsDashboardNotificationsIndexRouteImport } from './routes/(dashboards)/dashboard/notifications/index'
 import { Route as dashboardsDashboardBidsIndexRouteImport } from './routes/(dashboards)/dashboard/bids/index'
@@ -149,6 +150,12 @@ const dashboardsDashboardShopSetupIndexRoute =
     path: '/shop-setup/',
     getParentRoute: () => dashboardsDashboardRouteRoute,
   } as any)
+const dashboardsDashboardProfileIndexRoute =
+  dashboardsDashboardProfileIndexRouteImport.update({
+    id: '/profile/',
+    path: '/profile/',
+    getParentRoute: () => dashboardsDashboardRouteRoute,
+  } as any)
 const dashboardsDashboardOrdersIndexRoute =
   dashboardsDashboardOrdersIndexRouteImport.update({
     id: '/orders/',
@@ -224,6 +231,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/bids': typeof dashboardsDashboardBidsIndexRoute
   '/dashboard/notifications': typeof dashboardsDashboardNotificationsIndexRoute
   '/dashboard/orders': typeof dashboardsDashboardOrdersIndexRoute
+  '/dashboard/profile': typeof dashboardsDashboardProfileIndexRoute
   '/dashboard/shop-setup': typeof dashboardsDashboardShopSetupIndexRoute
   '/shop/analytics': typeof dashboardsShopAnalyticsIndexRoute
   '/shop/auctions': typeof dashboardsShopAuctionsIndexRoute
@@ -252,6 +260,7 @@ export interface FileRoutesByTo {
   '/dashboard/bids': typeof dashboardsDashboardBidsIndexRoute
   '/dashboard/notifications': typeof dashboardsDashboardNotificationsIndexRoute
   '/dashboard/orders': typeof dashboardsDashboardOrdersIndexRoute
+  '/dashboard/profile': typeof dashboardsDashboardProfileIndexRoute
   '/dashboard/shop-setup': typeof dashboardsDashboardShopSetupIndexRoute
   '/shop/analytics': typeof dashboardsShopAnalyticsIndexRoute
   '/shop/auctions': typeof dashboardsShopAuctionsIndexRoute
@@ -285,6 +294,7 @@ export interface FileRoutesById {
   '/(dashboards)/dashboard/bids/': typeof dashboardsDashboardBidsIndexRoute
   '/(dashboards)/dashboard/notifications/': typeof dashboardsDashboardNotificationsIndexRoute
   '/(dashboards)/dashboard/orders/': typeof dashboardsDashboardOrdersIndexRoute
+  '/(dashboards)/dashboard/profile/': typeof dashboardsDashboardProfileIndexRoute
   '/(dashboards)/dashboard/shop-setup/': typeof dashboardsDashboardShopSetupIndexRoute
   '/(dashboards)/shop/analytics/': typeof dashboardsShopAnalyticsIndexRoute
   '/(dashboards)/shop/auctions/': typeof dashboardsShopAuctionsIndexRoute
@@ -317,6 +327,7 @@ export interface FileRouteTypes {
     | '/dashboard/bids'
     | '/dashboard/notifications'
     | '/dashboard/orders'
+    | '/dashboard/profile'
     | '/dashboard/shop-setup'
     | '/shop/analytics'
     | '/shop/auctions'
@@ -345,6 +356,7 @@ export interface FileRouteTypes {
     | '/dashboard/bids'
     | '/dashboard/notifications'
     | '/dashboard/orders'
+    | '/dashboard/profile'
     | '/dashboard/shop-setup'
     | '/shop/analytics'
     | '/shop/auctions'
@@ -377,6 +389,7 @@ export interface FileRouteTypes {
     | '/(dashboards)/dashboard/bids/'
     | '/(dashboards)/dashboard/notifications/'
     | '/(dashboards)/dashboard/orders/'
+    | '/(dashboards)/dashboard/profile/'
     | '/(dashboards)/dashboard/shop-setup/'
     | '/(dashboards)/shop/analytics/'
     | '/(dashboards)/shop/auctions/'
@@ -545,6 +558,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof dashboardsDashboardShopSetupIndexRouteImport
       parentRoute: typeof dashboardsDashboardRouteRoute
     }
+    '/(dashboards)/dashboard/profile/': {
+      id: '/(dashboards)/dashboard/profile/'
+      path: '/profile'
+      fullPath: '/dashboard/profile'
+      preLoaderRoute: typeof dashboardsDashboardProfileIndexRouteImport
+      parentRoute: typeof dashboardsDashboardRouteRoute
+    }
     '/(dashboards)/dashboard/orders/': {
       id: '/(dashboards)/dashboard/orders/'
       path: '/orders'
@@ -659,6 +679,7 @@ interface dashboardsDashboardRouteRouteChildren {
   dashboardsDashboardBidsIndexRoute: typeof dashboardsDashboardBidsIndexRoute
   dashboardsDashboardNotificationsIndexRoute: typeof dashboardsDashboardNotificationsIndexRoute
   dashboardsDashboardOrdersIndexRoute: typeof dashboardsDashboardOrdersIndexRoute
+  dashboardsDashboardProfileIndexRoute: typeof dashboardsDashboardProfileIndexRoute
   dashboardsDashboardShopSetupIndexRoute: typeof dashboardsDashboardShopSetupIndexRoute
   dashboardsDashboardOrdersOrderIdSuccessRoute: typeof dashboardsDashboardOrdersOrderIdSuccessRoute
   dashboardsDashboardOrdersOrderIdIndexRoute: typeof dashboardsDashboardOrdersOrderIdIndexRoute
@@ -671,6 +692,7 @@ const dashboardsDashboardRouteRouteChildren: dashboardsDashboardRouteRouteChildr
     dashboardsDashboardNotificationsIndexRoute:
       dashboardsDashboardNotificationsIndexRoute,
     dashboardsDashboardOrdersIndexRoute: dashboardsDashboardOrdersIndexRoute,
+    dashboardsDashboardProfileIndexRoute: dashboardsDashboardProfileIndexRoute,
     dashboardsDashboardShopSetupIndexRoute:
       dashboardsDashboardShopSetupIndexRoute,
     dashboardsDashboardOrdersOrderIdSuccessRoute:

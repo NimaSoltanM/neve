@@ -19,6 +19,8 @@ export const users = pgTable('users', {
 
   isPhoneVerified: boolean('is_phone_verified').notNull().default(false),
 
+  avatar: text('avatar'),
+
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()
     .defaultNow(),

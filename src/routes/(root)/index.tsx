@@ -365,8 +365,10 @@ function HomePage() {
                 {t('landing.githubButton')}
               </Button>
             </a>
-            <Button variant="outline" size="lg">
-              {t('landing.contactButton')}
+            <Button variant="outline" size="lg" asChild>
+              <a href="https://t.me/NimaSoltanM" target="_blank">
+                {t('landing.contactButton')}
+              </a>
             </Button>
           </div>
         </div>

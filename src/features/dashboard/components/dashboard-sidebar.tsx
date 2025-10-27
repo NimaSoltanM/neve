@@ -56,11 +56,6 @@ export function DashboardSidebar() {
           href: '/dashboard/profile',
           icon: User,
         },
-        {
-          title: t('nav.settings'),
-          href: '/dashboard/settings',
-          icon: Settings,
-        },
       ],
     },
     {

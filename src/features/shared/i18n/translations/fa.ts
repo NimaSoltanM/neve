@@ -898,6 +898,22 @@ const fa: Translations = {
       desc: 'پشتیبانی کامل RTL',
     },
   },
+  profile: {
+    title: 'پروفایل',
+    editProfile: 'ویرایش پروفایل',
+    personalInfo: 'اطلاعات شخصی',
+    accountInfo: 'اطلاعات حساب',
+    firstName: 'نام',
+    lastName: 'نام خانوادگی',
+    phoneNumber: 'شماره تلفن',
+    memberSince: 'عضو از',
+    uploadAvatar: 'بارگذاری تصویر',
+    removeAvatar: 'حذف تصویر',
+    saveChanges: 'ذخیره تغییرات',
+    saving: 'در حال ذخیره...',
+    updateSuccess: 'پروفایل با موفقیت به‌روزرسانی شد',
+    updateError: 'خطا در به‌روزرسانی پروفایل',
+  },
 }
 
 export default fa

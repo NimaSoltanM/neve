@@ -19,6 +19,7 @@ export const getCurrentUser = createServerFn({ method: 'GET' }).handler(
         phoneNumber: users.phoneNumber,
         firstName: users.firstName,
         lastName: users.lastName,
+        avatar: users.avatar,
         isPhoneVerified: users.isPhoneVerified,
         createdAt: users.createdAt,
       })
