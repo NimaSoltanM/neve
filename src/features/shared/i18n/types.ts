@@ -253,6 +253,11 @@ export type Translations = {
     shopInactiveAlertDesc: string
     goToSettings: string
     showingResults: string
+
+    checkingAvailability: string
+    slugAvailable: string
+    slugTaken: string
+    liveUrlPreview: string
   }
   upload: {
     dragOrClick: string
@@ -480,6 +485,7 @@ export type Translations = {
     home: string
   }
   shop: {
+    auctionsLink: string
     management: string
     overview: string
     products: string
@@ -487,13 +493,48 @@ export type Translations = {
     addProduct: string
     categories: string
     orders: string
-    auctions: string
     insights: string
     analytics: string
     revenue: string
     configuration: string
     settings: string
     viewStorefront: string
+
+    auctions: {
+      title: string
+      export: string
+      createNew: string
+      active: string
+      ended: string
+      search: string
+      selected: string
+      endSelected: string
+      clearSelection: string
+      bids: string
+      view: string
+      duplicate: string
+      endEarly: string
+      noBids: string
+      endedSuccessfully: string
+      duplicated: string
+      stats: {
+        active: string
+        awaiting: string
+        paid: string
+        revenue: string
+        avgBids: string
+      }
+      sort: {
+        newest: string
+        ending: string
+        price: string
+        bids: string
+      }
+      status: {
+        ended: string
+        paid: string
+      }
+    }
   }
   cart: {
     title: string
@@ -509,6 +550,10 @@ export type Translations = {
     added: string
     inCart: string
     addedToCart: string
+    checkoutNote: string
+    clearAll: string
+    itemCount: string
+    subtotal: string
   }
   orders: {
     checkout: string

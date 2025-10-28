@@ -6,38 +6,43 @@ import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
+  DropdownMenuItem,
 } from '@/components/ui/dropdown-menu'
-import { ChevronDown } from 'lucide-react'
+import { Languages, Check } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 export function LanguageSwitcher() {
   const { locale, setLocale } = useI18n()
 
-  const languages: Record<Locale, string> = {
-    en: 'English',
-    fa: 'فارسی',
+  const languages: Record<Locale, { name: string; nativeName: string }> = {
+    en: { name: 'English', nativeName: 'English' },
+    fa: { name: 'Persian', nativeName: 'فارسی' },
   }
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" className="flex items-center gap-2">
-          <span>{languages[locale]}</span>
-          <ChevronDown className="h-4 w-4 opacity-70" />
+        <Button variant="ghost" size="sm" className="gap-2">
+          <Languages className="h-4 w-4" />
+          <span className="hidden sm:inline">
+            {languages[locale].nativeName}
+          </span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuRadioGroup
-          value={locale}
-          onValueChange={(val) => setLocale(val as Locale)}
-        >
-          {LOCALES.map((lang) => (
-            <DropdownMenuRadioItem key={lang} value={lang}>
-              {languages[lang]}
-            </DropdownMenuRadioItem>
-          ))}
-        </DropdownMenuRadioGroup>
+      <DropdownMenuContent align="end" className="w-48">
+        {LOCALES.map((lang) => (
+          <DropdownMenuItem
+            key={lang}
+            onClick={() => setLocale(lang)}
+            className={cn(
+              'flex items-center justify-between cursor-pointer',
+              locale === lang && 'bg-accent',
+            )}
+          >
+            <span className="font-medium">{languages[lang].nativeName}</span>
+            {locale === lang && <Check className="h-4 w-4 text-primary" />}
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   )

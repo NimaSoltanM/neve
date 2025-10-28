@@ -1,6 +1,6 @@
 // features/shops/components/shop-form.tsx
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -30,7 +30,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import { useI18n } from '@/features/shared/i18n'
-import { generateSlug } from '@/lib/utils'
+import { generateSlug, cn } from '@/lib/utils'
 import {
   Store,
   AlertCircle,
@@ -41,9 +41,10 @@ import {
   Link as LinkIcon,
   Info,
   ImageIcon,
+  Loader2,
 } from 'lucide-react'
-import { cn } from '@/lib/utils'
 import { createShop, updateShop, getMyShop } from '../actions'
+import { checkSlugAvailability } from '../actions/check-slug-availability'
 
 const formSchema = z.object({
   name: z
@@ -58,14 +59,8 @@ const formSchema = z.object({
       /^[a-z0-9-]+$/,
       'Slug can only contain lowercase letters, numbers and hyphens',
     ),
-  descriptionEn: z
-    .string()
-    .max(500, 'Description cannot exceed 500 characters')
-    .optional(),
-  descriptionFa: z
-    .string()
-    .max(500, 'Description cannot exceed 500 characters')
-    .optional(),
+  descriptionEn: z.string().max(500).optional(),
+  descriptionFa: z.string().max(500).optional(),
   logo: z.string().optional(),
   banner: z.string().optional(),
 })
@@ -88,9 +83,11 @@ export function ShopForm({ mode, initialData, onSuccess }: ShopFormProps) {
   const { t, locale, dir } = useI18n()
   const navigate = useNavigate()
   const [isSlugManual, setIsSlugManual] = useState(false)
-  const [slugAvailable, setSlugAvailable] = useState<boolean | null>(null)
+  const [slugAvailable, setSlugAvailable] = useState<
+    boolean | null | 'checking'
+  >(null)
+  const formRef = useRef<HTMLFormElement>(null)
 
-  // Check if user already has a shop (only for create mode)
   const { data: existingShop, isLoading } = useQuery({
     queryKey: ['myShop'],
     queryFn: async () => getMyShop(),
@@ -109,30 +106,35 @@ export function ShopForm({ mode, initialData, onSuccess }: ShopFormProps) {
     },
   })
 
-  // Auto-generate slug from name (create mode only)
   const nameValue = form.watch('name')
   const slugValue = form.watch('slug')
 
+  const hasPersian = /[\u0600-\u06FF]/.test(nameValue || '')
+
+  // 🔹 Auto-generate slug
   useEffect(() => {
-    if (mode === 'create' && !isSlugManual && nameValue) {
-      const hasPersian =
-        /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/.test(
-          nameValue,
-        )
-
-      if (!hasPersian) {
-        const generatedSlug = generateSlug(nameValue)
-        form.setValue('slug', generatedSlug)
-      }
+    if (mode === 'create' && !isSlugManual && nameValue && !hasPersian) {
+      form.setValue('slug', generateSlug(nameValue))
     }
-  }, [nameValue, isSlugManual, form, mode])
+  }, [nameValue, isSlugManual, form, mode, hasPersian])
 
-  // Check slug availability (create mode only)
+  // 🔹 Real-time slug availability check
   useEffect(() => {
     if (mode === 'create' && slugValue && slugValue.length >= 3) {
-      const timer = setTimeout(() => {
-        setSlugAvailable(true)
-      }, 500)
+      setSlugAvailable('checking')
+
+      const timer = setTimeout(async () => {
+        try {
+          const result = await checkSlugAvailability({ data: slugValue })
+          if (result.success) {
+            setSlugAvailable(result.available ?? null)
+          } else {
+            setSlugAvailable(null)
+          }
+        } catch (error) {
+          setSlugAvailable(null)
+        }
+      }, 500) // Debounce 500ms
 
       return () => clearTimeout(timer)
     } else {
@@ -140,7 +142,17 @@ export function ShopForm({ mode, initialData, onSuccess }: ShopFormProps) {
     }
   }, [slugValue, mode])
 
-  // Create shop mutation
+  // 🔹 Auto-scroll to first error
+  useEffect(() => {
+    const subscription = form.watch((_, { name }) => {
+      if (form.formState.errors[name as keyof ShopFormValues]) {
+        const el = formRef.current?.querySelector(`[name="${name}"]`)
+        el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }
+    })
+    return () => subscription.unsubscribe()
+  }, [form])
+
   const createMutation = useMutation({
     mutationFn: async (values: ShopFormValues) => {
       return createShop({
@@ -159,16 +171,11 @@ export function ShopForm({ mode, initialData, onSuccess }: ShopFormProps) {
         toast.success(t('shops.created'))
         onSuccess?.()
         navigate({ to: '/shop' })
-      } else {
-        toast.error(result.error || t('common.error'))
-      }
+      } else toast.error(result.error || t('common.error'))
     },
-    onError: () => {
-      toast.error(t('common.error'))
-    },
+    onError: () => toast.error(t('common.error')),
   })
 
-  // Update shop mutation
   const updateMutation = useMutation({
     mutationFn: async (values: ShopFormValues) => {
       return updateShop({
@@ -187,31 +194,19 @@ export function ShopForm({ mode, initialData, onSuccess }: ShopFormProps) {
       if (result.success) {
         toast.success(t('shops.updated'))
         onSuccess?.()
-      } else {
-        toast.error(result.error || t('common.error'))
-      }
+      } else toast.error(result.error || t('common.error'))
     },
-    onError: () => {
-      toast.error(t('common.error'))
-    },
+    onError: () => toast.error(t('common.error')),
   })
 
   const onSubmit = (values: ShopFormValues) => {
-    if (mode === 'create') {
-      createMutation.mutate(values)
-    } else {
-      updateMutation.mutate(values)
-    }
+    if (mode === 'create') createMutation.mutate(values)
+    else updateMutation.mutate(values)
   }
 
   const isSubmitting = createMutation.isPending || updateMutation.isPending
 
-  const hasPersianInName =
-    /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/.test(
-      nameValue || '',
-    )
-
-  // If user already has a shop (create mode)
+  // 🔹 Existing shop info
   if (
     mode === 'create' &&
     !isLoading &&
@@ -219,7 +214,7 @@ export function ShopForm({ mode, initialData, onSuccess }: ShopFormProps) {
     existingShop.data
   ) {
     return (
-      <Card className="max-w-2xl mx-auto" dir={dir}>
+      <Card className="max-w-2xl mx-auto mt-8" dir={dir}>
         <CardHeader>
           <div className="flex items-center gap-2 text-green-600 dark:text-green-400">
             <CheckCircle className="h-5 w-5" />
@@ -251,10 +246,9 @@ export function ShopForm({ mode, initialData, onSuccess }: ShopFormProps) {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8" dir={dir}>
-      {/* Welcome Section (create mode only) */}
+    <div className="max-w-4xl mx-auto space-y-8 pb-32" dir={dir}>
       {mode === 'create' && (
-        <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-background">
+        <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-background shadow-sm">
           <CardHeader>
             <div className="flex items-center gap-3">
               <div className="p-3 rounded-full bg-primary/10">
@@ -274,9 +268,13 @@ export function ShopForm({ mode, initialData, onSuccess }: ShopFormProps) {
       )}
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          {/* Basic Information */}
-          <Card>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          ref={formRef}
+          className="space-y-8"
+        >
+          {/* Basic info */}
+          <Card className="overflow-hidden shadow-sm">
             <CardHeader>
               <div className="flex items-center gap-2">
                 <Store className="h-5 w-5" />
@@ -289,22 +287,22 @@ export function ShopForm({ mode, initialData, onSuccess }: ShopFormProps) {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              {/* Shop Name */}
+              {/* Name */}
               <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="flex items-center gap-1">
-                      {t('shops.shopName')}
+                      {t('shops.shopName')}{' '}
                       <span className="text-destructive">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input
                         placeholder={t('shops.shopNamePlaceholder')}
                         {...field}
-                        className="text-lg"
                         disabled={isSubmitting}
+                        className="text-lg"
                       />
                     </FormControl>
                     <FormDescription>
@@ -314,6 +312,8 @@ export function ShopForm({ mode, initialData, onSuccess }: ShopFormProps) {
                   </FormItem>
                 )}
               />
+
+              {/* Slug */}
               {mode === 'create' && (
                 <FormField
                   control={form.control}
@@ -322,48 +322,45 @@ export function ShopForm({ mode, initialData, onSuccess }: ShopFormProps) {
                     <FormItem>
                       <FormLabel className="flex items-center gap-1">
                         <LinkIcon className="h-4 w-4" />
-                        {t('shops.shopUrl')}
+                        {t('shops.shopUrl')}{' '}
                         <span className="text-destructive">*</span>
                       </FormLabel>
                       <FormControl>
-                        <div className="relative">
-                          {/* Force LTR for the entire input group */}
-                          <div className="flex items-center" dir="ltr">
-                            <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-input bg-muted text-sm text-muted-foreground">
-                              {t('shops.urlPrefix')}
-                            </span>
-                            <Input
-                              placeholder={t('shops.shopUrlPlaceholder')}
-                              {...field}
-                              dir="ltr"
-                              className="rounded-l-none font-mono"
-                              disabled={isSubmitting}
-                              onChange={(e) => {
-                                field.onChange(e)
-                                setIsSlugManual(true)
-                              }}
-                            />
-                          </div>
-                          {hasPersianInName && !isSlugManual && (
-                            <Badge
-                              variant="secondary"
-                              className="absolute -top-2 ltr:right-0 rtl:left-0"
-                            >
-                              {t('shops.manualRequired')}
-                            </Badge>
-                          )}
+                        <div
+                          className="relative flex items-center gap-2"
+                          dir="ltr"
+                        >
+                          <span className="inline-flex items-center px-3 rounded-md border border-input bg-muted text-sm text-muted-foreground">
+                            {t('shops.urlPrefix')}
+                          </span>
+                          <Input
+                            {...field}
+                            placeholder={t('shops.shopUrlPlaceholder')}
+                            disabled={isSubmitting || hasPersian}
+                            onChange={(e) => {
+                              field.onChange(e)
+                              setIsSlugManual(true)
+                            }}
+                            className="font-mono"
+                          />
                           {slugAvailable !== null && slugValue && (
                             <div
                               className={cn(
-                                'absolute top-1/2 -translate-y-1/2 right-3',
-                                slugAvailable
-                                  ? 'text-green-600'
-                                  : 'text-destructive',
+                                'absolute right-3 top-1/2 -translate-y-1/2',
+                                slugAvailable === 'checking' &&
+                                  'text-muted-foreground',
+                                slugAvailable === true &&
+                                  'text-green-600 dark:text-green-400',
+                                slugAvailable === false && 'text-destructive',
                               )}
                             >
-                              {slugAvailable ? (
+                              {slugAvailable === 'checking' && (
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                              )}
+                              {slugAvailable === true && (
                                 <CheckCircle className="h-4 w-4" />
-                              ) : (
+                              )}
+                              {slugAvailable === false && (
                                 <AlertCircle className="h-4 w-4" />
                               )}
                             </div>
@@ -371,10 +368,44 @@ export function ShopForm({ mode, initialData, onSuccess }: ShopFormProps) {
                         </div>
                       </FormControl>
                       <FormDescription className="text-xs">
-                        {hasPersianInName
+                        {hasPersian
                           ? t('shops.persianDetected')
                           : t('shops.shopUrlHelper')}
                       </FormDescription>
+
+                      {/* Slug availability status */}
+                      {mode === 'create' &&
+                        slugValue &&
+                        slugValue.length >= 3 &&
+                        !hasPersian && (
+                          <p
+                            className={cn(
+                              'text-sm font-medium mt-1',
+                              slugAvailable === 'checking' &&
+                                'text-muted-foreground',
+                              slugAvailable === true &&
+                                'text-green-600 dark:text-green-400',
+                              slugAvailable === false && 'text-destructive',
+                            )}
+                          >
+                            {slugAvailable === 'checking' &&
+                              `⏳ ${t('shops.checkingAvailability')}`}
+                            {slugAvailable === true &&
+                              `✓ ${t('shops.slugAvailable')}`}
+                            {slugAvailable === false &&
+                              `✗ ${t('shops.slugTaken')}`}
+                          </p>
+                        )}
+
+                      {slugValue && !hasPersian && (
+                        <p className="text-sm text-muted-foreground mt-1">
+                          🌐 {t('shops.liveUrlPreview')}:{' '}
+                          <span className="font-mono underline">
+                            {t('shops.urlPrefix')}
+                            {slugValue}
+                          </span>
+                        </p>
+                      )}
                       <FormMessage />
                     </FormItem>
                   )}
@@ -383,8 +414,8 @@ export function ShopForm({ mode, initialData, onSuccess }: ShopFormProps) {
             </CardContent>
           </Card>
 
-          {/* Shop Description */}
-          <Card>
+          {/* Description */}
+          <Card className="shadow-sm">
             <CardHeader>
               <div className="flex items-center gap-2">
                 <Languages className="h-5 w-5" />
@@ -393,15 +424,13 @@ export function ShopForm({ mode, initialData, onSuccess }: ShopFormProps) {
               <CardDescription>{t('shops.descriptionHelper')}</CardDescription>
             </CardHeader>
             <CardContent>
-              <Tabs defaultValue="en" className="w-full">
-                <TabsList className="grid w-full grid-cols-2">
+              <Tabs defaultValue="en" className="w-full overflow-hidden">
+                <TabsList className="grid grid-cols-2">
                   <TabsTrigger value="en" className="gap-2">
-                    <Globe className="h-4 w-4" />
-                    English
+                    <Globe className="h-4 w-4" /> English
                   </TabsTrigger>
                   <TabsTrigger value="fa" className="gap-2">
-                    <Globe className="h-4 w-4" />
-                    فارسی
+                    <Globe className="h-4 w-4" /> فارسی
                   </TabsTrigger>
                 </TabsList>
 
@@ -419,11 +448,10 @@ export function ShopForm({ mode, initialData, onSuccess }: ShopFormProps) {
                         </FormLabel>
                         <FormControl>
                           <Textarea
-                            placeholder={t('shops.descriptionEnPlaceholder')}
                             {...field}
                             rows={5}
-                            className="resize-none"
                             dir="ltr"
+                            className="resize-none"
                             disabled={isSubmitting}
                           />
                         </FormControl>
@@ -451,11 +479,10 @@ export function ShopForm({ mode, initialData, onSuccess }: ShopFormProps) {
                         </FormLabel>
                         <FormControl>
                           <Textarea
-                            placeholder={t('shops.descriptionFaPlaceholder')}
                             {...field}
                             rows={5}
-                            className="resize-none"
                             dir="rtl"
+                            className="resize-none"
                             disabled={isSubmitting}
                           />
                         </FormControl>
@@ -472,9 +499,9 @@ export function ShopForm({ mode, initialData, onSuccess }: ShopFormProps) {
             </CardContent>
           </Card>
 
-          {/* Logo & Banner (update mode only) */}
+          {/* Branding (update) */}
           {mode === 'update' && (
-            <Card>
+            <Card className="shadow-sm">
               <CardHeader>
                 <div className="flex items-center gap-2">
                   <ImageIcon className="h-5 w-5" />
@@ -491,9 +518,9 @@ export function ShopForm({ mode, initialData, onSuccess }: ShopFormProps) {
                       <FormLabel>{t('shops.logo')}</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder={t('shops.logoPlaceholder')}
                           {...field}
                           disabled={isSubmitting}
+                          placeholder={t('shops.logoPlaceholder')}
                         />
                       </FormControl>
                       <FormDescription>{t('shops.logoHelper')}</FormDescription>
@@ -510,9 +537,9 @@ export function ShopForm({ mode, initialData, onSuccess }: ShopFormProps) {
                       <FormLabel>{t('shops.banner')}</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder={t('shops.bannerPlaceholder')}
                           {...field}
                           disabled={isSubmitting}
+                          placeholder={t('shops.bannerPlaceholder')}
                         />
                       </FormControl>
                       <FormDescription>
@@ -526,9 +553,9 @@ export function ShopForm({ mode, initialData, onSuccess }: ShopFormProps) {
             </Card>
           )}
 
-          {/* Info Alert (create mode only) */}
+          {/* Info alert */}
           {mode === 'create' && (
-            <Alert>
+            <Alert className="shadow-sm">
               <Info className="h-4 w-4" />
               <AlertTitle>{t('shops.beforeContinue')}</AlertTitle>
               <AlertDescription className="space-y-2 mt-2">
@@ -539,13 +566,14 @@ export function ShopForm({ mode, initialData, onSuccess }: ShopFormProps) {
             </Alert>
           )}
 
-          {/* Submit Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 sticky bottom-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 p-6 -mx-6 border-t">
+          {/* Footer buttons */}
+          <div className="sticky bottom-0 left-0 right-0 flex flex-col sm:flex-row gap-3 p-4 bg-background/95 backdrop-blur-md border-t shadow-sm z-10 rounded-t-lg">
             <Button
               type="submit"
-              disabled={isSubmitting || (mode === 'create' && !slugAvailable)}
-              className="flex-1 h-12"
               size="lg"
+              disabled={
+                isSubmitting || (mode === 'create' && slugAvailable !== true)
+              }
             >
               {isSubmitting ? (
                 <>
@@ -567,7 +595,6 @@ export function ShopForm({ mode, initialData, onSuccess }: ShopFormProps) {
               type="button"
               variant="outline"
               size="lg"
-              className="h-12"
               onClick={() => navigate({ to: '/dashboard' })}
               disabled={isSubmitting}
             >

@@ -362,13 +362,9 @@ function ShopAuctionsComponent() {
                 <div className="flex-1 space-y-2">
                   <div className="flex justify-between items-start">
                     <div>
-                      <Link
-                        to="/products/$slug"
-                        params={{ slug: auction.slug }}
-                        className="font-semibold hover:underline text-lg"
-                      >
+                      <p className="font-semibold hover:underline text-lg">
                         {auction.name}
-                      </Link>
+                      </p>
                       <div className="flex gap-4 mt-1 text-sm text-muted-foreground">
                         <span>
                           {auction.bidCount} {t('shop.auctions.bids')}
@@ -387,13 +383,10 @@ function ShopAuctionsComponent() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem asChild>
-                          <Link
-                            to="/products/$slug"
-                            params={{ slug: auction.slug }}
-                          >
+                          <p>
                             <Eye className="h-4 w-4 me-2" />
                             {t('shop.auctions.view')}
-                          </Link>
+                          </p>
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={() => duplicateMutation.mutate(auction.id)}
@@ -439,13 +432,9 @@ function ShopAuctionsComponent() {
                 <div className="flex-1">
                   <div className="flex justify-between items-start">
                     <div>
-                      <Link
-                        to="/products/$slug"
-                        params={{ slug: auction.slug }}
-                        className="font-medium hover:underline"
-                      >
+                      <p className="font-medium hover:underline">
                         {auction.name}
-                      </Link>
+                      </p>
 
                       <div className="text-sm text-muted-foreground mt-1">
                         {auction.winner ? (

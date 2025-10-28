@@ -39,7 +39,6 @@ export function DashboardSidebar() {
           title: t('nav.orders'),
           href: '/dashboard/orders',
           icon: Package,
-          badge: 2,
         },
         {
           title: t('nav.bids'),

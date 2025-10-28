@@ -57,7 +57,7 @@ export function ShopSidebar() {
           badge: 5,
         },
         {
-          title: t('shop.auctions'),
+          title: t('shop.auctionsLink'),
           href: '/shop/auctions',
           icon: Tags,
         },
