@@ -26,7 +26,6 @@ import {
   LogOut,
   LayoutDashboard,
   Gavel,
-  Menu,
 } from 'lucide-react'
 import { CartButton } from '@/features/cart/components/cart-button'
 import { NotificationBell } from '@/features/notifications/components/notification-bell'
@@ -34,7 +33,6 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { LogoIcon } from '@/components/logo-icon'
 import { Logo } from '@/components/logo'
 import { ModeToggle } from '../../theme'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 
 export function Header() {
   const { t, dir } = useI18n()
@@ -73,55 +71,6 @@ export function Header() {
 
         {/* Right Section: Actions */}
         <div className="flex items-center gap-2">
-          {/* Mobile Menu Button */}
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="lg:hidden">
-                <Menu className="h-5 w-5" />
-                <span className="sr-only">{t('nav.menu')}</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side={dir === 'rtl' ? 'right' : 'left'}>
-              <nav className="flex flex-col gap-4 mt-8">
-                <Link
-                  to="/marketplace"
-                  search={{ page: 1 }}
-                  className="text-lg font-medium hover:text-primary transition-colors"
-                >
-                  {t('nav.marketplace')}
-                </Link>
-                {isAuthenticated && (
-                  <>
-                    <Link
-                      to="/dashboard"
-                      className="text-lg font-medium hover:text-primary transition-colors"
-                    >
-                      {t('nav.dashboard')}
-                    </Link>
-                    <Link
-                      to="/dashboard/orders"
-                      className="text-lg font-medium hover:text-primary transition-colors"
-                    >
-                      {t('nav.orders')}
-                    </Link>
-                    <Link
-                      to="/dashboard/bids"
-                      className="text-lg font-medium hover:text-primary transition-colors"
-                    >
-                      {t('nav.bids')}
-                    </Link>
-                    <Link
-                      to="/shop"
-                      className="text-lg font-medium hover:text-primary transition-colors"
-                    >
-                      {t('nav.myShop')}
-                    </Link>
-                  </>
-                )}
-              </nav>
-            </SheetContent>
-          </Sheet>
-
           {/* Shopping Actions */}
           {isLoading ? (
             <Skeleton className="h-9 w-9 rounded-md" />

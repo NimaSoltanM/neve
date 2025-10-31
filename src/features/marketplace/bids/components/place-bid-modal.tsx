@@ -91,7 +91,7 @@ export function PlaceBidModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Gavel className="w-5 h-5" />
@@ -101,23 +101,23 @@ export function PlaceBidModal({
 
         <div className="space-y-4 py-4">
           <div>
-            <h3 className="font-medium mb-1">{product.name}</h3>
-            <p className="text-sm text-muted-foreground">
+            <h3 className="font-medium mb-1 text-sm sm:text-base break-words">{product.name}</h3>
+            <p className="text-xs sm:text-sm text-muted-foreground">
               {t('marketplace.currentBid')}: {formatLocalizedPrice(currentBid)}
             </p>
           </div>
 
           <Alert>
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
+            <AlertCircle className="h-4 w-4 shrink-0" />
+            <AlertDescription className="text-xs sm:text-sm">
               {t('marketplace.minimumBid')}: {formatLocalizedPrice(minBid)}
             </AlertDescription>
           </Alert>
 
           {/* Quick bid buttons */}
           <div className="space-y-2">
-            <Label>{t('marketplace.quickBid')}</Label>
-            <div className="flex gap-2">
+            <Label className="text-xs sm:text-sm">{t('marketplace.quickBid')}</Label>
+            <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
               {quickBidOptions.map((amount) => (
                 <Button
                   key={amount}
@@ -125,10 +125,10 @@ export function PlaceBidModal({
                   variant="outline"
                   size="sm"
                   onClick={() => setBidAmount(amount.toFixed(2))}
-                  className="flex-1"
+                  className="flex-1 text-xs sm:text-sm px-1 sm:px-3"
                 >
-                  <Plus className="w-3 h-3 me-1" />
-                  {formatLocalizedPrice(amount)}
+                  <Plus className="w-3 h-3 me-0.5 sm:me-1 shrink-0" />
+                  <span className="truncate">{formatLocalizedPrice(amount)}</span>
                 </Button>
               ))}
             </div>
@@ -136,7 +136,7 @@ export function PlaceBidModal({
 
           {/* Custom bid amount */}
           <div className="space-y-2">
-            <Label htmlFor="bidAmount">{t('marketplace.yourBid')}</Label>
+            <Label htmlFor="bidAmount" className="text-xs sm:text-sm">{t('marketplace.yourBid')}</Label>
             <Input
               id="bidAmount"
               type="number"
@@ -145,12 +145,13 @@ export function PlaceBidModal({
               value={bidAmount}
               onChange={(e) => setBidAmount(e.target.value)}
               placeholder={minBid.toFixed(2)}
+              className="text-sm sm:text-base"
             />
           </div>
 
           {product.buyNowPrice && (
             <Alert>
-              <AlertDescription>
+              <AlertDescription className="text-xs sm:text-sm">
                 {t('marketplace.buyNowAvailable')}:{' '}
                 {formatLocalizedPrice(product.buyNowPrice)}
               </AlertDescription>
@@ -163,15 +164,17 @@ export function PlaceBidModal({
             variant="outline"
             onClick={() => onOpenChange(false)}
             disabled={isLoading}
+            className="text-xs sm:text-sm"
           >
             {t('common.cancel')}
           </Button>
           <Button
             onClick={handlePlaceBid}
             disabled={isLoading || !bidAmount || parseFloat(bidAmount) < minBid}
+            className="text-xs sm:text-sm"
           >
-            <Gavel className="w-4 h-4 me-2" />
-            {t('marketplace.confirmBid')}
+            <Gavel className="w-4 h-4 me-1.5 sm:me-2 shrink-0" />
+            <span className="truncate">{t('marketplace.confirmBid')}</span>
           </Button>
         </DialogFooter>
       </DialogContent>
