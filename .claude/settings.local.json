@@ -5,6 +5,7 @@
       "Bash(npm run dev:*)",
       "Bash(npm run lint:*)",
       "Bash(npm run build:*)",
+<<<<<<< HEAD
       "Bash(if exist node_modules rmdir /s /q node_modules)",
       "Bash(if exist .vinxi rmdir /s /q .vinxi)",
       "Bash(if exist dist rmdir /s /q dist)",
@@ -17,6 +18,9 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git push:*)"
+=======
+      "Bash(git add:*)"
+>>>>>>> 3ca2db87fe29efdc63893c7b4d313e30b2be9784
     ],
     "deny": [],
     "ask": []
