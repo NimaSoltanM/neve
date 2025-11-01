@@ -86,7 +86,6 @@ function RadioGroupItem({
 
   const isSelected = context.value === value
   const isDisabled = disabled || context.disabled
-  const isRTL = context.dir === 'rtl'
 
   const handleClick = () => {
     if (!isDisabled && !isSelected) {

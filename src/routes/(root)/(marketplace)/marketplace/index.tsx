@@ -7,7 +7,7 @@ import { ProductGrid } from '@/features/marketplace/products/components/product-
 import { ProductGridSkeleton } from '@/features/marketplace/products/components/product-grid-skeleton'
 import { ProductFilters } from '@/features/marketplace/products/components/product-filters'
 import { PlaceBidModal } from '@/features/marketplace/bids/components/place-bid-modal'
-import { LanguageSwitcher, useI18n } from '@/features/shared/i18n'
+import { useI18n } from '@/features/shared/i18n'
 import { Input } from '@/components/ui/input'
 import { Search } from 'lucide-react'
 import { z } from 'zod'

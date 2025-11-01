@@ -33,7 +33,7 @@ import {
 } from '@/components/ui/card'
 import { FileUpload } from '@/features/shared/upload/components/file-upload'
 import { LanguageSwitcher, useI18n } from '@/features/shared/i18n'
-import { generateSlug, formatPrice } from '@/lib/utils'
+import { generateSlug } from '@/lib/utils'
 import { getCategories } from '@/features/marketplace/categories/actions'
 import { Calendar } from '@/components/ui/calendar'
 import {
@@ -43,7 +43,6 @@ import {
 } from '@/components/ui/popover'
 import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
-import { Skeleton } from '@/components/ui/skeleton'
 import {
   CalendarIcon,
   Package,

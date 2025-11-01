@@ -48,8 +48,8 @@ export function LostAuctionsList({ auctions }: LostAuctionsListProps) {
 
             <div className="flex-1">
               <Link
-                to="/products/$slug"
-                params={{ slug: auction.productSlug }}
+                to="/products/$productSlug"
+                params={{ productSlug: auction.productSlug }}
                 className="font-medium hover:underline text-muted-foreground"
               >
                 {auction.productName}
@@ -79,7 +79,7 @@ export function LostAuctionsList({ auctions }: LostAuctionsListProps) {
             </div>
 
             <Button variant="outline" size="sm" asChild>
-              <Link to="/products/$slug" params={{ slug: auction.productSlug }}>
+              <Link to="/products/$productSlug" params={{ productSlug: auction.productSlug }}>
                 {t('bids.viewSimilar')}
               </Link>
             </Button>

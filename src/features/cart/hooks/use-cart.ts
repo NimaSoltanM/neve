@@ -31,7 +31,7 @@ export function useCart() {
   const [localCartProducts, setLocalCartProducts] = useAtom(
     localCartProductsAtom,
   )
-  const [serverCart, setServerCart] = useAtom(serverCartAtom)
+  const [, setServerCart] = useAtom(serverCartAtom)
   const cart = useAtomValue(cartAtom)
   const itemCount = useAtomValue(cartItemCountAtom)
   const total = useAtomValue(cartTotalAtom)

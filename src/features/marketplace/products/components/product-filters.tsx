@@ -73,7 +73,7 @@ export function ProductFilters(props: ProductFiltersProps) {
     }
 
     navigate({
-      search: (prev) => ({
+      search: (prev: any) => ({
         ...prev,
         minPrice: minPrice || undefined,
         maxPrice: maxPrice || undefined,
@@ -96,7 +96,7 @@ export function ProductFilters(props: ProductFiltersProps) {
     setEndingSoon(false)
 
     navigate({
-      search: (prev) => ({
+      search: (prev: any) => ({
         page: prev.page,
         search: prev.search,
       }),
@@ -112,7 +112,7 @@ export function ProductFilters(props: ProductFiltersProps) {
         </Label>
         <RadioGroup
           value={productType}
-          onValueChange={setProductType}
+          onValueChange={(value: string) => setProductType(value as 'all' | 'regular' | 'auction')}
           dir={isRTL ? 'rtl' : 'ltr'}
           className="space-y-2"
         >

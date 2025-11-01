@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Trash2, Plus, Minus } from 'lucide-react'
 import { useCart } from '../hooks/use-cart'
-import { formatPrice, cn } from '@/lib/utils'
+import { formatPrice } from '@/lib/utils'
 import { useI18n } from '@/features/shared/i18n'
 import { CartItemWithProduct } from '../schemas/cart.schema'
 import { toast } from 'sonner'
@@ -14,7 +14,7 @@ interface CartItemProps {
 
 export function CartItem({ item }: CartItemProps) {
   const { updateQuantity, removeFromCart } = useCart()
-  const { t, locale } = useI18n()
+  const { t } = useI18n()
 
   const handleQuantityChange = (newQuantity: number) => {
     if (newQuantity < 1) return
@@ -34,7 +34,7 @@ export function CartItem({ item }: CartItemProps) {
   }
 
   const isAuction = item.product.type === 'auction'
-  const itemSubtotal = item.priceAtAdd * item.quantity
+  const itemSubtotal = parseFloat(item.priceAtAdd.toString()) * item.quantity
 
   return (
     <div className="group relative bg-card border rounded-lg p-3 hover:shadow-md transition-all">
@@ -51,8 +51,8 @@ export function CartItem({ item }: CartItemProps) {
       <div className="flex gap-3">
         {/* Image */}
         <Link
-          to="/marketplace/$slug"
-          params={{ slug: item.product.slug }}
+          to="/products/$productSlug"
+          params={{ productSlug: item.product.slug }}
           className="relative shrink-0"
         >
           <div className="w-20 h-20 rounded-md overflow-hidden bg-muted">
@@ -77,8 +77,8 @@ export function CartItem({ item }: CartItemProps) {
           {/* Title & Price */}
           <div className="pe-8">
             <Link
-              to="/marketplace/$slug"
-              params={{ slug: item.product.slug }}
+              to="/products/$productSlug"
+              params={{ productSlug: item.product.slug }}
               className="font-medium text-sm line-clamp-2 hover:text-primary transition-colors"
             >
               {item.product.name}

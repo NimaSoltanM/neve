@@ -64,8 +64,8 @@ export function WonAuctionsList({ auctions }: WonAuctionsListProps) {
 
                 <div className="flex-1">
                   <Link
-                    to="/products/$slug"
-                    params={{ slug: auction.slug }}
+                    to="/products/$productSlug"
+                    params={{ productSlug: auction.slug }}
                     className="font-medium hover:underline"
                   >
                     {auction.name}
@@ -86,7 +86,7 @@ export function WonAuctionsList({ auctions }: WonAuctionsListProps) {
                 <div>
                   {auction.inCart ? (
                     <Button asChild>
-                      <Link to="/cart">
+                      <Link to="/checkout">
                         <ShoppingCart className="h-4 w-4 me-2" />
                         {t('bids.checkout')}
                       </Link>

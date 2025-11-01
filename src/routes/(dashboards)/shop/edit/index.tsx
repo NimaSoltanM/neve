@@ -13,7 +13,7 @@ export const Route = createFileRoute('/(dashboards)/shop/edit/')({
     if (!result.success || !result.data) {
       // User doesn't have a shop, redirect to create
       throw redirect({
-        to: '/shop/new',
+        to: '/shop',
       })
     }
   },

@@ -35,7 +35,7 @@ interface CartDrawerProps {
 }
 
 export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
-  const { t, dir, locale } = useI18n()
+  const { t, dir } = useI18n()
   const { cart, total, hasItems, clearCart, isLoading } = useCart()
   const [showClearDialog, setShowClearDialog] = useState(false)
 

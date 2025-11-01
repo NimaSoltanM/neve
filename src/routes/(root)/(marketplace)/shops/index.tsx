@@ -21,7 +21,7 @@ export const Route = createFileRoute('/(root)/(marketplace)/shops/')({
     })
 
     return {
-      shops: shopsResult.success ? shopsResult.data : null,
+      shops: shopsResult.success && shopsResult.data ? shopsResult.data : null,
     }
   },
   component: ShopsPage,

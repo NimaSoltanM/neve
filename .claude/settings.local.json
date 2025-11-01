@@ -4,7 +4,17 @@
       "Read(//d/abyss/n.s insdustries/**)",
       "Bash(npm run dev:*)",
       "Bash(npm run lint:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(if exist node_modules rmdir /s /q node_modules)",
+      "Bash(if exist .vinxi rmdir /s /q .vinxi)",
+      "Bash(if exist dist rmdir /s /q dist)",
+      "Bash(if exist .output rmdir /s /q .output)",
+      "Bash(rm:*)",
+      "Bash(npm install:*)",
+      "Bash(mkdir:*)",
+      "Bash(npx tsc:*)",
+      "Bash(git pull:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []
