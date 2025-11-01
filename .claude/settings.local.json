@@ -14,7 +14,9 @@
       "Bash(mkdir:*)",
       "Bash(npx tsc:*)",
       "Bash(git pull:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []
